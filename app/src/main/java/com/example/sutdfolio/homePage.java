@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.sutdfolio.data.model.Posts;
+import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.NetworkManager;
@@ -48,7 +49,7 @@ public class homePage extends Fragment {
             @Override
             public void getResult(String object) {
                 final Gson gson = new Gson();
-                Posts[] posts = gson.fromJson(object, Posts[].class);
+                Posts[] posts = gson.fromJson(object, ReadPost[].class);
                 Log.d("get",posts[0].toString());
                 Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
             }
