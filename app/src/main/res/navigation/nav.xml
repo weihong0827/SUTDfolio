@@ -3,24 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/homePage">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.sutdfolio.ui.login.LoginFragment"
         android:label="fragment_login2"
-        tools:layout="@layout/fragment_login2" >
-        <action
-            android:id="@+id/action_loginFragment_to_homePage"
-            app:destination="@id/homePage" />
-    </fragment>
+        tools:layout="@layout/fragment_login2" />
+    <fragment
+        android:id="@+id/individualPost"
+        android:name="com.example.sutdfolio.IndividualPost"
+        android:label="fragment_individual_post"
+        tools:layout="@layout/fragment_individual_post" />
+    <fragment
+        android:id="@+id/upload"
+        android:name="com.example.sutdfolio.Upload"
+        android:label="upload_fragment"
+        tools:layout="@layout/upload_fragment" />
     <fragment
         android:id="@+id/homePage"
         android:name="com.example.sutdfolio.homePage"
-        android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" >
-        <action
-            android:id="@+id/action_homePage_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
+        android:label="home_page_fragment"
+        tools:layout="@layout/home_page_fragment" />
 
 </navigation>
