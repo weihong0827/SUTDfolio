@@ -21,6 +21,19 @@
         <action
             android:id="@+id/action_homePage_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homePage_to_individualPost"
+            app:destination="@id/individualPost" />
     </fragment>
+    <fragment
+        android:id="@+id/individualPost"
+        android:name="com.example.sutdfolio.IndividualPost"
+        android:label="fragment_individual_post"
+        tools:layout="@layout/fragment_individual_post" />
+    <fragment
+        android:id="@+id/upload"
+        android:name="com.example.sutdfolio.Upload"
+        android:label="upload_fragment"
+        tools:layout="@layout/upload_fragment" />
 
 </navigation>
