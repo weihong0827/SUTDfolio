@@ -13,18 +13,21 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-76" />
-                            <option name="y" value="-27" />
+                            <option name="x" value="-217" />
+                            <option name="y" value="-4" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_homePage_to_loginFragment">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="individualPost">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="68" />
+                            <option name="y" value="210" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -34,18 +37,21 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="137" />
-                            <option name="y" value="-34" />
+                            <option name="x" value="60" />
+                            <option name="y" value="-143" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_loginFragment_to_homePage">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="upload">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="329" />
+                            <option name="y" value="31" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
