@@ -1,6 +1,7 @@
 package com.example.sutdfolio.data;
 
 import com.example.sutdfolio.data.model.User;
+import com.example.sutdfolio.utils.APIRequest;
 
 import java.io.IOException;
 
@@ -12,7 +13,10 @@ public class LoginDataSource {
     public Result<User> login(String username, String password) {
 
         try {
+            APIRequest request = APIRequest.getInstance();
+
             // TODO: handle loggedInUser authentication
+
             User fakeUser =
                     new User(
                             "61e455a5ba6ec9dc13677d9b",

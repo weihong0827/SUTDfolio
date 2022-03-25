@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class APIRequest {
     private static final String TAG = "API Request";
-    private static final String prefixURL = "https://sutd-project-showcase-pim9c.ondigitalocean.app/";
+    private static final String prefixURL = "https://sutd-root-backend-w5e7n.ondigitalocean.app/";
     private NetworkManager netWorkInstance = NetworkManager.getInstance();
     private static APIRequest instance = null;
     private APIRequest(){
@@ -229,8 +229,9 @@ public class APIRequest {
                     @Override
                     public void onResponse(JSONArray response)
                     {
-                        Log.d(TAG + ": ", "All posts : " + response.toString());
+
                         if(null != response.toString())
+                            Log.d(TAG + ": ", "All posts : " + response.toString());
                             listener.getResult(response.toString());
 
                     }

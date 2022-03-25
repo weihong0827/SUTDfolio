@@ -1,6 +1,8 @@
 package com.example.sutdfolio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
 import android.view.View;
@@ -23,13 +25,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    Button Login;
-    EditText Email,Password;
 
+    NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         NetworkManager.getInstance(this);
+        setContentView(R.layout.activity_main);
     }
 }

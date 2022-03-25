@@ -7,9 +7,12 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29236121914708335" />
         <entry key="app/src/main/res/layout/fragment_home_page.xml" value="0.3463541666666667" />
+        <entry key="app/src/main/res/layout/fragment_individual_post.xml" value="0.3442028985507246" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.3463541666666667" />
         <entry key="app/src/main/res/layout/fragment_login2.xml" value="0.22" />
         <entry key="app/src/main/res/layout/home_page_fragment.xml" value="0.3442028985507246" />
+        <entry key="app/src/main/res/layout/recycler_view.xml" value="0.39969301085541203" />
+        <entry key="app/src/main/res/layout/upload_fragment.xml" value="0.3442028985507246" />
       </map>
     </option>
   </component>

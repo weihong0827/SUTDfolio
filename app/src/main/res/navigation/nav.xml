@@ -10,11 +10,6 @@
         android:label="fragment_login2"
         tools:layout="@layout/fragment_login2" />
     <fragment
-        android:id="@+id/individualPost"
-        android:name="com.example.sutdfolio.IndividualPost"
-        android:label="fragment_individual_post"
-        tools:layout="@layout/fragment_individual_post" />
-    <fragment
         android:id="@+id/upload"
         android:name="com.example.sutdfolio.Upload"
         android:label="upload_fragment"
@@ -23,6 +18,15 @@
         android:id="@+id/homePage"
         android:name="com.example.sutdfolio.homePage"
         android:label="home_page_fragment"
-        tools:layout="@layout/home_page_fragment" />
+        tools:layout="@layout/home_page_fragment" >
+        <action
+            android:id="@+id/action_homePage_to_individualPost"
+            app:destination="@id/individualPost" />
+    </fragment>
+    <fragment
+        android:id="@+id/individualPost"
+        android:name="com.example.sutdfolio.IndividualPost"
+        android:label="fragment_individual_post"
+        tools:layout="@layout/fragment_individual_post" />
 
 </navigation>
