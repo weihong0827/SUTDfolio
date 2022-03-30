@@ -60,7 +60,7 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
-    public void verify(final Listener<String>listener,int otp,String detail,String email){
+    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email){
         String url = prefixURL + "api/login";
         JSONObject body = new JSONObject();
         try {
@@ -78,7 +78,7 @@ public class APIRequest {
                         Log.d(TAG + ": ", "Login " + ": " + response.toString());
                         //TODO: Store the JWT token that comes back in the system for future use
                         if (null != response.toString())
-                            listener.getResult(response.toString());
+                            listener.getResult(response);
                     }
                 },new Response.ErrorListener() {
             @Override
@@ -90,7 +90,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
-    public void login(final Listener<String>listener,String email,String password){
+    public void login(final Listener<JSONObject>listener,String email,String password){
         String url = prefixURL + "api/login";
         JSONObject body = new JSONObject();
         try {
@@ -107,7 +107,7 @@ public class APIRequest {
                 Log.d(TAG + ": ", "Login " + ": " + response.toString());
                 //TODO: retain the detail and use that for otp verification
                 if (null != response.toString())
-                    listener.getResult(response.toString());
+                    listener.getResult(response);
             }
         },new Response.ErrorListener() {
             @Override

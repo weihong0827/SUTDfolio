@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,8 +122,13 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
+                String details = loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+                Bundle bundle = new Bundle();
+                bundle.putString("details",details);
+                bundle.putString("email", usernameEditText.getText().toString());
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
             }
         });
     }
