@@ -1,5 +1,6 @@
 package com.example.sutdfolio;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
@@ -52,6 +53,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Log.d(TAG, "id " + id + " clicked.");
                     NavController navController = Navigation.findNavController(v);
                     navController.navigate(R.id.action_homePage_to_individualPost,bundle);
+                    final Activity activity = (Activity) context;
+
+
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
                 }
             });

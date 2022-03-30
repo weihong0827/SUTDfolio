@@ -25,11 +25,6 @@ public class IndividualPost extends Fragment {
     Posts post;
 
 
-    public IndividualPost() {
-        // Required empty public constructor
-    }
-
-
     public static IndividualPost newInstance() {
         return new IndividualPost();
     }

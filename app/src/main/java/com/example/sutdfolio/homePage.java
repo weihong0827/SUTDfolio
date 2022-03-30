@@ -52,6 +52,12 @@ public class homePage extends Fragment{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getPostData();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_page_fragment, container, false);

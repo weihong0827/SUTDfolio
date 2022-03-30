@@ -15,6 +15,7 @@ public class  Posts {
     private String linkIn;
     private String youtube;
     private Boolean publish;
+
     public Posts(String title, String desc, List<Image> image, int term, String telegram, String linkIn, String youtube, Boolean publish) {
         this.title = title;
         this.desc = desc;
