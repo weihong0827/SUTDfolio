@@ -8,12 +8,11 @@
         android:id="@+id/loginFragment"
         android:name="com.example.sutdfolio.ui.login.LoginFragment"
         android:label="fragment_login2"
-        tools:layout="@layout/fragment_login2" />
-    <fragment
-        android:id="@+id/individualPost"
-        android:name="com.example.sutdfolio.IndividualPost"
-        android:label="fragment_individual_post"
-        tools:layout="@layout/fragment_individual_post" />
+        tools:layout="@layout/fragment_login2" >
+        <action
+            android:id="@+id/action_loginFragment_to_OTPverification"
+            app:destination="@id/OTPverification" />
+    </fragment>
     <fragment
         android:id="@+id/upload"
         android:name="com.example.sutdfolio.Upload"
@@ -23,6 +22,20 @@
         android:id="@+id/homePage"
         android:name="com.example.sutdfolio.homePage"
         android:label="home_page_fragment"
-        tools:layout="@layout/home_page_fragment" />
+        tools:layout="@layout/home_page_fragment" >
+        <action
+            android:id="@+id/action_homePage_to_individualPost"
+            app:destination="@id/individualPost" />
+    </fragment>
+    <fragment
+        android:id="@+id/individualPost"
+        android:name="com.example.sutdfolio.IndividualPost"
+        android:label="fragment_individual_post"
+        tools:layout="@layout/fragment_individual_post" />
+    <fragment
+        android:id="@+id/OTPverification"
+        android:name="com.example.sutdfolio.OTPverification"
+        android:label="fragment_o_t_pverification"
+        tools:layout="@layout/fragment_o_t_pverification" />
 
 </navigation>

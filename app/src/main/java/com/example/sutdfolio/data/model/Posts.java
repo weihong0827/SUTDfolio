@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 public class  Posts {
+    private String _id;
+
     private String title;
+
     private String desc;
     private List<Image> image;
     private int term;
@@ -23,20 +26,28 @@ public class  Posts {
         this.youtube = youtube;
         this.publish = publish;
     }
+
     @Override
     public String toString() {
         return "Posts{" +
-                "title='" + title + '\'' +
+                "_id='" + _id + '\'' +
+                ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
                 ", image=" + image +
-
                 ", term=" + term +
                 ", telegram='" + telegram + '\'' +
                 ", linkIn='" + linkIn + '\'' +
                 ", youtube='" + youtube + '\'' +
                 ", publish=" + publish +
-
                 '}';
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
     public String getTitle() {
         return title;

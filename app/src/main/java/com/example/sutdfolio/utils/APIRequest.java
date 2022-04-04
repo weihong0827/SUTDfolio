@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class APIRequest {
     private static final String TAG = "API Request";
-    private static final String prefixURL = "https://sutd-project-showcase-pim9c.ondigitalocean.app/";
+    private static final String prefixURL = "https://sutd-root-backend-w5e7n.ondigitalocean.app/";
     private NetworkManager netWorkInstance = NetworkManager.getInstance();
     private static APIRequest instance = null;
     private APIRequest(){
@@ -60,7 +60,7 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
-    public void verify(final Listener<String>listener,int otp,String detail,String email){
+    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email){
         String url = prefixURL + "api/login";
         JSONObject body = new JSONObject();
         try {
@@ -78,7 +78,7 @@ public class APIRequest {
                         Log.d(TAG + ": ", "Login " + ": " + response.toString());
                         //TODO: Store the JWT token that comes back in the system for future use
                         if (null != response.toString())
-                            listener.getResult(response.toString());
+                            listener.getResult(response);
                     }
                 },new Response.ErrorListener() {
             @Override
@@ -90,7 +90,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
-    public void login(final Listener<String>listener,String email,String password){
+    public void login(final Listener<JSONObject>listener,String email,String password){
         String url = prefixURL + "api/login";
         JSONObject body = new JSONObject();
         try {
@@ -107,7 +107,7 @@ public class APIRequest {
                 Log.d(TAG + ": ", "Login " + ": " + response.toString());
                 //TODO: retain the detail and use that for otp verification
                 if (null != response.toString())
-                    listener.getResult(response.toString());
+                    listener.getResult(response);
             }
         },new Response.ErrorListener() {
             @Override
@@ -229,8 +229,9 @@ public class APIRequest {
                     @Override
                     public void onResponse(JSONArray response)
                     {
-                        Log.d(TAG + ": ", "All posts : " + response.toString());
+
                         if(null != response.toString())
+                            Log.d(TAG + ": ", "All posts : " + response.toString());
                             listener.getResult(response.toString());
 
                     }

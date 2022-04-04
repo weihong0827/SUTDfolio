@@ -1,6 +1,10 @@
 package com.example.sutdfolio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,19 +21,30 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.sutdfolio.databinding.ActivityMainBinding;
 import com.example.sutdfolio.utils.NetworkManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    Button Login;
-    EditText Email,Password;
+//    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        binding = ActivityMainBinding.inflate(getLayoutInflater());
         NetworkManager.getInstance(this);
+//        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
+        NavController navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
+        
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,homePage.newInstance(),null).commit();
+
+
     }
 }
