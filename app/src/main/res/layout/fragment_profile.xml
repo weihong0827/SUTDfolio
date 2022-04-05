@@ -24,7 +24,7 @@
                 android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:id="@+id/Avatar"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/ic_baseline_person_24"
                 android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
 
@@ -34,12 +34,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/Name"
         android:text="Name"
         android:textSize="30dp"
         android:layout_gravity="center"
         />
+    <TextView
+        android:id="@+id/ClassOf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Class of"
+        android:textSize="15dp"
+        android:layout_gravity="center"
+        />
 
     <TextView
+        android:id="@+id/StudentID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -47,6 +57,7 @@
         android:text="Student ID" />
 
     <TextView
+        android:id="@+id/AboutMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="About Me"

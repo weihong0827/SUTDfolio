@@ -1,16 +1,25 @@
 package com.example.sutdfolio;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.sutdfolio.data.model.Posts;
+import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
 import com.example.sutdfolio.databinding.FragmentProfileBinding;
@@ -27,7 +36,6 @@ import org.json.JSONObject;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    private FragmentProfileBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,8 +46,16 @@ public class ProfileFragment extends Fragment {
     String user = "";
     String posts = "";
     String token = "";
-    User userObj;
+    private User userObj;
     Posts[] postsObj;
+    private RecyclerView mRecyclerView;
+    private RecyclerViewAdapter adapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    TextView name;
+    TextView id;
+    TextView classOf;
+    TextView aboutMe;
+    ImageView avatar;
 
 
     public ProfileFragment() {
@@ -62,6 +78,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         SharedPreferences pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = pref.getString("token", "");
@@ -81,13 +98,57 @@ public class ProfileFragment extends Fragment {
                         //object.getString("Profile");
                     }
             }, token);
+
+        id.setText(userObj.getStudentId());
+        classOf.setText((userObj.getClass_of()));
+        name.setText(userObj.getName());
+        aboutMe.setText(userObj.getAboutMe());
+        if (!userObj.getAvatar().isEmpty()){
+            Glide
+                    .with(getActivity())
+                    .load(userObj.getAvatar())
+                    .centerCrop()
+//                .placeholder(R.drawable.loading_spinner)
+                    .into(avatar);
+        }
+        getUserPostData();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.RecyclerViewProfile);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        id = view.findViewById(R.id.StudentID);
+        name = view.findViewById(R.id.Name);
+        avatar = view.findViewById(R.id.Avatar);
+        classOf = view.findViewById(R.id.ClassOf);
+        aboutMe = view.findViewById(R.id.AboutMe);
+
+        return view;
+
+
+    }
+
+
+    private void getUserPostData (){
+        APIRequest request = APIRequest.getInstance();
+        request.getPosts(new Listener<String>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void getResult(String object) {
+                final Gson gson = new Gson();
+                Log.d("get",postsObj[0].toString());
+//                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
+
+                adapter = new RecyclerViewAdapter(getActivity(),postsObj);
+                mRecyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }

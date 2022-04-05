@@ -29,6 +29,11 @@ import android.widget.Toast;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 
 import com.example.sutdfolio.R;
+import com.example.sutdfolio.utils.APIRequest;
+import com.example.sutdfolio.utils.Listener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginFragment extends Fragment {
 
@@ -111,10 +116,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
                 return false;
             }
         });
@@ -123,13 +124,23 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                String details = loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-                Bundle bundle = new Bundle();
-                bundle.putString("details",details);
-                bundle.putString("email", usernameEditText.getText().toString());
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
+                APIRequest api =APIRequest.getInstance();
+                api.login(new Listener<JSONObject>() {
+                    @Override
+                    public void getResult(JSONObject object) {
+                        try {
+                            String details = object.getString("Details");
+                            Bundle bundle = new Bundle();
+                            bundle.putString("details",details);
+                            bundle.putString("email", usernameEditText.getText().toString());
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, usernameEditText.getText().toString(), passwordEditText.getText().toString());
+
             }
         });
     }

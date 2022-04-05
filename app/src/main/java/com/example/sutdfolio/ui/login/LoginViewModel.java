@@ -40,21 +40,6 @@ public class LoginViewModel extends ViewModel {
 
     String details = "";
 
-    public String login(String username, String password) {
-
-        // can be launched in a separate asynchronous job
-        APIRequest api =APIRequest.getInstance();
-        api.login(new Listener<JSONObject>() {
-            @Override
-            public void getResult(JSONObject object) {
-                try {
-                    details = object.getString("Details");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, username, password);
-        return details;
 
 //        if (result instanceof Result.Success) {
 //            User data = ((Result.Success<User>) result).getData();
@@ -62,7 +47,7 @@ public class LoginViewModel extends ViewModel {
 //        } else {
 //            loginResult.setValue(new LoginResult(R.string.login_failed));
 //        }
-    }
+
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {

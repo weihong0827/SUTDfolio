@@ -72,10 +72,14 @@ public class OTPverification extends Fragment {
     String status = "";
     String token = "";
     SharedPreferences pref;
+    Button otpverification;
+    EditText otpEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        otpEditText = binding.otpfield;
+        otpverification = binding.verify;
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
@@ -98,8 +102,7 @@ public class OTPverification extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final EditText otpEditText = binding.otpfield;
-        final Button otpverification = binding.verify;
+
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
