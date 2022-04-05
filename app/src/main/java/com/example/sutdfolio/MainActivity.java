@@ -6,6 +6,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +34,12 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 //    ActivityMainBinding binding;
 
+    SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 //        binding = ActivityMainBinding.inflate(getLayoutInflater());
         NetworkManager.getInstance(this);
 //        setContentView(binding.getRoot());
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
         
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,homePage.newInstance(),null).commit();
 
 

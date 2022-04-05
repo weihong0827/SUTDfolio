@@ -1,11 +1,14 @@
 package com.example.sutdfolio;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -65,9 +68,15 @@ public class OTPverification extends Fragment {
         OTPverification fragment = new OTPverification();
         return fragment;
     }
+
+    String status = "";
+    String token = "";
+    SharedPreferences pref;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
             getEmail = getArguments().getString(EMAIL);
@@ -80,15 +89,12 @@ public class OTPverification extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOTPverificationBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
-    String status = "";
-    String token = "";
-    String user = "";
-    String posts = "";
-    User userObj;
-    Posts[] postsObj;
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -126,6 +132,14 @@ public class OTPverification extends Fragment {
                             status = object.getString("Status");
                             token = object.getString("Token");
                             if (status.equals("Success")){
+                                SharedPreferences.Editor prefEditor = pref.edit();
+                                prefEditor.putString("token", object.toString());
+                                prefEditor.apply();
+                                prefEditor.commit();
+                                Bundle bundle = new Bundle();
+                                NavController navController = Navigation.findNavController(view);
+                                navController.navigate(R.id.action_OTPverification_to_profileFragment,bundle);
+
                                 //TODO navigate to the logged in profile page
                                 //todo pass token to page in bundle
                                 //todo store jwt token on the phone
