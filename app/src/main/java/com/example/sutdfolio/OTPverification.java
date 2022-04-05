@@ -5,7 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
+import com.example.sutdfolio.ui.login.OTPFormState;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.google.gson.Gson;
@@ -76,7 +80,6 @@ public class OTPverification extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOTPverificationBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -92,7 +95,24 @@ public class OTPverification extends Fragment {
         final EditText otpEditText = binding.otpfield;
         final Button otpverification = binding.verify;
 
+        //for OTP field checking
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // check whether both the fields are empty or not
+                otpverification.setEnabled(s!=null && s.length()==6);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        otpEditText.addTextChangedListener(textWatcher);
         otpverification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
