@@ -2,6 +2,8 @@ package com.example.sutdfolio;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -65,7 +67,17 @@ public class OTPverification extends Fragment {
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
             getEmail = getArguments().getString(EMAIL);
+
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        binding = FragmentOTPverificationBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
     }
 
     String status = "";
@@ -75,10 +87,8 @@ public class OTPverification extends Fragment {
     User userObj;
     Posts[] postsObj;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentOTPverificationBinding.inflate(inflater, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         final EditText otpEditText = binding.otpfield;
         final Button otpverification = binding.verify;
 
@@ -133,10 +143,4 @@ public class OTPverification extends Fragment {
 //        }
 
 
-
-        return binding.getRoot();
-
-
-    }
-
-}
+    }}
