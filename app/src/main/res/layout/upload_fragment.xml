@@ -1,13 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".Upload">
+
+<ScrollView
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Upload">
+    android:paddingBottom="56dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="UPLOAD Page" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-</FrameLayout>
+        <!-- Include other widget or layout tags here. These are considered
+                "child views" or "children" of the linear layout -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:height="50dp"
+            android:text="UPLOAD Page" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Title (up to 6 words)" />
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Images" />
+
+        <Button
+            android:id="@+id/buttonGetComic"
+            android:text="Add another"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Project Description" />
+
+        <EditText
+            android:id="@+id/editTextProjectDescription"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="People Involved (Student IDs)" />
+
+        <EditText
+            android:id="@+id/editTextPeopleInvolved"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/buttonAddPeople"
+            android:text="Add Person"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Term" />
+
+        <Spinner
+            android:id="@+id/spinnerTerm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Course" />
+
+        <Spinner
+            android:id="@+id/spinnerCourse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Tag(s)" />
+
+        <Spinner
+            android:id="@+id/spinnerTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="YouTube Link" />
+
+        <EditText
+            android:id="@+id/editTextYouTubeLink"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Contact" />
+
+        <EditText
+            android:id="@+id/editTextTelegram"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:hint="Telegram Handle"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/editTextLinkedIn"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:hint="LinkedIn"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:text="Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>
+
+</LinearLayout>

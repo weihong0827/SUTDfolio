@@ -105,4 +105,14 @@
     </string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string-array name="term_array">
+        <item>Term 1</item>
+        <item>Term 2</item>
+        <item>Term 3</item>
+        <item>Term 4</item>
+        <item>Term 5</item>
+        <item>Term 6</item>
+        <item>Term 7</item>
+        <item>Term 8</item>
+    </string-array>
 </resources>
