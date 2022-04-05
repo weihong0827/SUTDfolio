@@ -60,6 +60,66 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
+    public void getCourse(final Listener<String> listener){
+        String url = prefixURL + "api/posts/courses";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        Log.d(TAG + ": ", "get courses" + response.toString());
+                        if(null != response.toString())
+                            listener.getResult(response.toString());
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+//                            listener.getResult(false);
+
+                        }
+                    }
+                });
+
+        netWorkInstance.requestQueue.add(request);
+    }
+    public void getTags(final Listener<String> listener){
+        String url = prefixURL + "api/posts/tags";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        Log.d(TAG + ": ", "get courses" + response.toString());
+                        if(null != response.toString())
+                            listener.getResult(response.toString());
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+//                            listener.getResult(false);
+
+                        }
+                    }
+                });
+
+        netWorkInstance.requestQueue.add(request);
+    }
     public void verify(final Listener<JSONObject>listener,int otp,String detail,String email){
         String url = prefixURL + "api/login";
         JSONObject body = new JSONObject();
