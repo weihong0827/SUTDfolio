@@ -36,6 +36,15 @@
         android:id="@+id/OTPverification"
         android:name="com.example.sutdfolio.OTPverification"
         android:label="fragment_o_t_pverification"
-        tools:layout="@layout/fragment_o_t_pverification" />
+        tools:layout="@layout/fragment_o_t_pverification" >
+        <action
+            android:id="@+id/action_OTPverification_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.sutdfolio.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

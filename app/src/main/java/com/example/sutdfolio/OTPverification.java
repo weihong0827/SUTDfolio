@@ -1,11 +1,17 @@
 package com.example.sutdfolio;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +25,7 @@ import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
+import com.example.sutdfolio.ui.login.OTPFormState;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.google.gson.Gson;
@@ -61,9 +68,15 @@ public class OTPverification extends Fragment {
         OTPverification fragment = new OTPverification();
         return fragment;
     }
+
+    String status = "";
+    String token = "";
+    SharedPreferences pref;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
             getEmail = getArguments().getString(EMAIL);
@@ -80,19 +93,32 @@ public class OTPverification extends Fragment {
         return binding.getRoot();
     }
 
-    String status = "";
-    String token = "";
-    String user = "";
-    String posts = "";
-    User userObj;
-    Posts[] postsObj;
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final EditText otpEditText = binding.otpfield;
         final Button otpverification = binding.verify;
 
+        //for OTP field checking
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // check whether both the fields are empty or not
+                otpverification.setEnabled(s!=null && s.length()==6);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        otpEditText.addTextChangedListener(textWatcher);
         otpverification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +132,14 @@ public class OTPverification extends Fragment {
                             status = object.getString("Status");
                             token = object.getString("Token");
                             if (status.equals("Success")){
+                                SharedPreferences.Editor prefEditor = pref.edit();
+                                prefEditor.putString("token", object.toString());
+                                prefEditor.apply();
+                                prefEditor.commit();
+                                Bundle bundle = new Bundle();
+                                NavController navController = Navigation.findNavController(view);
+                                navController.navigate(R.id.action_OTPverification_to_profileFragment,bundle);
+
                                 //TODO navigate to the logged in profile page
                                 //todo pass token to page in bundle
                                 //todo store jwt token on the phone
