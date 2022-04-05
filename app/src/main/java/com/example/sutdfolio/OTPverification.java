@@ -80,9 +80,6 @@ public class OTPverification extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        otpEditText = binding.otpfield;
-        otpverification = binding.verify;
-
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
@@ -105,7 +102,8 @@ public class OTPverification extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        otpEditText = binding.otpfield;
+        otpverification = binding.verify;
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
@@ -135,11 +133,14 @@ public class OTPverification extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
+
                             status = object.getString("Status");
+
                             token = object.getString("Token");
                             if (status.equals("Success")){
                                 SharedPreferences.Editor prefEditor = pref.edit();
-                                prefEditor.putString("token", object.toString());
+                                prefEditor.putString("token", token);
+                                Log.d("otp",token);
                                 prefEditor.apply();
                                 prefEditor.commit();
                                 Bundle bundle = new Bundle();

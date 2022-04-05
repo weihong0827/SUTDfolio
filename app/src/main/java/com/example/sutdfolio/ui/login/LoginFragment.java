@@ -125,10 +125,12 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 APIRequest api =APIRequest.getInstance();
+                Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
                 api.login(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
+                            Toast.makeText(getActivity(),"logged",Toast.LENGTH_LONG).show();
                             String details = object.getString("Details");
                             Bundle bundle = new Bundle();
                             bundle.putString("details",details);

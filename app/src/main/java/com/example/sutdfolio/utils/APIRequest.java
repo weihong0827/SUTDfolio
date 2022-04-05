@@ -22,6 +22,7 @@ import java.util.Map;
 public class APIRequest {
     private static final String TAG = "API Request";
     private static final String prefixURL = "https://sutd-root-backend-w5e7n.ondigitalocean.app/";
+//    private static final String prefixURL = "http://localhost:3000";
     private NetworkManager netWorkInstance = NetworkManager.getInstance();
     private static APIRequest instance = null;
     private APIRequest(){
@@ -38,7 +39,7 @@ public class APIRequest {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG + ": ", "Login " + ": " + response.toString());
+                        Log.d(TAG + ": ", "User " + ": " + response.toString());
                         //TODO: Store the user data
                         if (null != response)
                             listener.getResult(response);
@@ -48,13 +49,14 @@ public class APIRequest {
             public void onErrorResponse(VolleyError error) {
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Response message: " + error.getMessage());
                 }
             }
         }){
             @Override
             public Map<String,String> getHeaders() throws AuthFailureError{
                 HashMap<String,String> headers = new HashMap<>();
-                headers.put("auth-code",jwt);
+                headers.put("auth-token",jwt);
                 return headers;
             }
         };
@@ -121,7 +123,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
     public void verify(final Listener<JSONObject>listener,int otp,String detail,String email){
-        String url = prefixURL + "api/login";
+        String url = prefixURL + "api/user/verify/otp";
         JSONObject body = new JSONObject();
         try {
             body.put("otp",otp);
@@ -145,13 +147,14 @@ public class APIRequest {
             public void onErrorResponse(VolleyError error) {
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
             }
         });
         netWorkInstance.requestQueue.add(request);
     }
     public void login(final Listener<JSONObject>listener,String email,String password){
-        String url = prefixURL + "api/login";
+        String url = prefixURL + "api/user/login";
         JSONObject body = new JSONObject();
         try {
             body.put("email",email);
@@ -160,20 +163,24 @@ public class APIRequest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d(TAG + ": ", "Login " + ": " + body.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                 new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG + ": ", "Login " + ": " + response.toString());
                 //TODO: retain the detail and use that for otp verification
+
                 if (null != response.toString())
                     listener.getResult(response);
             }
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
             }
         });

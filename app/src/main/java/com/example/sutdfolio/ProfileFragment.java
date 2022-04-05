@@ -93,29 +93,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        SharedPreferences pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        token = pref.getString("token", "");
-        APIRequest api = APIRequest.getInstance();
-            api.getUser(new Listener<JSONObject>() {
-                @Override
-                public void getResult(JSONObject object) {
-                    try {
-                        user = object.getString("user");
-                        posts = object.getString("projects");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    final Gson gson = new Gson();
-                    userObj = gson.fromJson(user, User.class);
-                    postsObj = gson.fromJson(posts, Posts[].class);
-                        //object.getString("Profile");
-                    }
-            }, token);
 
-
-
-
-//        userObj.
 
     }
 
@@ -134,19 +112,48 @@ public class ProfileFragment extends Fragment {
         classOf = view.findViewById(R.id.ClassOf);
         aboutMe = view.findViewById(R.id.AboutMe);
 
-        id.setText(userObj.getStudentId());
-        classOf.setText((userObj.getClass_of()));
-        name.setText(userObj.getName());
-        aboutMe.setText(userObj.getAboutMe());
-        if (!userObj.getAvatar().isEmpty()){
-            Glide
-                    .with(getActivity())
-                    .load(userObj.getAvatar())
-                    .centerCrop()
+        SharedPreferences pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        token = pref.getString("token", "");
+        Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
+        Log.d("TOKEN", token);
+        APIRequest api = APIRequest.getInstance();
+        api.getUser(new Listener<JSONObject>() {
+            @Override
+            public void getResult(JSONObject object) {
+                try {
+                    user = object.getString("user");
+                    posts = object.getString("projects");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final Gson gson = new Gson();
+                userObj = gson.fromJson(user, User.class);
+                postsObj = gson.fromJson(posts, ReadPost[].class);
+                Log.d("profile user", userObj.toString());
+                Log.d("profile posts", postsObj.toString());
+                //object.getString("Profile");
+                id.setText(String.valueOf(userObj.getStudentId()));
+                classOf.setText(String.valueOf(userObj.getClass_of()));
+                name.setText(userObj.getName());
+                aboutMe.setText(userObj.getAboutMe());
+                if (userObj.getAvatar()!=null){
+                    Glide
+                            .with(getActivity())
+                            .load(userObj.getAvatar())
+                            .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
-                    .into(avatar);
+                            .into(avatar);
+                }
+            }
+        }, token);
+
+        if (postsObj!=null){
+            if (postsObj.length>0){
+                getUserPostData();
+            }
+
         }
-        getUserPostData();
 
         return view;
 
@@ -160,7 +167,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void getResult(String object) {
                 final Gson gson = new Gson();
-                Log.d("get",postsObj[0].toString());
+//                Log.d("get",postsObj);
 //                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
 
                 adapter = new RecyclerViewAdapter(getActivity(),postsObj);
