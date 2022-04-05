@@ -72,14 +72,17 @@ public class OTPverification extends Fragment {
     String status = "";
     String token = "";
     SharedPreferences pref;
+
     Button otpverification;
     EditText otpEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         otpEditText = binding.otpfield;
         otpverification = binding.verify;
+
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
@@ -144,7 +147,6 @@ public class OTPverification extends Fragment {
                                 navController.navigate(R.id.action_OTPverification_to_profileFragment,bundle);
 
                                 //TODO navigate to the logged in profile page
-                                //todo pass token to page in bundle
                                 //todo store jwt token on the phone
                             }
                             else{
