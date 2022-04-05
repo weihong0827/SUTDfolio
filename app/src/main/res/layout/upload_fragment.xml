@@ -94,7 +94,7 @@ tools:context=".Upload">
             android:text="Term" />
 
         <Spinner
-            android:id="@+id/planets_spinner"
+            android:id="@+id/spinnerTerm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
