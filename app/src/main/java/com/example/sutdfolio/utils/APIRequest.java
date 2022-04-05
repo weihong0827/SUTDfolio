@@ -32,7 +32,7 @@ public class APIRequest {
         }
         return instance;
     }
-    public void getUser (final Listener<String>listener,String jwt){
+    public void getUser (final Listener<JSONObject>listener,String jwt){
         String url = prefixURL + "api/user";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -40,8 +40,8 @@ public class APIRequest {
                     public void onResponse(JSONObject response) {
                         Log.d(TAG + ": ", "Login " + ": " + response.toString());
                         //TODO: Store the user data
-                        if (null != response.toString())
-                            listener.getResult(response.toString());
+                        if (null != response)
+                            listener.getResult(response);
                     }
                 },new Response.ErrorListener() {
             @Override
@@ -77,7 +77,7 @@ public class APIRequest {
                     public void onResponse(JSONObject response) {
                         Log.d(TAG + ": ", "Login " + ": " + response.toString());
                         //TODO: Store the JWT token that comes back in the system for future use
-                        if (null != response.toString())
+                        if (null != response)
                             listener.getResult(response);
                     }
                 },new Response.ErrorListener() {

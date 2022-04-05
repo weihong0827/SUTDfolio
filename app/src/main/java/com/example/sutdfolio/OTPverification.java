@@ -2,18 +2,26 @@ package com.example.sutdfolio;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.sutdfolio.data.model.Posts;
+import com.example.sutdfolio.data.model.ReadPost;
+import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,15 +67,28 @@ public class OTPverification extends Fragment {
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
             getEmail = getArguments().getString(EMAIL);
+
         }
     }
 
-    String status = "";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOTPverificationBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
+    }
+
+    String status = "";
+    String token = "";
+    String user = "";
+    String posts = "";
+    User userObj;
+    Posts[] postsObj;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         final EditText otpEditText = binding.otpfield;
         final Button otpverification = binding.verify;
 
@@ -83,22 +104,43 @@ public class OTPverification extends Fragment {
                     public void getResult(JSONObject object) {
                         try {
                             status = object.getString("Status");
+                            token = object.getString("Token");
+                            if (status.equals("Success")){
+                                //TODO navigate to the logged in profile page
+                                //todo pass token to page in bundle
+                                //todo store jwt token on the phone
+                            }
+                            else{
+                                Log.d("otp","wrong otp");
+                                Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }, getOtp, getDetails, getEmail);
             }
+
         });
+//        if (status.equals("Success")){
+//            APIRequest api = APIRequest.getInstance();
+//            api.getUser(new Listener<JSONObject>() {
+//                @Override
+//                public void getResult(JSONObject object) {
+//                    try {
+//                        user = object.getString("User");
+//                        posts = object.getString("Posts");
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    final Gson gson = new Gson();
+//                    userObj = gson.fromJson(user, User.class);
+//                    postsObj = gson.fromJson(posts, Posts[].class);
+//                        //object.getString("Profile");
+//                    }
+//            }, token);
+//        }
 
 
-        return binding.getRoot();
-
-
-    }
-
-
-
-
-    }
-}
+    }}
