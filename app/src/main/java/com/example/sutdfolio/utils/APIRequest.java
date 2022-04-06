@@ -3,6 +3,7 @@ package com.example.sutdfolio.utils;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,8 +23,9 @@ import java.util.Map;
 public class APIRequest {
     private static final String TAG = "API Request";
     private static final String prefixURL = "https://sutd-root-backend-w5e7n.ondigitalocean.app/";
-//    private static final String prefixURL = "http://localhost:3000";
+
     private NetworkManager netWorkInstance = NetworkManager.getInstance();
+    static final float DEFAULT_BACKOFF_MULT = 1f;
     private static APIRequest instance = null;
     private APIRequest(){
     };
@@ -155,6 +157,7 @@ public class APIRequest {
     }
     public void login(final Listener<JSONObject>listener,String email,String password){
         String url = prefixURL + "api/user/login";
+
         JSONObject body = new JSONObject();
         try {
             body.put("email",email);
@@ -184,6 +187,8 @@ public class APIRequest {
                 }
             }
         });
+        request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         netWorkInstance.requestQueue.add(request);
     }
 
