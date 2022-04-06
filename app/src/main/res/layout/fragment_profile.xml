@@ -28,7 +28,6 @@
                 android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:id="@+id/Avatar"
-                android:src="@drawable/ic_baseline_person_24"
                 android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
 
@@ -39,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Name"
-        android:text="Name"
+        android:text=""
         android:textSize="30dp"
         android:layout_gravity="center"
         />
@@ -53,7 +52,7 @@
             android:id="@+id/Pillar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pillar"
+            android:text=""
             android:textSize="15dp"
             />
         <TextView
@@ -68,7 +67,7 @@
             android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Year"
+            android:text=""
             android:textSize="15dp"
             />
     </LinearLayout>
@@ -78,13 +77,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="20dp"
-        android:text="Student ID" />
+        android:text="" />
 
     <TextView
         android:id="@+id/AboutMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About Me"
+        android:text=""
         android:layout_margin="10dp"
         android:layout_gravity="center"
         />

@@ -49,22 +49,22 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentLogin2Binding.inflate(inflater, container, false);
-        if (checkToken()){
-            navController = Navigation.findNavController(binding.getRoot());
-            navController.navigate(R.id.action_loginFragment_to_profileFragment);
-        }
+//        if (checkToken()){
+//            navController = Navigation.findNavController(binding.getRoot());
+//            navController.navigate(R.id.action_loginFragment_to_profileFragment);
+//        }
         return binding.getRoot();
 
     }
 
-    private boolean checkToken(){
-        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        token = pref.getString("token", "");
-        if (token.equals("")){
-            return false;
-        }else{return true;}
-
-    }
+//    private boolean checkToken(){
+//        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+//        token = pref.getString("token", "");
+//        if (token.equals("")){
+//            return false;
+//        }else{return true;}
+//
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

@@ -4,6 +4,7 @@ package com.example.sutdfolio;
 import android.annotation.SuppressLint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -91,6 +92,8 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        token = pref.getString("token", "");
         super.onCreate(savedInstanceState);
 
 
@@ -115,10 +118,10 @@ public class ProfileFragment extends Fragment {
         logout = view.findViewById(R.id.Logout);
 
 
-        if (!checkToken()){
-            navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_profileFragment_to_loginFragment);
-        }
+//        if (!checkToken()){
+//            navController = Navigation.findNavController(view);
+//            navController.navigate(R.id.action_profileFragment_to_loginFragment);
+//        }
         Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
         Log.d("TOKEN", token);
 
@@ -167,8 +170,16 @@ public class ProfileFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pref.edit().remove("token").apply();
-                navController.navigate(R.id.action_profileFragment_to_loginFragment);
+                try{
+                    pref.edit().remove("token").apply();
+                    getActivity().finish();
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+                catch (Error error){
+                    Log.d("logout", "no token");
+                }
+
             }
         });
 
@@ -183,11 +194,11 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private boolean checkToken(){
-        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        token = pref.getString("token", "");
-        if (token.equals("")){
-            return false;
-        }else{return true;}
-    }
+//    private boolean checkToken(){
+//        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+//        token = pref.getString("token", "");
+//        if (token.equals("")){
+//            return false;
+//        }else{return true;}
+//    }
 }

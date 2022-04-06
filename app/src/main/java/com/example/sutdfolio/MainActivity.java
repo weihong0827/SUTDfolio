@@ -10,6 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
 //    ActivityMainBinding binding;
 
     SharedPreferences pref;
+    String token = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pref = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        String token = pref.getString("token", "");
+        token = pref.getString("token", "");
 
+        Log.d("gottoken", token);
 
 //        binding = ActivityMainBinding.inflate(getLayoutInflater());
         NetworkManager.getInstance(this);
@@ -54,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Log.d("bottomnav", "listening");
                         if (item.getItemId() == R.id.loginFragment){
+                            token = pref.getString("token", "");
+                            Log.d("loginpress", token);
+                            Log.d("tokencheck", String.valueOf(token.equals("")));
                             if(token.equals("")){
                                 navController.navigate(R.id.loginFragment);
                             }else{navController.navigate(R.id.profileFragment);}
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+
 
 //NavigationUI.setupWithNavController(bottomNavigationView, navController);
 //                item -> {

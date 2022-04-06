@@ -135,27 +135,26 @@ public class OTPverification extends Fragment {
                         try {
 
                             status = object.getString("Status");
-
                             token = object.getString("Token");
-                            if (status.equals("Success")){
                                 SharedPreferences.Editor prefEditor = pref.edit();
                                 prefEditor.putString("token", token);
-                                Log.d("otp",token);
+
+                                Log.d("otp", token);
+
                                 prefEditor.apply();
                                 prefEditor.commit();
+                                Log.d("tokenput", pref.getString("token", ""));
                                 NavController navController = Navigation.findNavController(view);
                                 navController.navigate(R.id.action_OTPverification_to_profileFragment);
 
                                 //TODO navigate to the logged in profile page
                                 //todo store jwt token on the phone
-                            }
-                            else{
-                                Log.d("otp","wrong otp");
-                                Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
-                            }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("otp","wrong otp");
+                            Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, getOtp, getDetails, getEmail);
