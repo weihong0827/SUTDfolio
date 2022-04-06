@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,14 +35,14 @@ import android.view.ViewGroup;
 import com.example.sutdfolio.data.model.Posts;
 
 import com.example.sutdfolio.data.model.User;
-import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
-import com.example.sutdfolio.databinding.FragmentProfileBinding;
 import com.example.sutdfolio.utils.APIRequest;
 import com.google.gson.Gson;
 import com.example.sutdfolio.utils.Listener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,13 +51,6 @@ import org.json.JSONObject;
  */
 public class ProfileFragment extends Fragment {
 
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-    // TODO: Rename and change types of parameters
     String user = "";
     String posts = "";
     String token = "";
@@ -66,9 +62,13 @@ public class ProfileFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     TextView name;
     TextView id;
-    TextView classOf;
+    TextView year;
     TextView aboutMe;
     ImageView avatar;
+    TextView pillar;
+    Button logout;
+    SharedPreferences pref;
+    NavController navController;
 
 
 
@@ -91,8 +91,8 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
 
 
     }
@@ -109,13 +109,19 @@ public class ProfileFragment extends Fragment {
         id = view.findViewById(R.id.StudentID);
         name = view.findViewById(R.id.Name);
         avatar = view.findViewById(R.id.Avatar);
-        classOf = view.findViewById(R.id.ClassOf);
+        year = view.findViewById(R.id.year);
         aboutMe = view.findViewById(R.id.AboutMe);
+        pillar = view.findViewById(R.id.Pillar);
+        logout = view.findViewById(R.id.Logout);
 
-        SharedPreferences pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        token = pref.getString("token", "");
+
+        if (!checkToken()){
+            navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_profileFragment_to_loginFragment);
+        }
         Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
         Log.d("TOKEN", token);
+
         APIRequest api = APIRequest.getInstance();
         api.getUser(new Listener<JSONObject>() {
             @Override
@@ -131,10 +137,12 @@ public class ProfileFragment extends Fragment {
                 userObj = gson.fromJson(user, User.class);
                 postsObj = gson.fromJson(posts, ReadPost[].class);
                 Log.d("profile user", userObj.toString());
-                Log.d("profile posts", postsObj.toString());
+                Log.d("profile posts", Arrays.toString(postsObj));
                 //object.getString("Profile");
+
                 id.setText(String.valueOf(userObj.getStudentId()));
-                classOf.setText(String.valueOf(userObj.getClass_of()));
+                year.setText(String.valueOf(userObj.getClass_of()));
+                pillar.setText(String.valueOf(userObj.getPillar()));
                 name.setText(userObj.getName());
                 aboutMe.setText(userObj.getAboutMe());
                 if (userObj.getAvatar()!=null){
@@ -145,36 +153,41 @@ public class ProfileFragment extends Fragment {
 //                .placeholder(R.drawable.loading_spinner)
                             .into(avatar);
                 }
+                Log.d("TAG", Arrays.toString(postsObj));
+                if (postsObj!=null){
+                    if (postsObj.length>0){
+                        Log.d("posts not empty", "not empty");
+                        getUserPostData();
+                    }
+
+                }
             }
         }, token);
 
-        if (postsObj!=null){
-            if (postsObj.length>0){
-                getUserPostData();
-            }
-
-        }
-
-        return view;
-
-
-    }
-
-    private void getUserPostData (){
-        APIRequest request = APIRequest.getInstance();
-        request.getPosts(new Listener<String>() {
-            @SuppressLint("NotifyDataSetChanged")
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void getResult(String object) {
-                final Gson gson = new Gson();
-//                Log.d("get",postsObj);
-//                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
-
-                adapter = new RecyclerViewAdapter(getActivity(),postsObj);
-                mRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+            public void onClick(View view) {
+                pref.edit().remove("token").apply();
+                navController.navigate(R.id.action_profileFragment_to_loginFragment);
             }
         });
 
+
+        return view;
+    }
+
+    private void getUserPostData (){
+        adapter = new RecyclerViewAdapter(getActivity(),postsObj);
+        mRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    private boolean checkToken(){
+        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        token = pref.getString("token", "");
+        if (token.equals("")){
+            return false;
+        }else{return true;}
     }
 }

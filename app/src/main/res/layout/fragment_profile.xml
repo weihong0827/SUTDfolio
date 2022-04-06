@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:backgroundTint="@android:color/transparent"
+        app:cardElevation="0dp">
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="100dp"
@@ -39,15 +43,35 @@
         android:textSize="30dp"
         android:layout_gravity="center"
         />
-    <TextView
-        android:id="@+id/ClassOf"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Class of"
-        android:textSize="15dp"
-        android:layout_gravity="center"
-        />
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
+        <TextView
+            android:id="@+id/Pillar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pillar"
+            android:textSize="15dp"
+            />
+        <TextView
+            android:id="@+id/ClassOf"
+            android:layout_marginHorizontal="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Class of"
+            android:textSize="15dp"
+            />
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Year"
+            android:textSize="15dp"
+            />
+    </LinearLayout>
     <TextView
         android:id="@+id/StudentID"
         android:layout_width="wrap_content"
@@ -65,10 +89,18 @@
         android:layout_gravity="center"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
+        android:id="@+id/Logout"
+        android:layout_gravity="center"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
         android:scrollbars="vertical" />
 
 </LinearLayout>

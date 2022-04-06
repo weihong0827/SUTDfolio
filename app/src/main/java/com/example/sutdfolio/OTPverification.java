@@ -143,9 +143,8 @@ public class OTPverification extends Fragment {
                                 Log.d("otp",token);
                                 prefEditor.apply();
                                 prefEditor.commit();
-                                Bundle bundle = new Bundle();
                                 NavController navController = Navigation.findNavController(view);
-                                navController.navigate(R.id.action_OTPverification_to_profileFragment,bundle);
+                                navController.navigate(R.id.action_OTPverification_to_profileFragment);
 
                                 //TODO navigate to the logged in profile page
                                 //todo store jwt token on the phone
