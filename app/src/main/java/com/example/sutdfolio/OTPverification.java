@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.os.TestLooperManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,21 +19,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.sutdfolio.data.model.Posts;
-import com.example.sutdfolio.data.model.ReadPost;
-import com.example.sutdfolio.data.model.User;
-import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
-import com.example.sutdfolio.ui.login.OTPFormState;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.

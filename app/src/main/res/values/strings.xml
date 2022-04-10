@@ -8,7 +8,7 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name (minimum 6 characters long)</string>
     <string name="prompt_student_ID">Student ID</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="Enter_OTP">Enter OTP</string>
     <string name="Enter_OTP_email">Enter OTP sent to user Email</string>
     <string name="verify_otp">Verify</string>
