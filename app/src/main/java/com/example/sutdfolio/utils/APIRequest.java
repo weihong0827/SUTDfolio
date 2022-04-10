@@ -171,12 +171,47 @@ public class APIRequest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG + ": ", "Login " + ": " + body.toString());
+        Log.d(TAG + ": ", "Register " + ": " + body.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG + ": ", "Register " + ": " + response.toString());
+                        if (null != response.toString())
+                            listener.getResult(response);
+                    }
+                },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (null != error.networkResponse) {
+                    Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
+                }
+            }
+        });
+        netWorkInstance.requestQueue.add(request);
+    }
+
+    public void editUser(final Listener<JSONObject>listener,String aboutMe,String pillar,String class_of,String avatar){
+        String url = prefixURL + "api/user/register";
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("aboutMe",aboutMe);
+            body.put("pillar",pillar);
+            body.put("class_of",class_of);
+            body.put("avatar",avatar);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG + ": ", "Edit profile " + ": " + body.toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG + ": ", "Edit profile " + ": " + response.toString());
                         if (null != response.toString())
                             listener.getResult(response);
                     }
