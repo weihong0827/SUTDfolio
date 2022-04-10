@@ -64,7 +64,7 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
-    
+
     public void getCourse(final Listener<String> listener){
         String url = prefixURL + "api/posts/courses";
         Log.d(TAG, "getCourse: start"+url);
