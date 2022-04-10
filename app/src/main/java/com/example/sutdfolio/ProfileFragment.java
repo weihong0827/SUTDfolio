@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
     String token = "";
 
     private User userObj;
-    Posts[] postsObj;
+    ReadPost[] postsObj;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -172,9 +172,9 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 try{
                     pref.edit().remove("token").apply();
-                    getActivity().finish();
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    startActivity(intent);
+                    navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.action_profileFragment_to_loginFragment);
+
                 }
                 catch (Error error){
                     Log.d("logout", "no token");

@@ -57,57 +57,11 @@ tools:context=".Upload">
                 android:id="@+id/uploadPage_images_LinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:orientation="horizontal" >
 
-                <ImageView
-                    android:id="@+id/uploadPage_image_1_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
 
-                <ImageView
-                    android:id="@+id/uploadPage_image_2_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
-
-                <ImageView
-                    android:id="@+id/uploadPage_image_3_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
-
-                <ImageView
-                    android:id="@+id/uploadPage_image_4_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
-
-                <ImageView
-                    android:id="@+id/uploadPage_image_5_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
-
-                <ImageView
-                    android:id="@+id/uploadPage_image_6_ImageView"
-                    android:layout_width="75dp"
-                    android:background="#c1c1c1"
-                    android:layout_height="75dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
 
             </LinearLayout>
 
@@ -141,13 +95,19 @@ tools:context=".Upload">
             android:gravity="bottom"
             android:height="50dp"
             android:text="@string/people_involved_student_ids" />
+        <LinearLayout
+            android:id="@+id/peopleInvolve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <EditText
             android:id="@+id/uploadPage_peopleInvolved_EditText"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:height="100dp"
-            android:inputType="text"/>
+            android:inputType="number"/>
+    </LinearLayout>
 
         <Button
             android:id="@+id/uploadPage_addPerson_Button"
@@ -189,11 +149,11 @@ tools:context=".Upload">
             android:height="50dp"
             android:text="Tag(s)" />
 
-        <Spinner
-            android:id="@+id/uploadPage_tag_Spinner"
+        <LinearLayout
+            android:id="@+id/tagList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
         <TextView
             android:id="@+id/uploadPage_YouTube_TextView"
             android:layout_width="match_parent"

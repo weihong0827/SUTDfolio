@@ -18,7 +18,6 @@ import com.example.sutdfolio.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -71,11 +70,12 @@ public class APIRequest {
     }
     public void getCourse(final Listener<String> listener){
         String url = prefixURL + "api/posts/courses";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
+        Log.d(TAG, "getCourse: start"+url);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>()
                 {
                     @Override
-                    public void onResponse(JSONObject response)
+                    public void onResponse(JSONArray response)
                     {
                         Log.d(TAG + ": ", "get courses" + response.toString());
                         if(null != response.toString())
@@ -88,6 +88,7 @@ public class APIRequest {
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
+                        Log.d(TAG, "onErrorResponse: "+error);
                         if (null != error.networkResponse)
                         {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
@@ -101,11 +102,11 @@ public class APIRequest {
     }
     public void getTags(final Listener<String> listener){
         String url = prefixURL + "api/posts/tags";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>()
                 {
                     @Override
-                    public void onResponse(JSONObject response)
+                    public void onResponse(JSONArray response)
                     {
                         Log.d(TAG + ": ", "get courses" + response.toString());
                         if(null != response.toString())
@@ -160,6 +161,41 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
+    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId){
+        String url = prefixURL + "api/user/register";
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email",email);
+            body.put("password",password);
+            body.put("name",name);
+            body.put("studentId",studentId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG + ": ", "Login " + ": " + body.toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG + ": ", "Register " + ": " + response.toString());
+                        if (null != response.toString())
+                            listener.getResult(response);
+                    }
+                },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (null != error.networkResponse) {
+                    Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
+                }
+            }
+        });
+        netWorkInstance.requestQueue.add(request);
+    }
+
     public void login(final Listener<JSONObject>listener,String email,String password, TextView errorText){
         String url = prefixURL + "api/user/login";
 
