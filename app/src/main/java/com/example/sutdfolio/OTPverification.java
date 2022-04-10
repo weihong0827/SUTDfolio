@@ -73,9 +73,13 @@ public class OTPverification extends Fragment {
     String token = "";
     SharedPreferences pref;
 
+    Button otpverification;
+    EditText otpEditText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         if (getArguments() != null) {
             getDetails = getArguments().getString(DETAILS);
@@ -98,8 +102,8 @@ public class OTPverification extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final EditText otpEditText = binding.otpfield;
-        final Button otpverification = binding.verify;
+        otpEditText = binding.otpfield;
+        otpverification = binding.verify;
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
@@ -129,28 +133,28 @@ public class OTPverification extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
+
                             status = object.getString("Status");
                             token = object.getString("Token");
-                            if (status.equals("Success")){
                                 SharedPreferences.Editor prefEditor = pref.edit();
-                                prefEditor.putString("token", object.toString());
+                                prefEditor.putString("token", token);
+
+                                Log.d("otp", token);
+
                                 prefEditor.apply();
                                 prefEditor.commit();
-                                Bundle bundle = new Bundle();
+                                Log.d("tokenput", pref.getString("token", ""));
                                 NavController navController = Navigation.findNavController(view);
-                                navController.navigate(R.id.action_OTPverification_to_profileFragment,bundle);
+                                navController.navigate(R.id.action_OTPverification_to_profileFragment);
 
                                 //TODO navigate to the logged in profile page
-                                //todo pass token to page in bundle
                                 //todo store jwt token on the phone
-                            }
-                            else{
-                                Log.d("otp","wrong otp");
-                                Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
-                            }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("otp","wrong otp");
+                            Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, getOtp, getDetails, getEmail);

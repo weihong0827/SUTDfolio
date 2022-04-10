@@ -29,11 +29,19 @@ import android.widget.Toast;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 
 import com.example.sutdfolio.R;
+import com.example.sutdfolio.utils.APIRequest;
+import com.example.sutdfolio.utils.Listener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private FragmentLogin2Binding binding;
+    SharedPreferences pref;
+    NavController navController;
+    String token = "";
 
     @Nullable
     @Override
@@ -41,9 +49,22 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentLogin2Binding.inflate(inflater, container, false);
+//        if (checkToken()){
+//            navController = Navigation.findNavController(binding.getRoot());
+//            navController.navigate(R.id.action_loginFragment_to_profileFragment);
+//        }
         return binding.getRoot();
 
     }
+
+//    private boolean checkToken(){
+//        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+//        token = pref.getString("token", "");
+//        if (token.equals("")){
+//            return false;
+//        }else{return true;}
+//
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -111,10 +132,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
                 return false;
             }
         });
@@ -123,13 +140,25 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                String details = loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-                Bundle bundle = new Bundle();
-                bundle.putString("details",details);
-                bundle.putString("email", usernameEditText.getText().toString());
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
+                APIRequest api =APIRequest.getInstance();
+                Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
+                api.login(new Listener<JSONObject>() {
+                    @Override
+                    public void getResult(JSONObject object) {
+                        try {
+                            Toast.makeText(getActivity(),"logged",Toast.LENGTH_LONG).show();
+                            String details = object.getString("Details");
+                            Bundle bundle = new Bundle();
+                            bundle.putString("details",details);
+                            bundle.putString("email", usernameEditText.getText().toString());
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, usernameEditText.getText().toString(), passwordEditText.getText().toString());
+
             }
         });
     }

@@ -14,6 +14,20 @@ public class User {
     private String aboutMe;
     private int class_of;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "_id='" + _id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", studentId=" + studentId +
+                ", pillar='" + pillar + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", aboutMe='" + aboutMe + '\'' +
+                ", class_of=" + class_of +
+                '}';
+    }
+
     public User(String _id, String name, String email, int studentId, String pillar, String avatar, String aboutMe, int class_of) {
         this._id = _id;
         this.name = name;
