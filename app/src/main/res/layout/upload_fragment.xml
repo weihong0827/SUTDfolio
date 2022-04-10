@@ -1,13 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".Upload">
+
+<ScrollView
+    android:id="@+id/uploadPage_scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Upload">
+    android:paddingBottom="56dp"> <!--    height of the bottom nav bar is 56dp-->
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/uploadPage_LinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="UPLOAD Page" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/uploadPage_header_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:height="50dp"
+            android:text="UPLOAD Page" />
+
+        <TextView
+            android:id="@+id/uploadPage_title_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Title (up to 280 characters)" />
+
+        <EditText
+            android:id="@+id/uploadPage_title_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/uploadPage_images_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Images" />
+
+        <HorizontalScrollView
+            android:id="@+id/uploadPage_images_HorizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/uploadPage_images_LinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_1_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_2_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_3_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_4_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_5_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+                <ImageView
+                    android:id="@+id/uploadPage_image_6_ImageView"
+                    android:layout_width="75dp"
+                    android:background="#c1c1c1"
+                    android:layout_height="75dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_cloud_upload_24"/>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/uploadPage_addImage_Button"
+            android:text="@string/add_another"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/uploadPage_projectDescription_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Project Description" />
+
+        <EditText
+            android:id="@+id/uploadPage_projectDescription_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/uploadPage_peopleInvolved_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="@string/people_involved_student_ids" />
+
+        <EditText
+            android:id="@+id/uploadPage_peopleInvolved_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/uploadPage_addPerson_Button"
+            android:text="@string/add_person"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/uploadPage_term_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Term" />
+
+        <Spinner
+            android:id="@+id/uploadPage_term_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/uploadPage_course_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Course" />
+
+        <Spinner
+            android:id="@+id/uploadPage_course_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/uploadPage_tag_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Tag(s)" />
+
+        <Spinner
+            android:id="@+id/uploadPage_tag_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/uploadPage_YouTube_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="YouTube Link" />
+
+        <EditText
+            android:id="@+id/uploadPage_YouTube_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/uploadPage_contact_TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:height="50dp"
+            android:text="Contact" />
+
+        <EditText
+            android:id="@+id/uploadPage_telegram_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:hint="Telegram Handle"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/uploadPage_LinkedIn_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:hint="LinkedIn"
+            android:inputType="text"/>
+
+        <Button
+            android:id="@+id/uploadPage_submit_Button"
+            android:text="Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>
+
+</LinearLayout>

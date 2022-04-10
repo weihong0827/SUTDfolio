@@ -39,6 +39,9 @@ public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private FragmentLogin2Binding binding;
+    SharedPreferences pref;
+    NavController navController;
+    String token = "";
 
     @Nullable
     @Override
@@ -46,9 +49,22 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentLogin2Binding.inflate(inflater, container, false);
+//        if (checkToken()){
+//            navController = Navigation.findNavController(binding.getRoot());
+//            navController.navigate(R.id.action_loginFragment_to_profileFragment);
+//        }
         return binding.getRoot();
 
     }
+
+//    private boolean checkToken(){
+//        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+//        token = pref.getString("token", "");
+//        if (token.equals("")){
+//            return false;
+//        }else{return true;}
+//
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -125,10 +141,12 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 APIRequest api =APIRequest.getInstance();
+                Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
                 api.login(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
+                            Toast.makeText(getActivity(),"logged",Toast.LENGTH_LONG).show();
                             String details = object.getString("Details");
                             Bundle bundle = new Bundle();
                             bundle.putString("details",details);
