@@ -105,6 +105,9 @@
     </string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="add_another">Add another</string>
+    <string name="people_involved_student_ids">People Involved (Student IDs)</string>
+    <string name="add_person">Add Person</string>
     <string-array name="term_array">
         <item>Term 1</item>
         <item>Term 2</item>
