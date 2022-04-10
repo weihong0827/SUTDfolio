@@ -22,18 +22,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
+import com.example.sutdfolio.data.model.ReadPost;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
     private static final String TAG = "Recycler adapter";
-    private final Posts[] posts;
+    private List<ReadPost> posts;
     private final Context context;
     private static String id;
+    private ArrayList<ReadPost> tempList;
 
-    public RecyclerViewAdapter(Context context,Posts[] posts) {
+    public RecyclerViewAdapter(Context context,ReadPost[] posts) {
         this.context = context;
-        this.posts = posts;
+        this.posts = Arrays.asList(posts);
+        tempList = new ArrayList<>();
+        tempList.addAll(Arrays.asList(posts));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -93,10 +100,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.getTextTitle().setText(posts[position].getTitle());
+        holder.getTextTitle().setText(tempList.get(position).getTitle());
 //        holder.getTextDesc().setText(Html.fromHtml(posts[position].getDesc()));
-        holder.getTextDesc().setText(posts[position].getDesc());
-        List<Image> imageList = posts[position].getImage();
+        holder.getTextDesc().setText(tempList.get(position).getDesc());
+        List<Image> imageList = tempList.get(position).getImage();
         if (imageList.size()>0){
             Glide
                     .with(context)
@@ -105,13 +112,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                .placeholder(R.drawable.loading_spinner)
                     .into(holder.getItemImage());
         }
-        id = posts[position].get_id();
+        id = tempList.get(position).get_id();
 
 
+    }
+    public void filter(String s) {
+        Log.d(TAG, "filter: input string"+s);
+        String lowerS = s.toLowerCase(Locale.ROOT);
+        Log.d(TAG, "filter: posts data"+posts.toString());
+        tempList.clear();
+        if (s.length()==0){
+            tempList.addAll(posts);
+        }else{
+            for (ReadPost item: posts){
+                if (item.getTitle().toLowerCase(Locale.ROOT).contains(lowerS)){
+                    tempList.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return posts.length;
+        return tempList.size();
     }
 }

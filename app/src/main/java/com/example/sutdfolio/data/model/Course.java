@@ -20,6 +20,10 @@ public class Course {
         this._id = _id;
     }
 
+    public String get_id() {
+        return _id;
+    }
+
     public String getCourseDesc() {
         return courseDesc;
     }
@@ -32,5 +36,8 @@ public class Course {
         return courseNo;
     }
 
-
+    @Override
+    public String toString() {
+        return courseName;
+    }
 }

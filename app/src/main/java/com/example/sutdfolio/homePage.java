@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.sutdfolio.data.model.Posts;
@@ -31,10 +32,11 @@ import java.util.List;
 public class homePage extends Fragment{
 
     private HomePageViewModel mViewModel;
-    Posts[] posts;
+    ReadPost[] posts;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    SearchView searchView;
 
     public static homePage newInstance() {
         return new homePage();
@@ -64,6 +66,22 @@ public class homePage extends Fragment{
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        searchView = rootView.findViewById(R.id.simpleSearchView);
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        adapter.filter(s);
+                        return true;
+                    }
+                }
+
+        );
 
         return rootView;
     }
@@ -89,7 +107,7 @@ public class homePage extends Fragment{
                 Log.d("get",posts[0].toString());
 //                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
 
-                adapter = new RecyclerViewAdapter(getActivity(),posts);
+                adapter = new RecyclerViewAdapter(getActivity(), posts);
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

@@ -64,13 +64,15 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
+    
     public void getCourse(final Listener<String> listener){
         String url = prefixURL + "api/posts/courses";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
+        Log.d(TAG, "getCourse: start"+url);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>()
                 {
                     @Override
-                    public void onResponse(JSONObject response)
+                    public void onResponse(JSONArray response)
                     {
                         Log.d(TAG + ": ", "get courses" + response.toString());
                         if(null != response.toString())
@@ -83,6 +85,7 @@ public class APIRequest {
                     @Override
                     public void onErrorResponse(VolleyError error)
                     {
+                        Log.d(TAG, "onErrorResponse: "+error);
                         if (null != error.networkResponse)
                         {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
@@ -96,11 +99,11 @@ public class APIRequest {
     }
     public void getTags(final Listener<String> listener){
         String url = prefixURL + "api/posts/tags";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>()
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>()
                 {
                     @Override
-                    public void onResponse(JSONObject response)
+                    public void onResponse(JSONArray response)
                     {
                         Log.d(TAG + ": ", "get courses" + response.toString());
                         if(null != response.toString())
