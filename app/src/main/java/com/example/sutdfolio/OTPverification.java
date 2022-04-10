@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -106,6 +107,7 @@ public class OTPverification extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         otpEditText = binding.otpfield;
         otpverification = binding.verify;
+        TextView ErrorText = getView().findViewById(R.id.OTPErrorMessage);
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
@@ -129,7 +131,6 @@ public class OTPverification extends Fragment {
             @Override
             public void onClick(View view) {
                 getOtp = Integer.valueOf(otpEditText.getText().toString());
-
                 APIRequest api = APIRequest.getInstance();
                 api.verify(new Listener<JSONObject>() {
                     @Override
@@ -156,7 +157,7 @@ public class OTPverification extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                }, getOtp, getDetails, getEmail);
+                }, getOtp, getDetails, getEmail, ErrorText);
             }
 
         });

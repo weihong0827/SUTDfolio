@@ -130,16 +130,18 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email){
+    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email,TextView errorText){
         String url = prefixURL + "api/user/verify/otp";
         JSONObject body = new JSONObject();
         try {
             body.put("otp",otp);
             body.put("verification_key",detail);
             body.put("check",email);
+            errorText.setVisibility(View.INVISIBLE);
 
         } catch (JSONException e) {
             e.printStackTrace();
+            errorText.setVisibility(View.VISIBLE);
         }
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                 new Response.Listener<JSONObject>() {
@@ -154,6 +156,7 @@ public class APIRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (null != error.networkResponse) {
+                    errorText.setVisibility(View.VISIBLE);
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
@@ -203,6 +206,7 @@ public class APIRequest {
         try {
             body.put("email",email);
             body.put("password",password);
+            errorText.setVisibility(View.INVISIBLE);
 
         } catch (JSONException e) {
             e.printStackTrace();
