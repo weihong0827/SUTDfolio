@@ -37,6 +37,16 @@
         android:selectAllOnFocus="true"
        />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ErrorMessage"
+        android:text="Invalid username/ password, please try again."
+        android:textSize="16dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,6 +87,24 @@ public class RegisterFragment extends Fragment {
         studentIDReg = view.findViewById(R.id.StudentIDReg);
         register = view.findViewById(R.id.registration);
 
+        //for email checking
+        TextWatcher emailTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // check whether both the fields are empty or not
+                if(!emailReg.toString().contains("@mymail.sutd.edu.sg") && !emailReg.toString().contains("@sutd.edu.sg")){
+                    register.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
 
         //TODO handle exceptions, invalid email, email already registered, null field
         // for all the 4 fields
