@@ -158,6 +158,41 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
+    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId){
+        String url = prefixURL + "api/user/register";
+
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email",email);
+            body.put("password",password);
+            body.put("name",name);
+            body.put("studentId",studentId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG + ": ", "Login " + ": " + body.toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG + ": ", "Register " + ": " + response.toString());
+                        if (null != response.toString())
+                            listener.getResult(response);
+                    }
+                },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                if (null != error.networkResponse) {
+                    Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
+                }
+            }
+        });
+        netWorkInstance.requestQueue.add(request);
+    }
+
     public void login(final Listener<JSONObject>listener,String email,String password){
         String url = prefixURL + "api/user/login";
 

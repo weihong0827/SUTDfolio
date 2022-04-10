@@ -9,6 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,8 +22,11 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -42,6 +49,7 @@ import com.example.sutdfolio.utils.Listener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +60,7 @@ public class Upload extends Fragment {
     private List<Tag> tags;
     private String selectedCourse;
     private ArrayList<String> selectedTag = new ArrayList<>();
-
+    private int term;
     public static Upload newInstance() {
         return new Upload();
     }
@@ -66,6 +74,27 @@ public class Upload extends Fragment {
                     //TODO Camera input
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Uri uri = result.getData().getData();
+                        String[] projection = {MediaStore.MediaColumns.DATA};
+//                        Cursor cursor = managedQuery(uri, projection, null, null, null);
+//                        int column_index = cursor
+//                                .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+//                        cursor.moveToFirst();
+//                        String imagePath = cursor.getString(column_index);
+//                        Bitmap bm = BitmapFactory.decodeFile(imagePath);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+//                        bm.compress(Bitmap.CompressFormat.JPEG,40,baos);
+
+
+                        // bitmap object
+
+                        byte[] byteImage_photo = baos.toByteArray();
+
+                        //generate base64 string of image
+
+                        String encodedImage = Base64.encodeToString(byteImage_photo,Base64.DEFAULT);
+
                         ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
                         ImageView imageView = new ImageView(getContext());
                         imageView.setPadding(0,0,20,0);
@@ -82,13 +111,22 @@ public class Upload extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.upload_fragment, container, false);
-
         Spinner spinner = (Spinner) v.findViewById(R.id.uploadPage_term_Spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.term_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                term = i+1;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         APIRequest request = APIRequest.getInstance();
 
@@ -160,14 +198,16 @@ public class Upload extends Fragment {
             public void onClick(View view) {
                 LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
                 LinearLayout itemSet = new LinearLayout(getContext());
-
-                itemSet.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT ));
+                itemSet.setOrientation(LinearLayout.VERTICAL);
+                itemSet.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
                 EditText editText = new EditText(getContext());
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-//                editText.setLayoutParams(new ViewGroup.LayoutParams());
+                editText.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 itemSet.addView(editText);
                 Button removeButton = new Button(getContext());
+                FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
 
+                removeButton.setLayoutParams(param);
                 removeButton.setText("remove");
                 removeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -183,7 +223,11 @@ public class Upload extends Fragment {
         final Button submitButton = v.findViewById(R.id.uploadPage_submit_Button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses button
+                EditText titleEdit = v.findViewById(R.id.uploadPage_title_EditText);
+                EditText descEdit = v.findViewById(R.id.uploadPage_projectDescription_EditText);
+                String title = titleEdit.getText().toString();
+                String desc = descEdit.getText().toString();
+                LinearLayout imageLinear = v.findViewById(R.id.uploadPage_images_LinearLayout);
 
             }
         });
