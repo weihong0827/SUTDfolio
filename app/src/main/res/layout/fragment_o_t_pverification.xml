@@ -21,6 +21,17 @@
         android:inputType="number"
         android:maxLength="6"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OTPErrorMessage"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="Wrong OTP, please try again."
+        android:textSize="16dp"
+        android:gravity="center"
+    />
+
     <Button
         android:id="@+id/verify"
         android:layout_width="wrap_content"

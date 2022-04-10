@@ -54,7 +54,6 @@ public class LoginFragment extends Fragment {
 //            navController.navigate(R.id.action_loginFragment_to_profileFragment);
 //        }
         return binding.getRoot();
-
     }
 
 //    private boolean checkToken(){
@@ -69,9 +68,10 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        super.onCreate(savedInstanceState);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
+        TextView error = getView().findViewById(R.id.ErrorMessage);
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
@@ -146,18 +146,20 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
-                            Toast.makeText(getActivity(),"logged",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "logged", Toast.LENGTH_LONG).show();
                             String details = object.getString("Details");
                             Bundle bundle = new Bundle();
-                            bundle.putString("details",details);
+                            bundle.putString("details", details);
                             bundle.putString("email", usernameEditText.getText().toString());
                             NavController navController = Navigation.findNavController(v);
-                            navController.navigate(R.id.action_loginFragment_to_OTPverification,bundle);
+                            navController.navigate(R.id.action_loginFragment_to_OTPverification, bundle);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("login","Wrong credentials");
+                            Toast.makeText(getActivity(), "Wrong credentials, please try again", Toast.LENGTH_LONG).show();
                         }
                     }
-                }, usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                }, usernameEditText.getText().toString(), passwordEditText.getText().toString(), error);
 
             }
         });

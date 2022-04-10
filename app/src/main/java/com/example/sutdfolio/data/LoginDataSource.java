@@ -33,6 +33,7 @@ public class LoginDataSource extends Fragment {
         api.getUser(new Listener<JSONObject>() {
             @Override
             public void getResult(JSONObject object) {
+
             }
             
             public User getUser(JSONObject object) {

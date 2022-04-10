@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.TestLooperManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sutdfolio.data.model.Posts;
@@ -133,7 +135,6 @@ public class OTPverification extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
-
                             status = object.getString("Status");
                             token = object.getString("Token");
                                 SharedPreferences.Editor prefEditor = pref.edit();
@@ -153,8 +154,6 @@ public class OTPverification extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("otp","wrong otp");
-                            Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, getOtp, getDetails, getEmail);

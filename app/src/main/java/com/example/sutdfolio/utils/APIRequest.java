@@ -1,6 +1,9 @@
 package com.example.sutdfolio.utils;
 
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -10,10 +13,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.sutdfolio.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -155,7 +160,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
-    public void login(final Listener<JSONObject>listener,String email,String password){
+    public void login(final Listener<JSONObject>listener,String email,String password, TextView errorText){
         String url = prefixURL + "api/user/login";
 
         JSONObject body = new JSONObject();
@@ -165,6 +170,7 @@ public class APIRequest {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            errorText.setVisibility(View.VISIBLE);
         }
         Log.d(TAG + ": ", "Login " + ": " + body.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
@@ -173,14 +179,13 @@ public class APIRequest {
             public void onResponse(JSONObject response) {
                 Log.d(TAG + ": ", "Login " + ": " + response.toString());
                 //TODO: retain the detail and use that for otp verification
-
                 if (null != response.toString())
                     listener.getResult(response);
             }
         },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                errorText.setVisibility(View.VISIBLE);
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
