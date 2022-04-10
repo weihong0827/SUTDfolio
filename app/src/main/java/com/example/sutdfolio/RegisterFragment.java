@@ -5,14 +5,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.sutdfolio.utils.APIRequest;
+import com.example.sutdfolio.utils.Listener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 /**
@@ -33,6 +42,7 @@ public class RegisterFragment extends Fragment {
     EditText nameReg;
     EditText studentIDReg;
     Button register;
+    String userID;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -81,7 +91,15 @@ public class RegisterFragment extends Fragment {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                APIRequest api = APIRequest.getInstance();
+                api.register(new Listener<JSONObject>() {
+                    @Override
+                    public void getResult(JSONObject object) {
+                        Toast.makeText(getActivity(),"Registered, please log in.",Toast.LENGTH_LONG).show();
+                        NavController navController = Navigation.findNavController(view);
+                        navController.navigate(R.id.action_registerFragment_to_loginFragment);
+                    }
+                }, emailReg.getText().toString(), passwordReg.getText().toString(), nameReg.getText().toString(), Integer.valueOf(studentIDReg.getText().toString()));
             }
         });
 
