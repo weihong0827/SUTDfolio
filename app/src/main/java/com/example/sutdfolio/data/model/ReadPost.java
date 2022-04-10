@@ -26,4 +26,6 @@ public class ReadPost extends Posts {
     public Course getCourseNo() {
         return courseNo;
     }
+
+    public List<Tag> getTags() { return tags; }
 }

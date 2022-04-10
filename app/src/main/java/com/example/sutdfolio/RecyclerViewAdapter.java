@@ -2,17 +2,20 @@ package com.example.sutdfolio;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,9 +26,13 @@ import com.bumptech.glide.Glide;
 import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
+import com.example.sutdfolio.data.model.Tag;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,7 +54,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private final TextView textTitle;
         private final TextView textDesc;
         private final ImageView itemImage;
-
+        private final ImageButton heartImageButton;
+        private final TextView textHeartCount;
+        private final TextView textTags;
+        private boolean liked = false;
 
         public ViewHolder(View v,Context context) {
             super(v);
@@ -69,7 +79,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textTitle = (TextView) v.findViewById(R.id.item_title);
             textDesc = (TextView) v.findViewById(R.id.item_detail);
             itemImage = v.findViewById(R.id.item_image);
+            heartImageButton = (ImageButton) v.findViewById(R.id.item_heart_button);
+            textHeartCount = (TextView) v.findViewById(R.id.item_heart_counter);
+            textTags = (TextView) v.findViewById(R.id.item_tags);
 
+            heartImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (liked) {
+                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        liked = !liked;
+                    }
+                    else {
+                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                        liked = !liked;
+                    }
+                }
+            });
         }
 
         public ImageView getItemImage() {
@@ -83,6 +109,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView getTextDesc() {
             return textDesc;
         }
+
+        public ImageButton getHeartImageButton() { return heartImageButton; }
+
+        public TextView getTextHeartCount() { return textHeartCount; }
+
+        public TextView getTextTags() { return textTags; }
 
         @Override
         public void onClick(View view) {
@@ -98,6 +130,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(v,parent.getContext());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         holder.getTextTitle().setText(tempList.get(position).getTitle());
@@ -114,7 +147,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         id = tempList.get(position).get_id();
 
+        // get and update heart count
+//        holder.getHeartImageButton().setImageResource(R.drawable.ic_baseline_favorite_24);
+        holder.getTextHeartCount().setText(String.valueOf(tempList.get(position).getUpvoteCount()));
 
+        // get and update tags
+//        List<String> tagStrings = null;
+//        tempList.get(position).getTags().forEach((tag) -> { tagStrings.add(tag.toString()); });
+        List<String> tagStrings = new ArrayList<>();
+        tagStrings.add("tag1");
+        tagStrings.add("tag2");
+
+        int count = 0;
+
+        List<Tag> tagList = tempList.get(position).getTags();
+//        Tag testTag1 = new Tag("1", "testTag1");
+//        tagList.add(testTag1);
+//        for (Tag tag : tagList) {
+////            tagStrings.add(tag.getName());
+//            count++;
+//        }
+
+        tagStrings.add(String.valueOf(count));
+//        tagStrings.add(String.valueOf(tagList.size()));
+
+        holder.getTextTags().setText(String.join(", ", tagStrings));
+//        Log.d("Abram Text", tempList.get(position).getTags().toString());
     }
     public void filter(String s) {
         Log.d(TAG, "filter: input string"+s);
