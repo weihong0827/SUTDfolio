@@ -86,6 +86,8 @@ public class RegisterFragment extends Fragment {
         nameReg = view.findViewById(R.id.NameReg);
         studentIDReg = view.findViewById(R.id.StudentIDReg);
         register = view.findViewById(R.id.registration);
+        final Boolean[] validEmailPasswordNameId = {false, false, false, false};
+        final Boolean[] isValid = {true, true, true, true};
 
         //for email checking
         TextWatcher emailTextWatcher = new TextWatcher() {
@@ -95,9 +97,14 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // check whether both the fields are empty or not
+                // check if email is valid sutd email
                 if(!emailReg.toString().contains("@mymail.sutd.edu.sg") && !emailReg.toString().contains("@sutd.edu.sg")){
-                    register.setEnabled(false);
+                    validEmailPasswordNameId[0] = true;
+                } else {
+                    validEmailPasswordNameId[0] = false;
+                }
+                if (validEmailPasswordNameId == isValid) {
+                    register.setEnabled(true);
                 }
             }
 
@@ -105,6 +112,81 @@ public class RegisterFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         };
+
+        //for password checking
+        TextWatcher passwordTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // change this condition for password validation
+                if(passwordReg.toString().length()<=6){
+                    validEmailPasswordNameId[1] = true;
+                } else {
+                    validEmailPasswordNameId[1] = false;
+                }
+                if (validEmailPasswordNameId == isValid) {
+                    register.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        //for name checking
+        TextWatcher nameTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // check name length
+                if(nameReg.toString().length()>=6){
+                    validEmailPasswordNameId[2] = true;
+                } else {
+                    validEmailPasswordNameId[2] = false;
+                }
+                if (validEmailPasswordNameId == isValid) {
+                    register.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        //for id checking
+        TextWatcher idTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // check whether both the fields are empty or not
+                if(studentIDReg.toString()!=null){
+                    validEmailPasswordNameId[3] = true;
+                }
+                if (validEmailPasswordNameId == isValid) {
+                    register.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        emailReg.addTextChangedListener(emailTextWatcher);
+        passwordReg.addTextChangedListener(passwordTextWatcher);
+        nameReg.addTextChangedListener(nameTextWatcher);
+        studentIDReg.addTextChangedListener(idTextWatcher);
 
         //TODO handle exceptions, invalid email, email already registered, null field
         // for all the 4 fields
