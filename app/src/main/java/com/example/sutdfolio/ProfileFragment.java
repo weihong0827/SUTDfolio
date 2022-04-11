@@ -148,7 +148,7 @@ public class ProfileFragment extends Fragment {
                 pillar.setText(String.valueOf(userObj.getPillar()));
                 name.setText(userObj.getName());
                 aboutMe.setText(userObj.getAboutMe());
-//                Log.d("avatar", userObj.getAvatar());
+                Log.d("avatar", userObj.getAvatar());
                 if (userObj.getAvatar()!=null){
                     Glide
                             .with(getActivity())
