@@ -166,6 +166,9 @@ public class IndividualPost extends Fragment {
                     tagTextView[i] = new TextView(linearLayout.getContext());
                     tagTextView[i].setBackgroundResource(R.drawable.tag_border);
                     tagTextView[i].setText("#"+tag.getName());
+                    tagTextView[i].setPadding(5,1,5,1);
+                    tagTextView[i].layout(5,1,5,1);
+                    tagTextView[i].setTextSize(18);
 
                     linearLayout.addView(tagTextView[i]);
                 }
@@ -211,7 +214,7 @@ public class IndividualPost extends Fragment {
 
                     }
                 });
-
+                telegrampic.setImageResource(R.drawable.logos_telegram);
 
                 textHeartCount.setText(String.valueOf(post.getUpvoteCount()));
                 team.setText(temp);

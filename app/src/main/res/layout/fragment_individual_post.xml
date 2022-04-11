@@ -14,17 +14,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:paddingTop="20px"
         android:textSize="28dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="20dp">
+     >
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPageImageSlider"
             android:layout_width="match_parent"
-            android:layout_height="360px"
-            android:layout_marginTop="80px"
+            android:layout_height="540px"
+            android:layout_marginTop="40px"
+            android:scaleType="fitXY"
             />
 
 
@@ -99,6 +101,7 @@
         android:textSize="28dp"
         android:id="@+id/relevantLInk"
         android:layout_marginTop="20dp"/>
+
         <TextView
             android:id="@+id/youtube"
             android:layout_width="match_parent"
@@ -109,12 +112,12 @@
         <TextView
             android:id="@+id/telegram"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/youtube" />
         <TextView
         android:id="@+id/linkedIn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/youtube" />
         <TextView
         android:id="@+id/term"
