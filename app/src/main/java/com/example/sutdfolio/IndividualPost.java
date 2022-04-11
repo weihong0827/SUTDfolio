@@ -1,5 +1,7 @@
 package com.example.sutdfolio;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.Tag;
+import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.Util;
@@ -42,6 +45,11 @@ public class IndividualPost extends Fragment {
     Bundle bundle;
     private ViewPager2 viewPager2;
     private String ID;
+    private SharedPreferences prefs;
+    private  String token;
+    private boolean liked = false;
+
+    private Context context;
 
     public static IndividualPost newInstance() {
 
@@ -51,7 +59,9 @@ public class IndividualPost extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context = getContext();
+        prefs =context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        token = prefs.getString("token", "");
         if (getArguments() != null) {
             ID = getArguments().getString("_id");
 
@@ -98,7 +108,10 @@ public class IndividualPost extends Fragment {
         TextView telegram = getView().findViewById(R.id.telegram);
         TextView linkedIn = getView().findViewById(R.id.linkedIn);
         TextView term = getView().findViewById(R.id.term);
-        LinearLayout linearLayout = getView().findViewById(R.id.item_tag_linear_layout);
+        TextView team = getView().findViewById(R.id.teamInvolved);
+        TextView textHeartCount = getView().findViewById(R.id.item_heart_counter);
+        ImageView heartImageButton = getView().findViewById(R.id.item_heart_button);
+        LinearLayout linearLayout = getView().findViewById(R.id.linear_layout);
 
         viewPager2 = (ViewPager2) getView().findViewById(R.id.viewPageImageSlider);
         List<PostItem> postItems = new ArrayList<>();
@@ -129,16 +142,17 @@ public class IndividualPost extends Fragment {
                 Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
                 List<Image> images = post.getImage();
-
+                postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
+                postItems.add(new PostItem("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png"));
                 for(Image i:images)
                 {
                     postItems.add(new PostItem(i.getUrl()));
                 }
-                postItems.add(new PostItem("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png"));
+
                 //postItems.add(new PostItem(R.drawable.ic_baseline_home_24));
-                postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
-                telegram.setText(post.getTelegram());
-                youtube.setText(post.getYoutube());
+
+                telegram.setText("@hungchiayu1");
+                youtube.setText("youtube.com");
                 title.setText(post.getTitle());
                 descView.setText(post.getDesc());
 
@@ -152,8 +166,55 @@ public class IndividualPost extends Fragment {
                     tagTextView[i] = new TextView(linearLayout.getContext());
                     tagTextView[i].setBackgroundResource(R.drawable.tag_border);
                     tagTextView[i].setText("#"+tag.getName());
+
                     linearLayout.addView(tagTextView[i]);
                 }
+                List<User> users = post.getPeopleInvolved();
+                String temp = "";
+                for(User i :users)
+                {
+                   temp+=i.getName().toString()+" ("+i.getPillar()+")"+",";
+                }
+               int count = post.getUpvoteCount();
+                liked = post.isLiked();
+                if (liked)
+                {
+                    heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_24);
+                }
+                else
+                {heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+
+                }
+
+                heartImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!token.equals("")){
+                            request.upVote(new Listener<String>() {
+                                @Override
+                                public void getResult(String object) {
+                                    if (liked){
+                                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                                        liked = !liked;
+                                        textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())-1));
+                                    }else{
+                                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                        liked = !liked;
+                                        textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())+1));
+                                    }
+                                }
+                            },ID,token);
+                        }else{
+                            Toast.makeText(context,"Please login to like the post!",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+
+                textHeartCount.setText(String.valueOf(post.getUpvoteCount()));
+                team.setText(temp);
 
 
                 adapter.notifyDataSetChanged();
