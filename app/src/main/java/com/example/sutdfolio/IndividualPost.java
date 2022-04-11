@@ -214,7 +214,7 @@ public class IndividualPost extends Fragment {
 
                     }
                 });
-                telegrampic.setImageResource(R.drawable.logos_telegram);
+
 
                 textHeartCount.setText(String.valueOf(post.getUpvoteCount()));
                 team.setText(temp);
