@@ -98,13 +98,23 @@
                 android:inputType="text"
                 />
 
-            <Button
+<!--            <Button-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center"-->
+<!--                android:id="@+id/SaveChanges"-->
+<!--                android:text="Save Changes"-->
+<!--                />-->
+            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:id="@+id/SaveChanges"
                 android:text="Save Changes"
-                />
+                android:background="@drawable/circular_border_shape" />
+            app:spinning_bar_width="4dp" <!-- Optional -->
+            app:spinning_bar_color="#FFF" <!-- Optional -->
+            app:spinning_bar_padding="6dp" <!-- Optional -->
 
 
 

@@ -1,9 +1,15 @@
 package com.example.sutdfolio;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +21,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -50,6 +58,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
+
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,28 +118,22 @@ public class EditProfileFragment extends Fragment {
                     //TODO Camera input
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         uri = result.getData().getData();
-//                        String[] projection = {MediaStore.MediaColumns.DATA};
-//                        Cursor cursor = managedQuery(uri, projection, null, null, null);
-//                        int column_index = cursor
-//                                .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-//                        cursor.moveToFirst();
-//                        String imagePath = cursor.getString(column_index);
-//                        Bitmap bm = BitmapFactory.decodeFile(imagePath);
 
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-//                        bm.compress(Bitmap.CompressFormat.JPEG,40,baos);
-
-
-                        // bitmap object
                         String name = UUID.randomUUID().toString();
                         StorageReference ref
                                 = mStorageRef
                                 .child("images/" + name);
+                        CircularProgressButton btn = (CircularProgressButton) getActivity().findViewById(R.id.SaveChanges);
+                        btn.startAnimation();
                         ref.putFile(uri).addOnSuccessListener(
                                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                        Bitmap bm = getBitmapFromVectorDrawable(getContext(),
+//                                                R.drawable.ic_baseline_check_circle_outline_24);
+//                                        Log.d("TAG", "onSuccess: "+bm.toString());
+//                                        btn.doneLoadingAnimation(R.color.sutd_red_1,bm);
+                                        btn.revertAnimation();
                                         Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
                                         task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -149,30 +153,27 @@ public class EditProfileFragment extends Fragment {
                                     }
                                 }
                         );
-//                        byte[] byteImage_photo = baos.toByteArray();
-
-                        //generate base64 string of image
-
-//                        String encodedImage = Base64.encodeToString(byteImage_photo,Base64.DEFAULT);
-//                        Log.d("encoded image", encodedImage);
-                        Log.d("uri", uri.toString());
-
-//                        ll = getActivity().findViewById(R.id.AvatarEdit);
-//                        avatar.set
-//                        ImageView imageView = new ImageView(getContext());
-//                        imageView.setPadding(0,0,20,0);
-//                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
-//                        imageView.setLayoutParams(layoutParams);
-//                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         avatar.setImageURI(uri);
-//                        imageView.setImageResource();
-//                        ll.addView(imageView);
+
                         Log.d("Upload", "onActivityResult: "+ uri.toString());
                     }
 
                 }
             });
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
 
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,7 +248,7 @@ public class EditProfileFragment extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         Log.d("save changes", "pass");
-                        Log.d("saved avatar", setAvatar);
+                        
                         Toast.makeText(getActivity(),"Changes saved.",Toast.LENGTH_LONG).show();
                     }
                 }, setAboutMe, setPillar, setClassOf, setAvatar, jwt);

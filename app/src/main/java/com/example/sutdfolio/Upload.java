@@ -86,6 +86,8 @@ public class Upload extends Fragment {
     private StorageReference mStorageRef;
     NavController navController;
 
+
+
     public static Upload newInstance() {
         return new Upload();
     }

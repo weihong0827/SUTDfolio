@@ -34,6 +34,7 @@ tools:context=".Upload">
             android:layout_height="match_parent"
             android:text="Title (up to 280 characters)" />
 
+
         <EditText
             android:id="@+id/uploadPage_title_EditText"
             android:layout_height="wrap_content"

@@ -11,9 +11,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static final String TAG = "Recycler adapter";
     private List<ReadPost> posts;
     private final Context context;
-    private static String id;
     private ArrayList<ReadPost> tempList;
-
     public RecyclerViewAdapter(Context context,ReadPost[] posts) {
         this.context = context;
         this.posts = Arrays.asList(posts);
@@ -58,36 +58,47 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private String id;
         private final TextView textTitle;
         private final TextView textDesc;
         private final ImageView itemImage;
         private final ImageButton heartImageButton;
         private final TextView textHeartCount;
-//        private final TextView textTags;
 
         private final LinearLayout tagLinearLayout;
         private APIRequest request = APIRequest.getInstance();
         private SharedPreferences prefs;
         private  String token;
+        private RelativeLayout parentLayout;
         private boolean liked = false;
 
-        public ViewHolder(View v,Context context) {
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public ViewHolder(View v, Context context) {
             super(v);
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("_id",id);
-                    Log.d(TAG, "id " + id + " clicked.");
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.individualPost,bundle);
-                    final Activity activity = (Activity) context;
-
-
-                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
-                }
-            });
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("_id",id);
+//                    Log.d(TAG, "id " + id + " clicked.");
+//                    NavController navController = Navigation.findNavController(v);
+//                    navController.navigate(R.id.individualPost,bundle);
+//                    final Activity activity = (Activity) context;
+//
+//
+//                    Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
+//                }
+//            });
+            parentLayout = v.findViewById(R.id.parent_layout);
             prefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
             token = prefs.getString("token", "");
 
@@ -124,6 +135,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 }
             });
+        }
+
+        public RelativeLayout getParentLayout() {
+            return parentLayout;
         }
 
         public boolean isLiked() {
@@ -173,6 +188,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
+
         holder.getTextTitle().setText(tempList.get(position).getTitle());
 //        holder.getTextDesc().setText(Html.fromHtml(posts[position].getDesc()));
         holder.getTextDesc().setText(tempList.get(position).getDesc());
@@ -185,8 +201,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                .placeholder(R.drawable.loading_spinner)
                     .into(holder.getItemImage());
         }
-        id = tempList.get(position).get_id();
 
+        holder.setId(tempList.get(position).get_id());
+        if (holder.getParentLayout()==null){
+            Log.d(TAG, "onBindViewHolder: rip");
+        }
+        holder.getParentLayout().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("_id",holder.getId());
+                    Log.d(TAG, "id " + holder.getId() + " clicked.");
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.individualPost,bundle);
+                    final Activity activity = (Activity) context;
+
+                    }
+                }
+        );
         // get and update heart count
         holder.setLiked(tempList.get(position).isLiked());
 
