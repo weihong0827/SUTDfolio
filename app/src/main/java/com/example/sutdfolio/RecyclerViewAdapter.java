@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,7 +206,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         for (Tag tag : tagList) {
             tagStrings.add("#"+tag.getName());
-            if (String.join(" ", tagStrings).length() <= 50) { // check that length of tags do not exceed a certain threshold/wrap
+            if (String.join(" ", tagStrings).length() <= 20) { // check that length of tags do not exceed a certain threshold/wrap
 
                 TextView tagTextView = new TextView(context.getApplicationContext());
                 tagTextView.setText("#"+tag.getName());
@@ -214,6 +215,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 int verticalPads = (int) Util.pxFromDp(context.getApplicationContext(), 1);
                 tagTextView.setPadding(horizontalPads,verticalPads,horizontalPads,verticalPads);
                 tagTextView.layout(horizontalPads, verticalPads, horizontalPads, verticalPads);
+                tagTextView.setTextSize(18);
+                tagTextView.setGravity(Gravity.CENTER);
                 holder.getTagLinearLayout().addView(tagTextView);
             }
         }
