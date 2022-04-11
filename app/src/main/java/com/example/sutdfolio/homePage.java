@@ -109,6 +109,7 @@ public class homePage extends Fragment{
 //                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
 
                 adapter = new RecyclerViewAdapter(getActivity(), posts);
+
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

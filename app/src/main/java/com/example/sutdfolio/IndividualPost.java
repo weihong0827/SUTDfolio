@@ -5,21 +5,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
+import com.example.sutdfolio.data.model.Tag;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
+import com.example.sutdfolio.utils.Util;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -32,10 +38,10 @@ import java.util.List;
  */
 public class IndividualPost extends Fragment {
 
-    Posts post;
+    ReadPost post;
     Bundle bundle;
     private ViewPager2 viewPager2;
-
+    private String ID;
 
     public static IndividualPost newInstance() {
 
@@ -47,8 +53,10 @@ public class IndividualPost extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            String id = getArguments().getString("_id");
-            getData(id);
+            ID = getArguments().getString("_id");
+
+
+
         } else {
             Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
         }
@@ -74,19 +82,27 @@ public class IndividualPost extends Fragment {
                 final Gson gson = new Gson();
                 post = gson.fromJson(object, ReadPost.class);
                 Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+
+
             }
         }, id);
+        ;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("test", String.valueOf(R.id.viewPageImageSlider));
+        TextView title = getView().findViewById(R.id.indivPostTitle);
+        TextView descView = getView().findViewById(R.id.desc);
+        TextView youtube = getView().findViewById(R.id.youtube);
+        TextView telegram = getView().findViewById(R.id.telegram);
+        TextView linkedIn = getView().findViewById(R.id.linkedIn);
+        TextView term = getView().findViewById(R.id.term);
+        LinearLayout linearLayout = getView().findViewById(R.id.item_tag_linear_layout);
+
         viewPager2 = (ViewPager2) getView().findViewById(R.id.viewPageImageSlider);
         List<PostItem> postItems = new ArrayList<>();
-        postItems.add(new PostItem(R.drawable.ic_baseline_cloud_upload_24));
-        postItems.add(new PostItem(R.drawable.ic_baseline_home_24));
-        viewPager2.setAdapter(new PostAdapter(postItems, viewPager2));
+
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
         viewPager2.setOffscreenPageLimit(3);
@@ -100,16 +116,50 @@ public class IndividualPost extends Fragment {
                 page.setScaleY(0.85f+r*0.15f);
             }
         });
-        TextView textView = getView().findViewById(R.id.indivposttext);
-        TextView descview = getView().findViewById(R.id.desc);
-        TextView youtube = getView().findViewById(R.id.youtube);
-        TextView telegram = getView().findViewById(R.id.telegram);
+        PostAdapter adapter = new PostAdapter(postItems,viewPager2);
+        viewPager2.setAdapter(adapter);
 
-        descview.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-                "sed do eiusmod tempor incididunt ut labore et dolore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.mollit anim id est laborum. magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         viewPager2.setPageTransformer(compositepagetransformer);
-        telegram.setText("hungchiayu1");
-        youtube.setText("youtube.com");
-        textView.setText("THIS IS FOR TESTING");
+        APIRequest request = APIRequest.getInstance();
+        request.getPost(new Listener<String>() {
+            @Override
+            public void getResult(String object) {
+                final Gson gson = new Gson();
+                post = gson.fromJson(object, ReadPost.class);
+                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+                Log.d("test",post.getTags().toString());
+                List<Image> images = post.getImage();
+
+                for(Image i:images)
+                {
+                    postItems.add(new PostItem(i.getUrl()));
+                }
+                postItems.add(new PostItem("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png"));
+                //postItems.add(new PostItem(R.drawable.ic_baseline_home_24));
+                postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
+                telegram.setText(post.getTelegram());
+                youtube.setText(post.getYoutube());
+                title.setText(post.getTitle());
+                descView.setText(post.getDesc());
+
+                List<Tag> tags = post.getTags();
+                TextView[] tagTextView = new TextView[tags.size()];
+                Log.d("test",tags.toString());
+                for (int i =0;i<tags.size();i++)
+                {
+                    Tag tag = tags.get(i);
+
+                    tagTextView[i] = new TextView(linearLayout.getContext());
+                    tagTextView[i].setBackgroundResource(R.drawable.tag_border);
+                    tagTextView[i].setText("#"+tag.getName());
+                    linearLayout.addView(tagTextView[i]);
+                }
+
+
+                adapter.notifyDataSetChanged();
+
+            }
+        }, ID);
+       ;
     }
 }

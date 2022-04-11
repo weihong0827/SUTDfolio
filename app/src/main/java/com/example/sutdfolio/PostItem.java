@@ -1,13 +1,17 @@
 package com.example.sutdfolio;
 
+import com.example.sutdfolio.data.model.Image;
+
 public class PostItem {
-    private int image;
-    PostItem (int image)
+    private String imageUrl;
+    PostItem (String image)
     {
-        this.image = image;
+
+        this.imageUrl = image;
+
     }
 
-    public int getImage() {
-        return image;
+    public String getImage() {
+        return this.imageUrl;
     }
 }

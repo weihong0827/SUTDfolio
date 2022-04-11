@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.sutdfolio.data.model.Posts;
 
 import java.util.List;
@@ -48,7 +49,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostAdapterHol
         }
         void setImage(PostItem post)
         {
-            imageView.setImageResource(post.getImage());
+            Glide.with(itemView.getContext())
+                    .load(post.getImage())
+                    .into(imageView);
+
         }
     }
 

@@ -1,45 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:orientation="vertical">
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:scrollbars="vertical">
     <TextView
-        android:id="@+id/indivposttext"
+        android:id="@+id/indivPostTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPageImageSlider"
-        android:layout_width="match_parent"
-        android:layout_height="360px"
-        android:layout_marginTop="80px"
-        android:paddingStart="80px"
-        android:paddingEnd="80px"
-        />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="28dp"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPageImageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="360px"
+            android:layout_marginTop="80px"
+            />
+    <ImageButton
+        android:layout_below="@+id/viewPageImageSlider"
+        android:id="@+id/item_heart_button"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        android:layout_width="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_height="30dp"
+
+        android:background="@null"
+        app:tint="@color/sutd_red_2" />
+
+        <LinearLayout
+            android:id="@+id/item_tag_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/viewPageImageSlider"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="15dp"
+            android:divider="@drawable/horizontal_divider"
+            android:orientation="horizontal"
+            android:showDividers="middle"/>
+
+
+        <TextView android:layout_below="@+id/viewPageImageSlider"
+        android:id="@+id/item_heart_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_toRightOf="@+id/item_heart_button"
+        android:text="0"
+        android:layout_marginLeft="5dp"
+        android:gravity="center"
+        />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_view_id"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/indiv_desc"
+        android:textSize="28dp"
+        android:layout_marginTop="20dp"/>
         <TextView
             android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp" />
-
+            android:layout_marginTop="20dp"
+           />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/indiv_desc"
+        android:textSize="28dp"
+        android:layout_marginTop="80dp"/>
         <TextView
             android:id="@+id/youtube"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/desc" />
 
+
         <TextView
             android:id="@+id/telegram"
-            android:layout_width="96dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/youtube" />
+        <TextView
+        android:id="@+id/linkedIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/youtube" />
+        <TextView
+        android:id="@+id/term"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/youtube" />
+
 
 
 </LinearLayout>
