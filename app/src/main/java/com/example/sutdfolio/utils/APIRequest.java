@@ -3,6 +3,7 @@ package com.example.sutdfolio.utils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -244,18 +245,18 @@ public class APIRequest {
     }
 
 
-    public void login(final Listener<JSONObject>listener,String email,String password, TextView errorText){
+    public void login(final Listener<JSONObject>listener, String email, String password,  Response.ErrorListener errorListener){
         String url = prefixURL + "api/user/login";
 
         JSONObject body = new JSONObject();
         try {
             body.put("email",email);
             body.put("password",password);
-            errorText.setVisibility(View.INVISIBLE);
+
 
         } catch (JSONException e) {
             e.printStackTrace();
-            errorText.setVisibility(View.VISIBLE);
+
         }
         Log.d(TAG + ": ", "Login " + ": " + body.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
@@ -267,16 +268,7 @@ public class APIRequest {
                 if (null != response.toString())
                     listener.getResult(response);
             }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                errorText.setVisibility(View.VISIBLE);
-                if (null != error.networkResponse) {
-                    Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
-                    Log.d(TAG + ": ", "Error Message: " + error.getMessage());
-                }
-            }
-        });
+        },errorListener);
         request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         netWorkInstance.requestQueue.add(request);
@@ -321,7 +313,7 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void getPost(final Listener<String>listener,String id){
+    public void getPost(final Listener<String>listener,String id,String token){
         String url = prefixURL + "api/posts/"+id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
@@ -347,12 +339,21 @@ public class APIRequest {
 
                         }
                     }
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                if (!token.isEmpty()) {
+                    headers.put("auth-token", token);
+                }
+                return headers;
+            }
+        };
 
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void getPosts( final Listener<String> listener)
+    public void getPosts( final Listener<String> listener,String token)
     {
         String url = prefixURL + "api/posts";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -380,7 +381,16 @@ public class APIRequest {
 
                         }
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap<>();
+                if (!token.isEmpty()){
+                    headers.put("auth-token",token);
+                }
+                return headers;
+            }
+        };
 
         netWorkInstance.requestQueue.add(request);
     }

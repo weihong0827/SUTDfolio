@@ -23,7 +23,11 @@
         android:id="@+id/upload"
         android:name="com.example.sutdfolio.Upload"
         android:label="upload_fragment"
-        tools:layout="@layout/upload_fragment" />
+        tools:layout="@layout/upload_fragment" >
+        <action
+            android:id="@+id/action_upload_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homePage"
         android:name="com.example.sutdfolio.homePage"

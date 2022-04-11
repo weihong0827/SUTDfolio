@@ -70,6 +70,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
 public class Upload extends Fragment {
 
     private UploadViewModel mViewModel;
@@ -95,9 +97,7 @@ public class Upload extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = pref.getString("token", "");
-        if (token.isEmpty()){
-            Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
-        }
+
         mStorageRef = FirebaseStorage.getInstance().getReference();
         super.onCreate(savedInstanceState);
 
@@ -161,7 +161,9 @@ public class Upload extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.upload_fragment, container, false);
+
         Spinner spinner = (Spinner) v.findViewById(R.id.uploadPage_term_Spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.term_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -272,72 +274,71 @@ public class Upload extends Fragment {
         EditText linkedInEdit = v.findViewById(R.id.uploadPage_peopleInvolved_EditText);
         EditText telegramEdit = v.findViewById(R.id.uploadPage_telegram_EditText);
         LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
-        final Button submitButton = v.findViewById(R.id.uploadPage_submit_Button);
-
+        CircularProgressButton submitButton = (CircularProgressButton) v.findViewById(R.id.uploadPage_submit_Button);
+//        final Button submitButton = v.findViewById(R.id.uploadPage_submit_Button);
+        if (token.isEmpty()){
+            submitButton.setEnabled(false);
+            Toast.makeText(getActivity(),"Not Logged in. Please Log in before uploading a post.",Toast.LENGTH_LONG).show();
+        }
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (token.isEmpty()){
-                    navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.loginFragment);
-                    Toast.makeText(getActivity(),"Not Logged in. Please Log in before uploading a post.",Toast.LENGTH_LONG).show();
+                submitButton.startAnimation();
+                String title = titleEdit.getText().toString();
+                String desc = descEdit.getText().toString();
+                String youtube = youtubeEdit.getText().toString();
+                String linkedIn = linkedInEdit.getText().toString();
+                String telegram = telegramEdit.getText().toString();
+                people = new ArrayList<>();
+
+
+                for (int i=0; i<peopleLL.getChildCount();i++){
+                    EditText peopleText;
+                    if (i==0){
+                        peopleText = (EditText) peopleLL.getChildAt(0);
+                    }else{
+                        LinearLayout subLayout = (LinearLayout) peopleLL.getChildAt(i);
+                        peopleText = (EditText) subLayout.getChildAt(0);
+                    }
+                    String input = peopleText.getText().toString();
+                    if (!input.equals("") ){
+                        people.add(Integer.parseInt(input));}
                 }
-                else {
-                    String title = titleEdit.getText().toString();
-                    String desc = descEdit.getText().toString();
-                    String youtube = youtubeEdit.getText().toString();
-                    String linkedIn = linkedInEdit.getText().toString();
-                    String telegram = telegramEdit.getText().toString();
-                    people = new ArrayList<>();
-
-
-                    for (int i=0; i<peopleLL.getChildCount();i++){
-                        EditText peopleText;
-                        if (i==0){
-                            peopleText = (EditText) peopleLL.getChildAt(0);
-                        }else{
-                            LinearLayout subLayout = (LinearLayout) peopleLL.getChildAt(i);
-                            peopleText = (EditText) subLayout.getChildAt(0);
-                        }
-                        String input = peopleText.getText().toString();
-                        if (!input.equals("") ){
-                            people.add(Integer.parseInt(input));}
+                CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
+                Boolean studentIDvalidchecker = true;
+                for(Integer k : people){
+                    if (!(1000000<k && k<1100000)){
+                        studentIDvalidchecker=false;
                     }
-                    CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
-                    Boolean studentIDvalidchecker = true;
-                    for(Integer k : people){
-                        if (!(1000000<k && k<1100000)){
-                            studentIDvalidchecker=false;
-                        }
-                    }
-                    Log.d("upload", "onClick: "+postToSend.toString());
-                    Gson gson = new Gson();
-                    String postString =  gson.toJson(postToSend);
+                }
+                Log.d("upload", "onClick: "+postToSend.toString());
+                Gson gson = new Gson();
+                String postString =  gson.toJson(postToSend);
 
-                    if(title.length()<6){
-                        Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
-                    }else if(!studentIDvalidchecker){Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
-                    else{
-                        try {
-                            JSONObject object = new JSONObject(postString);
-                            request.uploadPost(new Listener<JSONObject>() {
-                                @Override
-                                public void getResult(JSONObject object) {
-                                    try{
-                                        Log.d("HI", "getResult: "+object.getString("_id"));
-                                        String id = object.getString("_id");
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("_id",id);
-                                        navController = Navigation.findNavController(v);
-                                        navController.navigate(R.id.individualPost,bundle);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                if(title.length()<6){
+                    Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
+                }else if(!studentIDvalidchecker){Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
+                else{
+                    try {
+                        JSONObject object = new JSONObject(postString);
+                        request.uploadPost(new Listener<JSONObject>() {
+                            @Override
+                            public void getResult(JSONObject object) {
+                                try{
+                                    Log.d("HI", "getResult: "+object.getString("_id"));
+                                    String id = object.getString("_id");
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("_id",id);
+                                    navController = Navigation.findNavController(v);
+                                    navController.navigate(R.id.individualPost,bundle);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            },object,token);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }}
-                }
+                            }
+                        },object,token);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }}
+
             }
         });
 

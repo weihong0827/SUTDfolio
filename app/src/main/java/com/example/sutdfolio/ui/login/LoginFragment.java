@@ -26,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 
 import com.example.sutdfolio.R;
@@ -34,6 +36,8 @@ import com.example.sutdfolio.utils.Listener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 public class LoginFragment extends Fragment {
 
@@ -71,11 +75,11 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-        TextView error = getView().findViewById(R.id.ErrorMessage);
+        TextView errorText = getView().findViewById(R.id.ErrorMessage);
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
+        final CircularProgressButton loginButton = binding.login;
+
         final Button registerButton = binding.register;
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
@@ -100,7 +104,7 @@ public class LoginFragment extends Fragment {
                 if (loginResult == null) {
                     return;
                 }
-                loadingProgressBar.setVisibility(View.GONE);
+
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
                 }
@@ -140,7 +144,7 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+                loginButton.startAnimation();
                 APIRequest api =APIRequest.getInstance();
                 Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
                 api.login(new Listener<JSONObject>() {
@@ -155,12 +159,24 @@ public class LoginFragment extends Fragment {
                             NavController navController = Navigation.findNavController(v);
                             navController.navigate(R.id.action_loginFragment_to_OTPverification, bundle);
                         } catch (JSONException e) {
+                            loginButton.revertAnimation();
                             e.printStackTrace();
-                            Log.d("login","Wrong credentials");
+                            Log.d("login", "Wrong credentials");
                             Toast.makeText(getActivity(), "Wrong credentials, please try again", Toast.LENGTH_LONG).show();
                         }
                     }
-                }, usernameEditText.getText().toString(), passwordEditText.getText().toString(), error);
+                }, usernameEditText.getText().toString(), passwordEditText.getText().toString(), new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                                loginButton.revertAnimation();
+                                errorText.setVisibility(View.VISIBLE);
+                                if (null != error.networkResponse) {
+                                    Log.d("LOGIN" + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                                    Log.d("LOGIN" + ": ", "Error Message: " + error.getMessage());
+                            }
+
+                    }
+                });
 
             }
         });

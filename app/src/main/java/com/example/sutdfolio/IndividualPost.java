@@ -84,20 +84,6 @@ public class IndividualPost extends Fragment {
         return view;
     }
 
-    public void getData(String id) {
-        APIRequest request = APIRequest.getInstance();
-        request.getPost(new Listener<String>() {
-            @Override
-            public void getResult(String object) {
-                final Gson gson = new Gson();
-                post = gson.fromJson(object, ReadPost.class);
-                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
-
-
-            }
-        }, id);
-        ;
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -223,7 +209,7 @@ public class IndividualPost extends Fragment {
                 adapter.notifyDataSetChanged();
 
             }
-        }, ID);
+        }, ID,token);
        ;
     }
 }

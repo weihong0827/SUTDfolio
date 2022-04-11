@@ -195,12 +195,21 @@ tools:context=".Upload">
             android:hint="LinkedIn"
             android:inputType="text"/>
 
-        <Button
-            android:id="@+id/uploadPage_submit_Button"
-            android:text="Submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+<!--        <Button-->
+<!--            android:id="@+id/uploadPage_submit_Button"-->
+<!--            android:text="Submit"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content" />-->
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/uploadPage_submit_Button"
+            android:text="Upload"
+            android:background="@drawable/circular_border_shape" />
+        app:spinning_bar_width="4dp" <!-- Optional -->
+        app:spinning_bar_color="#FFF" <!-- Optional -->
+        app:spinning_bar_padding="6dp" <!-- Optional -->
     </LinearLayout>
 
 </ScrollView>

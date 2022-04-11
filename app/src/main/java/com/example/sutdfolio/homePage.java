@@ -40,6 +40,8 @@ public class homePage extends Fragment{
     private RecyclerView.LayoutManager mLayoutManager;
     SearchView searchView;
 
+    private SharedPreferences pref;
+    private String token;
 
     public static homePage newInstance() {
         return new homePage();
@@ -102,7 +104,8 @@ public class homePage extends Fragment{
 //    }
     private void getPostData (){
 
-
+        pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        token = pref.getString("token", "");
         APIRequest request = APIRequest.getInstance();
         request.getPosts(new Listener<String>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -118,7 +121,7 @@ public class homePage extends Fragment{
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
-        });
+        },token);
     }
 
 }

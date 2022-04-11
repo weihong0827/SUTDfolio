@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/fragment_vertical_margin"
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
+    android:gravity="center"
     tools:context=".ui.login.LoginFragment"
     android:orientation="vertical">
 
@@ -16,7 +17,7 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+
         android:layout_marginTop="96dp"
 
         android:hint="@string/prompt_email"
@@ -27,7 +28,7 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+
         android:layout_marginTop="48dp"
         android:hint="@string/prompt_password"
         android:imeActionLabel="@string/action_sign_in_short"
@@ -47,18 +48,29 @@
         android:visibility="invisible"
         />
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
+<!--    <Button-->
+<!--        android:id="@+id/login"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginStart="48dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="48dp"-->
+<!--        android:layout_marginBottom="64dp"-->
+<!--        android:enabled="false"-->
+<!--        android:text="@string/action_sign_in"-->
+<!--   />-->
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
-        android:enabled="false"
-        android:text="@string/action_sign_in"
-   />
+        android:id="@+id/login"
+        android:layout_centerHorizontal="true"
+        android:text="Login"
+        android:background="@drawable/circular_border_shape" />
+    app:spinning_bar_width="4dp" <!-- Optional -->
+    app:spinning_bar_color="#FFF" <!-- Optional -->
+    app:spinning_bar_padding="6dp" <!-- Optional -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -79,15 +91,15 @@
         android:text="@string/action_register"
         />
 
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
-        android:visibility="gone"
- />
+<!--    <ProgressBar-->
+<!--        android:id="@+id/loading"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginStart="32dp"-->
+<!--        android:layout_marginTop="64dp"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:layout_marginBottom="64dp"-->
+<!--        android:visibility="gone"-->
+<!-- />-->
 </LinearLayout>
