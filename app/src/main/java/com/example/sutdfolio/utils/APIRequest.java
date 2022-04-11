@@ -200,8 +200,8 @@ public class APIRequest {
     }
 
 
-    public void editUser(final Listener<JSONObject>listener,String aboutMe,String pillar,String class_of,String avatar){
-        String url = prefixURL + "api/user/register";
+    public void editUser(final Listener<JSONObject>listener,String aboutMe,String pillar,String class_of,String avatar, String jwt){
+        String url = prefixURL + "api/user";
 
         JSONObject body = new JSONObject();
         try {
@@ -214,7 +214,7 @@ public class APIRequest {
             e.printStackTrace();
         }
         Log.d(TAG + ": ", "Edit profile " + ": " + body.toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, body,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -231,7 +231,15 @@ public class APIRequest {
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
             }
-        });
+        })
+        {
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError{
+                HashMap<String,String> headers = new HashMap<>();
+                headers.put("auth-token",jwt);
+                return headers;
+            }
+        };
         netWorkInstance.requestQueue.add(request);
     }
 
