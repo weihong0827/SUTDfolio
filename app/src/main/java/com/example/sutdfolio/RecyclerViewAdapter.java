@@ -233,7 +233,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }else{
             for (ReadPost item: posts){
                 if (item.getTitle().toLowerCase(Locale.ROOT).contains(lowerS)){
+                    tempList.add(0, item);
+                }
+                else if (item.getDesc().toLowerCase(Locale.ROOT).contains(lowerS)) {
                     tempList.add(item);
+                }
+                else {
+                    for (Tag tag : item.getTags()) {
+                        if (tag.getName().toLowerCase(Locale.ROOT).contains(lowerS)) {
+                            tempList.add(item);
+                        }
+                    }
                 }
             }
         }
