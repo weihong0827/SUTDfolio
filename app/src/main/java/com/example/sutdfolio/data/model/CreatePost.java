@@ -5,13 +5,13 @@ import java.util.List;
 
 public class CreatePost extends Posts {
     private List<Integer> peopleInvolved;
-    private ArrayList<String> tags;
+    private ArrayList<String> tag;
     private String courseNo;
-    public CreatePost(String title, ArrayList<String> tags, String desc, List<Image> image, List<Integer> peopleInvolved, String courseNo, int term, String telegram, String linkIn, String youtube, Boolean publish) {
+    public CreatePost(String title, ArrayList<String> tag, String desc, List<Image> image, List<Integer> peopleInvolved, String courseNo, int term, String telegram, String linkIn, String youtube, Boolean publish) {
         super(title,desc, image,term, telegram, linkIn, youtube, publish);
         this.peopleInvolved = peopleInvolved;
         this.courseNo = courseNo;
-        this.tags = tags;
+        this.tag = tag;
     }
 
     public List<Integer> getPeopleInvolved() {
@@ -20,6 +20,15 @@ public class CreatePost extends Posts {
 
     public void setPeopleInvolved(List<Integer> peopleInvolved) {
         this.peopleInvolved = peopleInvolved;
+    }
+
+    @Override
+    public String toString() {
+        return "CreatePost{" +
+                "peopleInvolved=" + peopleInvolved +
+                ", tag=" + tag +
+                ", courseNo='" + courseNo + '\'' +
+                '}'+super.toString();
     }
 
     public String getCourseNo() {

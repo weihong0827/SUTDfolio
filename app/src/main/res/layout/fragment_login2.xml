@@ -37,6 +37,16 @@
         android:selectAllOnFocus="true"
        />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ErrorMessage"
+        android:text="Invalid username/ password, please try again."
+        android:textSize="16dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
@@ -49,6 +59,25 @@
         android:enabled="false"
         android:text="@string/action_sign_in"
    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Don't already have an account? Register here!"/>
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="64dp"
+        android:enabled="true"
+        android:text="@string/action_register"
+        />
 
     <ProgressBar
         android:id="@+id/loading"

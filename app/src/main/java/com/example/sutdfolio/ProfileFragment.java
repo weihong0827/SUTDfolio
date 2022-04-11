@@ -68,6 +68,7 @@ public class ProfileFragment extends Fragment {
     ImageView avatar;
     TextView pillar;
     Button logout;
+    Button editProfile;
     SharedPreferences pref;
     NavController navController;
 
@@ -96,8 +97,6 @@ public class ProfileFragment extends Fragment {
         token = pref.getString("token", "");
         super.onCreate(savedInstanceState);
 
-
-
     }
 
     @Override
@@ -116,6 +115,7 @@ public class ProfileFragment extends Fragment {
         aboutMe = view.findViewById(R.id.AboutMe);
         pillar = view.findViewById(R.id.Pillar);
         logout = view.findViewById(R.id.Logout);
+        editProfile = view.findViewById(R.id.editProfile);
 
 
 //        if (!checkToken()){
@@ -148,6 +148,7 @@ public class ProfileFragment extends Fragment {
                 pillar.setText(String.valueOf(userObj.getPillar()));
                 name.setText(userObj.getName());
                 aboutMe.setText(userObj.getAboutMe());
+//                Log.d("avatar", userObj.getAvatar());
                 if (userObj.getAvatar()!=null){
                     Glide
                             .with(getActivity())
@@ -166,6 +167,19 @@ public class ProfileFragment extends Fragment {
                 }
             }
         }, token);
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("aboutme",userObj.getAboutMe());
+                bundle.putString("pillar", String.valueOf(userObj.getPillar()));
+                bundle.putString("classof", String.valueOf(userObj.getClass_of()));
+                bundle.putString("avatar", userObj.getAvatar());
+                navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_profileFragment_to_editProfileFragment, bundle);
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

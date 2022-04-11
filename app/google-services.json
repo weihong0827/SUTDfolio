@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "405322301802",
+    "project_id": "sutdfolio",
+    "storage_bucket": "sutdfolio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405322301802:android:55679dae511816c2a22513",
+        "android_client_info": {
+          "package_name": "com.example.sutdfolio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405322301802-m281ale3n3jr63lpv9e04baf9ma57277.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAB0wQ1eNhHhUSfvo4eD6i7TzoVZCHfxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405322301802-m281ale3n3jr63lpv9e04baf9ma57277.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

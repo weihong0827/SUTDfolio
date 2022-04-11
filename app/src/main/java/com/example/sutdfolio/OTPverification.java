@@ -18,17 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.example.sutdfolio.data.model.Posts;
-import com.example.sutdfolio.data.model.ReadPost;
-import com.example.sutdfolio.data.model.User;
-import com.example.sutdfolio.databinding.FragmentLogin2Binding;
 import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
-import com.example.sutdfolio.ui.login.OTPFormState;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,6 +98,7 @@ public class OTPverification extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         otpEditText = binding.otpfield;
         otpverification = binding.verify;
+        TextView ErrorText = getView().findViewById(R.id.OTPErrorMessage);
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
@@ -127,13 +122,11 @@ public class OTPverification extends Fragment {
             @Override
             public void onClick(View view) {
                 getOtp = Integer.valueOf(otpEditText.getText().toString());
-
                 APIRequest api = APIRequest.getInstance();
                 api.verify(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
-
                             status = object.getString("Status");
                             token = object.getString("Token");
                                 SharedPreferences.Editor prefEditor = pref.edit();
@@ -153,11 +146,9 @@ public class OTPverification extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("otp","wrong otp");
-                            Toast.makeText(getActivity(), "wrong otp please try again", Toast.LENGTH_LONG).show();
                         }
                     }
-                }, getOtp, getDetails, getEmail);
+                }, getOtp, getDetails, getEmail, ErrorText);
             }
 
         });

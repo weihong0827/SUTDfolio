@@ -38,6 +38,7 @@ tools:context=".Upload">
             android:id="@+id/uploadPage_title_EditText"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:maxLength="250"
             android:inputType="text"/>
 
         <TextView
@@ -99,14 +100,15 @@ tools:context=".Upload">
             android:id="@+id/peopleInvolve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical">
 
-<!--        <EditText-->
-<!--            android:id="@+id/uploadPage_peopleInvolved_EditText"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:height="100dp"-->
-<!--            android:inputType="text"/>-->
+        <EditText
+            android:id="@+id/uploadPage_peopleInvolved_EditText"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:height="100dp"
+            android:inputType="number" />
+    </LinearLayout>
 
         <Button
             android:id="@+id/uploadPage_addPerson_Button"
