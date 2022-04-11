@@ -3,22 +3,10 @@ package com.example.sutdfolio.ui.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
-import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 
 import com.example.sutdfolio.data.LoginRepository;
-import com.example.sutdfolio.data.Result;
-import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.R;
-import com.example.sutdfolio.utils.APIRequest;
-import com.example.sutdfolio.utils.Listener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class LoginViewModel extends ViewModel {
 
