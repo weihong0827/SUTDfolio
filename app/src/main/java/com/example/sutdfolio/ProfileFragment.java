@@ -97,8 +97,6 @@ public class ProfileFragment extends Fragment {
         token = pref.getString("token", "");
         super.onCreate(savedInstanceState);
 
-
-
     }
 
     @Override

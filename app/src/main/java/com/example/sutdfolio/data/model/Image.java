@@ -1,5 +1,6 @@
 package com.example.sutdfolio.data.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Image {
@@ -22,6 +23,8 @@ public class Image {
         this.url = url;
         this.compress_url = compress_url;
     }
+
+
 
     public String getFilename() {
         return filename;

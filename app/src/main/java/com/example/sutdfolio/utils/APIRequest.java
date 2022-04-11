@@ -1,6 +1,5 @@
 package com.example.sutdfolio.utils;
 
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -8,20 +7,21 @@ import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.example.sutdfolio.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
+
 import java.util.Map;
 
 public class APIRequest {
@@ -282,8 +282,9 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void uploadImage(final Listener<String>listener,String image) {
+    public void uploadImage(final Listener<String>listener,String image,String jwt) {
         String url = prefixURL + "api/file";
+
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -299,12 +300,18 @@ public class APIRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (null != error.networkResponse) {
-                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                            try {
+                                String body = new String(error.networkResponse.data,"UTF-8");
+                                Log.d(TAG + ": ", "Error Response code: " + body);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
 //                            listener.getResult(false);
 
                         }
                     }
-                }) {
+                })
+        {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
@@ -316,12 +323,25 @@ public class APIRequest {
                 return params;
             }
 
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError{
+                HashMap<String,String> headers = new HashMap<>();
+                headers.put("auth-token",jwt);
+                return headers;
+            }
+
+
 
         };
-        netWorkInstance.requestQueue.add(request);
+        {
+            int socketTimeout = 30000;
+            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            request.setRetryPolicy(policy);
+            netWorkInstance.requestQueue.add(request);
+        };
     }
 
-    public void uploadPost(final Listener<String>listener,JSONObject postData){
+    public void uploadPost(final Listener<JSONObject>listener, JSONObject postData,String jwt){
         String url = prefixURL + "api/posts";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>()
@@ -331,7 +351,7 @@ public class APIRequest {
                     {
                         Log.d(TAG + ": ", "uploaded post "+": " + response.toString());
                         if(null != response.toString())
-                            listener.getResult(response.toString());
+                            listener.getResult(response);
 
                     }
                 },
@@ -343,11 +363,19 @@ public class APIRequest {
                         if (null != error.networkResponse)
                         {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                            Log.d(TAG + ": ", "Error Response code: " + error.getMessage());
 //                            listener.getResult(false);
 
                         }
                     }
-                });
+                }){
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError{
+                HashMap<String,String> headers = new HashMap<>();
+                headers.put("auth-token",jwt);
+                return headers;
+            }
+        };
 
         netWorkInstance.requestQueue.add(request);
     }
