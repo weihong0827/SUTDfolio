@@ -7,11 +7,13 @@ public class ReadPost extends Posts {
     private int upvoteCount;
     private Course courseNo;
     private List<Tag> tag;
-    public ReadPost(String title, String desc, List<Image> image, List<Tag> tag,List<User> peopleInvolved, Course courseNo, int term, String telegram, String linkIn, String youtube, Boolean publish, int upvoteCount) {
+    private boolean liked;
+    public ReadPost(String title, String desc, List<Image> image, List<Tag> tag,List<User> peopleInvolved, Course courseNo, int term, String telegram, String linkIn, String youtube, Boolean publish, int upvoteCount,boolean liked) {
         super(title,desc, image,term, telegram, linkIn, youtube, publish);
         this.peopleInvolved = peopleInvolved;
         this.courseNo = courseNo;
         this.upvoteCount = upvoteCount;
+        this.liked = liked;
         this.tag = tag;
     }
 
@@ -23,6 +25,14 @@ public class ReadPost extends Posts {
                 ", courseNo=" + courseNo +
                 ", tags=" + tag +
                 '}';
+    }
+
+    public List<Tag> getTag() {
+        return tag;
+    }
+
+    public boolean isLiked() {
+        return liked;
     }
 
     public List<User> getPeopleInvolved() {
