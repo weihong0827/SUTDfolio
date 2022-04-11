@@ -42,6 +42,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.example.sutdfolio.data.model.Course;
 import com.example.sutdfolio.data.model.CreatePost;
 import com.example.sutdfolio.data.model.Image;
@@ -89,6 +91,9 @@ public class Upload extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         pref = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         token = pref.getString("token", "");
+        if (token.isEmpty()){
+            Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
+        }
         mStorageRef = FirebaseStorage.getInstance().getReference();
         super.onCreate(savedInstanceState);
 
@@ -136,7 +141,6 @@ public class Upload extends Fragment {
                         );
 //                        Bitmap bm = BitmapFactory.decodeFile(picturePath);
 
-
                         ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
                         ImageView imageView = new ImageView(getContext());
                         imageView.setPadding(0,0,20,0);
@@ -147,7 +151,6 @@ public class Upload extends Fragment {
                         ll.addView(imageView);
                         Log.d("Upload", "onActivityResult: "+ uri.toString());
                     }
-
                 }
             });
 
@@ -171,8 +174,6 @@ public class Upload extends Fragment {
             }
         });
 
-
-
         request.getCourse(new Listener<String>() {
             @Override
             public void getResult(String object) {
@@ -184,17 +185,15 @@ public class Upload extends Fragment {
                 courseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        selectedCourse = courses.get(i).get_id();
-                    }
-
+                        selectedCourse = courses.get(i).get_id();}
                     @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
+                    public void onNothingSelected(AdapterView<?> adapterView) {}
                 });
                 courseSpinner.setAdapter(courseArrayAdapter);
             }
         });
+
+
         request.getTags(new Listener<String>() {
             @Override
             public void getResult(String object) {
@@ -235,6 +234,7 @@ public class Upload extends Fragment {
 
             }
         });
+
         final Button addPersonButton = v.findViewById(R.id.uploadPage_addPerson_Button);
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,13 +264,19 @@ public class Upload extends Fragment {
         });
         EditText titleEdit = (EditText)v.findViewById(R.id.uploadPage_title_EditText);
         EditText descEdit = (EditText)v.findViewById(R.id.uploadPage_projectDescription_EditText);
+        EditText youtubeEdit = v.findViewById((R.id.uploadPage_YouTube_EditText));
+        EditText linkedInEdit = v.findViewById(R.id.uploadPage_peopleInvolved_EditText);
+        EditText telegramEdit = v.findViewById(R.id.uploadPage_telegram_EditText);
         LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
         final Button submitButton = v.findViewById(R.id.uploadPage_submit_Button);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 String title = titleEdit.getText().toString();
                 String desc = descEdit.getText().toString();
+                String youtube = youtubeEdit.getText().toString();
+                String linkedIn = linkedInEdit.getText().toString();
+                String telegram = telegramEdit.getText().toString();
 
                 for (int i=0; i<peopleLL.getChildCount();i++){
                     EditText peopleText;
@@ -282,19 +288,24 @@ public class Upload extends Fragment {
                     }
                     String input = peopleText.getText().toString();
                     people.add(Integer.parseInt(input));
-
                 }
-                CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,"","","",true);
+                CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
 
                 Log.d("upload", "onClick: "+postToSend.toString());
                 Gson gson = new Gson();
                 String postString =  gson.toJson(postToSend);
+                if(token.isEmpty()){
+                    Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
+                }else if(title.length()<6){
+                    Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
+                }
+                else{
                 try {
                     JSONObject object = new JSONObject(postString);
                     request.uploadPost(new Listener<JSONObject>() {
                         @Override
                         public void getResult(JSONObject object) {
-                            try {
+                            try{
                                 Log.d("HI", "getResult: "+object.getString("_id"));
                                 String id = object.getString("_id");
                                 Bundle bundle = new Bundle();
@@ -304,14 +315,11 @@ public class Upload extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
-
                         }
                     },object,token);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
+                }}
             }
         });
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -13,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,12 +33,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +75,9 @@ public class EditProfileFragment extends Fragment {
     String setAvatar;
     NavController navController;
     SharedPreferences prefs;
+    private StorageReference mStorageRef;
+    Uri uri;
+
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -90,8 +105,8 @@ public class EditProfileFragment extends Fragment {
                     //TODO handle multiple image
                     //TODO Camera input
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Uri uri = result.getData().getData();
-                        String[] projection = {MediaStore.MediaColumns.DATA};
+                        uri = result.getData().getData();
+//                        String[] projection = {MediaStore.MediaColumns.DATA};
 //                        Cursor cursor = managedQuery(uri, projection, null, null, null);
 //                        int column_index = cursor
 //                                .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -99,19 +114,45 @@ public class EditProfileFragment extends Fragment {
 //                        String imagePath = cursor.getString(column_index);
 //                        Bitmap bm = BitmapFactory.decodeFile(imagePath);
 
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 //                        bm.compress(Bitmap.CompressFormat.JPEG,40,baos);
 
 
                         // bitmap object
-
-                        byte[] byteImage_photo = baos.toByteArray();
+                        String name = UUID.randomUUID().toString();
+                        StorageReference ref
+                                = mStorageRef
+                                .child("images/" + name);
+                        ref.putFile(uri).addOnSuccessListener(
+                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @RequiresApi(api = Build.VERSION_CODES.O)
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                setAvatar = uri.toString();
+                                                Log.d("HELL YEH", "onSuccess: "+uri.toString());
+                                            }
+                                        });
+                                    }
+                                }
+                        ).addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("LOSER", "onFailure: ");
+                                    }
+                                }
+                        );
+//                        byte[] byteImage_photo = baos.toByteArray();
 
                         //generate base64 string of image
 
-                        String encodedImage = Base64.encodeToString(byteImage_photo,Base64.DEFAULT);
-                        Log.d("encoded image", encodedImage);
+//                        String encodedImage = Base64.encodeToString(byteImage_photo,Base64.DEFAULT);
+//                        Log.d("encoded image", encodedImage);
                         Log.d("uri", uri.toString());
 
 //                        ll = getActivity().findViewById(R.id.AvatarEdit);
@@ -141,6 +182,7 @@ public class EditProfileFragment extends Fragment {
         }
         prefs = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         jwt = prefs.getString("token", "");
+        setAvatar = oriAvatar;
     }
 
     @Override
@@ -148,6 +190,7 @@ public class EditProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
 
         aboutme = view.findViewById(R.id.Edit_About_Me);
         classof = view.findViewById(R.id.Edit_Class_Of);
@@ -179,7 +222,6 @@ public class EditProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
-
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 mGetContent.launch(intent);
@@ -194,7 +236,6 @@ public class EditProfileFragment extends Fragment {
                 setAboutMe = aboutme.getText().toString();
                 setPillar = pillar.getText().toString();
                 setClassOf = classof.getText().toString();
-                setAvatar=oriAvatar;
 
                 APIRequest api = APIRequest.getInstance();
                 api.editUser(new Listener<JSONObject>() {
