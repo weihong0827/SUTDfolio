@@ -81,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     bundle.putString("_id",id);
                     Log.d(TAG, "id " + id + " clicked.");
                     NavController navController = Navigation.findNavController(v);
-                    navController.navigate(R.id.action_homePage_to_individualPost,bundle);
+                    navController.navigate(R.id.individualPost,bundle);
                     final Activity activity = (Activity) context;
 
 
