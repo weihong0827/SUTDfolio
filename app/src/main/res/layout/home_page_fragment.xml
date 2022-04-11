@@ -6,9 +6,15 @@
     tools:context=".homePage">
     <SearchView
         android:id="@+id/simpleSearchView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"/>
+        android:clickable="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="15dp"
+        android:focusable="true"
+        android:queryHint="Search"
+        android:iconifiedByDefault="false"
+        android:gravity="center"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerView"
