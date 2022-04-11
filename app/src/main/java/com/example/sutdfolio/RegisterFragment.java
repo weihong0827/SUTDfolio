@@ -47,6 +47,7 @@ public class RegisterFragment extends Fragment {
     EditText nameReg;
     EditText studentIDReg;
     Button register;
+    TextView errorText;
     String userID;
 
     public RegisterFragment() {
@@ -88,6 +89,7 @@ public class RegisterFragment extends Fragment {
         nameReg = view.findViewById(R.id.NameReg);
         studentIDReg = view.findViewById(R.id.StudentIDReg);
         register = (Button)view.findViewById(R.id.registration);
+        errorText = (TextView)view.findViewById(R.id.RegisterErrorMessage);
         Boolean[] validEmailPasswordNameId = {false, false, false, false};
         final Boolean[] isValid = {true, true, true, true};
 
@@ -103,6 +105,7 @@ public class RegisterFragment extends Fragment {
                 if(s.toString().contains("sutd.edu.sg") && s.toString().contains("@")){
                     validEmailPasswordNameId[0] = true;
                 }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
 
@@ -123,7 +126,9 @@ public class RegisterFragment extends Fragment {
                 // change this condition for password validation
                 if(s.length()>=6){
                     validEmailPasswordNameId[1] = true;
+
                 }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -144,6 +149,7 @@ public class RegisterFragment extends Fragment {
                 if(s.length()>=6){
                     validEmailPasswordNameId[2] = true;
                 }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -163,6 +169,7 @@ public class RegisterFragment extends Fragment {
                 if(s.length()==7 && Integer.parseInt(s.toString())<=1100000 && Integer.parseInt(s.toString())>=1000000){
                     validEmailPasswordNameId[3] = true;
                 }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -185,11 +192,15 @@ public class RegisterFragment extends Fragment {
                 api.register(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
-                        Toast.makeText(getActivity(),"Registered, please log in.",Toast.LENGTH_LONG).show();
-                        NavController navController = Navigation.findNavController(view);
-                        navController.navigate(R.id.action_registerFragment_to_loginFragment);
+                        try {
+                            Toast.makeText(getActivity(), "Registered, please log in.", Toast.LENGTH_LONG).show();
+                            NavController navController = Navigation.findNavController(view);
+                            navController.navigate(R.id.action_registerFragment_to_loginFragment);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }, emailReg.getText().toString(), passwordReg.getText().toString(), nameReg.getText().toString(), Integer.valueOf(studentIDReg.getText().toString()));
+                }, emailReg.getText().toString(), passwordReg.getText().toString(), nameReg.getText().toString(), Integer.valueOf(studentIDReg.getText().toString()), errorText);
             }
         });
 

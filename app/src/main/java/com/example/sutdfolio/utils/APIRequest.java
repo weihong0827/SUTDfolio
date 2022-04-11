@@ -164,7 +164,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
-    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId){
+    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId, TextView errorText){
         String url = prefixURL + "api/user/register";
 
         JSONObject body = new JSONObject();
@@ -189,7 +189,7 @@ public class APIRequest {
                 },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                errorText.setVisibility(View.VISIBLE);
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());

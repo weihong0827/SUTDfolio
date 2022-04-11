@@ -11,12 +11,25 @@
     android:paddingBottom="@dimen/fragment_vertical_margin">
 
     <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/RegisterErrorMessage"
+        android:text="Invalid credentials detected, please try again."
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/sutd_red_1"
+        android:visibility="invisible"
+        android:textSize="16dp"
+        android:layout_marginTop="48dp"
+        />
+
     <EditText
         android:id="@+id/NameReg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="24dp"
         android:hint="@string/prompt_name"
         />
 
@@ -49,9 +62,6 @@
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         />
-
-
-
 
     <Button
         android:id="@+id/registration"
