@@ -31,7 +31,7 @@
         android:layout_marginStart="10dp"
         android:background="@null"
         android:layout_below="@+id/item_image"
-        />
+        app:tint="@color/sutd_red_2" />
     <TextView
         android:id="@+id/item_heart_counter"
         android:layout_width="wrap_content"

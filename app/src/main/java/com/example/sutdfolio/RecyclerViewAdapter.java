@@ -163,6 +163,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         List<String> tagStrings = new ArrayList<>();
         List<Tag> tagList = tempList.get(position).getTags();
         Log.d("Special tag", "onBindViewHolder: "+ tagList.toString());
+        holder.getTagLinearLayout().removeAllViews();
+
         for (Tag tag : tagList) {
             tagStrings.add("#"+tag.getName());
             if (String.join(" ", tagStrings).length() <= 50) { // check that length of tags do not exceed a certain threshold/wrap
@@ -184,6 +186,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String lowerS = s.toLowerCase(Locale.ROOT);
         Log.d(TAG, "filter: posts data"+posts.toString());
         tempList.clear();
+
         if (s.length()==0){
             tempList.addAll(posts);
         }else{
