@@ -78,7 +78,7 @@ public class Upload extends Fragment {
     private String selectedCourse;
     private ArrayList<String> selectedTag = new ArrayList<>();
     private int term;
-    private ArrayList<Integer> people = new ArrayList<>();
+    private ArrayList<Integer> people;
     private ArrayList<Image> image = new ArrayList<>();
     APIRequest request = APIRequest.getInstance();
     SharedPreferences pref;
@@ -277,7 +277,7 @@ public class Upload extends Fragment {
                 if (token.isEmpty()){
                     navController = Navigation.findNavController(v);
                     navController.navigate(R.id.loginFragment);
-                    Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Not Logged in. Please Log in before uploading a post.",Toast.LENGTH_LONG).show();
                 }
                 else {
                     String title = titleEdit.getText().toString();
@@ -285,6 +285,7 @@ public class Upload extends Fragment {
                     String youtube = youtubeEdit.getText().toString();
                     String linkedIn = linkedInEdit.getText().toString();
                     String telegram = telegramEdit.getText().toString();
+                    people = new ArrayList<>();
 
 
                     for (int i=0; i<peopleLL.getChildCount();i++){
@@ -296,18 +297,23 @@ public class Upload extends Fragment {
                             peopleText = (EditText) subLayout.getChildAt(0);
                         }
                         String input = peopleText.getText().toString();
-                        if (!input.equals("")){
-                        people.add(Integer.parseInt(input));}
+                        if (!input.equals("") ){
+                            people.add(Integer.parseInt(input));}
                     }
                     CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
-
+                    Boolean studentIDvalidchecker = true;
+                    for(Integer k : people){
+                        if (!(1000000<k && k<1100000)){
+                            studentIDvalidchecker=false;
+                        }
+                    }
                     Log.d("upload", "onClick: "+postToSend.toString());
                     Gson gson = new Gson();
                     String postString =  gson.toJson(postToSend);
 
                     if(title.length()<6){
                         Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
-                    }
+                    }else if(!studentIDvalidchecker){Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
                     else{
                         try {
                             JSONObject object = new JSONObject(postString);
