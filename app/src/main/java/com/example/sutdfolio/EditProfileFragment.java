@@ -39,6 +39,7 @@ import com.example.sutdfolio.utils.Listener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -73,6 +74,7 @@ public class EditProfileFragment extends Fragment {
     String setClassOf;
     String setPillar;
     String setAvatar;
+    String newUri;
     NavController navController;
     SharedPreferences prefs;
     private StorageReference mStorageRef;
@@ -133,8 +135,8 @@ public class EditProfileFragment extends Fragment {
                                             @RequiresApi(api = Build.VERSION_CODES.O)
                                             @Override
                                             public void onSuccess(Uri uri) {
-                                                setAvatar = uri.toString();
                                                 Log.d("HELL YEH", "onSuccess: "+uri.toString());
+                                                newUri = uri.toString();
                                             }
                                         });
                                     }
@@ -182,7 +184,7 @@ public class EditProfileFragment extends Fragment {
         }
         prefs = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         jwt = prefs.getString("token", "");
-        setAvatar = oriAvatar;
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -236,12 +238,16 @@ public class EditProfileFragment extends Fragment {
                 setAboutMe = aboutme.getText().toString();
                 setPillar = pillar.getText().toString();
                 setClassOf = classof.getText().toString();
+                if (newUri != null){
+                    setAvatar = newUri;
+                }else{setAvatar = oriAvatar;}
 
                 APIRequest api = APIRequest.getInstance();
                 api.editUser(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
                         Log.d("save changes", "pass");
+                        Log.d("saved avatar", setAvatar);
                         Toast.makeText(getActivity(),"Changes saved.",Toast.LENGTH_LONG).show();
                     }
                 }, setAboutMe, setPillar, setClassOf, setAvatar, jwt);

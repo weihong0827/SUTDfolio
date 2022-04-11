@@ -84,6 +84,8 @@ public class Upload extends Fragment {
     SharedPreferences pref;
     String token;
     private StorageReference mStorageRef;
+    NavController navController;
+
     public static Upload newInstance() {
         return new Upload();
     }
@@ -273,6 +275,8 @@ public class Upload extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (token.isEmpty()){
+                    navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.loginFragment);
                     Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
                 }
                 else {
@@ -281,6 +285,7 @@ public class Upload extends Fragment {
                     String youtube = youtubeEdit.getText().toString();
                     String linkedIn = linkedInEdit.getText().toString();
                     String telegram = telegramEdit.getText().toString();
+
 
                     for (int i=0; i<peopleLL.getChildCount();i++){
                         EditText peopleText;
@@ -291,7 +296,8 @@ public class Upload extends Fragment {
                             peopleText = (EditText) subLayout.getChildAt(0);
                         }
                         String input = peopleText.getText().toString();
-                        people.add(Integer.parseInt(input));
+                        if (!input.equals("")){
+                        people.add(Integer.parseInt(input));}
                     }
                     CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
 
@@ -313,7 +319,7 @@ public class Upload extends Fragment {
                                         String id = object.getString("_id");
                                         Bundle bundle = new Bundle();
                                         bundle.putString("_id",id);
-                                        NavController navController = Navigation.findNavController(v);
+                                        navController = Navigation.findNavController(v);
                                         navController.navigate(R.id.individualPost,bundle);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
