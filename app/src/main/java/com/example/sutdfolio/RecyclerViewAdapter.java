@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.Tag;
+import com.example.sutdfolio.utils.Util;
 
 import org.w3c.dom.Text;
 
@@ -56,8 +58,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private final ImageView itemImage;
         private final ImageButton heartImageButton;
         private final TextView textHeartCount;
-        private final TextView textTags;
+//        private final TextView textTags;
         private boolean liked = false;
+        private final LinearLayout tagLinearLayout;
 
         public ViewHolder(View v,Context context) {
             super(v);
@@ -81,7 +84,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemImage = v.findViewById(R.id.item_image);
             heartImageButton = (ImageButton) v.findViewById(R.id.item_heart_button);
             textHeartCount = (TextView) v.findViewById(R.id.item_heart_counter);
-            textTags = (TextView) v.findViewById(R.id.item_tags);
+//            textTags = (TextView) v.findViewById(R.id.item_tags);
+            tagLinearLayout = (LinearLayout) v.findViewById(R.id.item_tag_linear_layout);
 
             heartImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,7 +118,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public TextView getTextHeartCount() { return textHeartCount; }
 
-        public TextView getTextTags() { return textTags; }
+//        public TextView getTextTags() { return textTags; }
+
+        public LinearLayout getTagLinearLayout() {
+            return tagLinearLayout;
+        }
 
         @Override
         public void onClick(View view) {
@@ -152,27 +160,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.getTextHeartCount().setText(String.valueOf(tempList.get(position).getUpvoteCount()));
 
         // get and update tags
-//        List<String> tagStrings = null;
-//        tempList.get(position).getTags().forEach((tag) -> { tagStrings.add(tag.toString()); });
         List<String> tagStrings = new ArrayList<>();
-        tagStrings.add("tag1");
-        tagStrings.add("tag2");
-
-        int count = 0;
-
         List<Tag> tagList = tempList.get(position).getTags();
-//        Tag testTag1 = new Tag("1", "testTag1");
-//        tagList.add(testTag1);
-//        for (Tag tag : tagList) {
-////            tagStrings.add(tag.getName());
-//            count++;
-//        }
+        Log.d("Special tag", "onBindViewHolder: "+ tagList.toString());
+        for (Tag tag : tagList) {
+            tagStrings.add("#"+tag.getName());
+            if (String.join(" ", tagStrings).length() <= 50) { // check that length of tags do not exceed a certain threshold/wrap
 
-        tagStrings.add(String.valueOf(count));
-//        tagStrings.add(String.valueOf(tagList.size()));
-
-        holder.getTextTags().setText(String.join(", ", tagStrings));
-//        Log.d("Abram Text", tempList.get(position).getTags().toString());
+                TextView tagTextView = new TextView(context.getApplicationContext());
+                tagTextView.setText("#"+tag.getName());
+                tagTextView.setBackgroundResource(R.drawable.tag_border);
+                int horizontalPads = (int) Util.pxFromDp(context.getApplicationContext(), 5);
+                int verticalPads = (int) Util.pxFromDp(context.getApplicationContext(), 1);
+                tagTextView.setPadding(horizontalPads,verticalPads,horizontalPads,verticalPads);
+                tagTextView.layout(horizontalPads, verticalPads, horizontalPads, verticalPads);
+                holder.getTagLinearLayout().addView(tagTextView);
+            }
+        }
+//        holder.getTextTags().setText(String.join(" ", tagStrings));
     }
     public void filter(String s) {
         Log.d(TAG, "filter: input string"+s);

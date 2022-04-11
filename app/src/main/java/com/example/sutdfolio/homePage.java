@@ -103,6 +103,7 @@ public class homePage extends Fragment{
             @Override
             public void getResult(String object) {
                 final Gson gson = new Gson();
+                Log.d("TAG", "getResult: "+object);
                 posts = gson.fromJson(object, ReadPost[].class);
                 Log.d("get",posts[0].toString());
 //                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
