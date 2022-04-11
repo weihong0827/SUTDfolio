@@ -13,7 +13,7 @@
     android:foreground="?selectableItemBackground"
     android:clickable="true"
     >
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -22,6 +22,42 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"/>
+    <ImageButton
+        android:id="@+id/item_heart_button"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        android:layout_width="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:background="@null"
+        android:layout_below="@+id/item_image"
+        app:tint="@color/sutd_red_2" />
+    <TextView
+        android:id="@+id/item_heart_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/item_image"
+        android:layout_toRightOf="@+id/item_heart_button"
+        android:text="0"
+        android:layout_marginLeft="5dp"
+        android:gravity="center"
+        />
+    <LinearLayout
+        android:id="@+id/item_tag_linear_layout"
+        android:layout_marginTop="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/item_image"
+        android:layout_marginEnd="15dp"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:divider="@drawable/horizontal_divider"
+        android:showDividers="middle">
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/item_title"
         android:layout_width="match_parent"
@@ -30,18 +66,20 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_below="@+id/item_heart_button"
         />
-        <TextView
-            android:id="@+id/item_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="item details"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/item_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="item details"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/item_title"
+        />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
