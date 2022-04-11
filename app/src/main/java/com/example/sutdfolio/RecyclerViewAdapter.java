@@ -2,10 +2,12 @@ package com.example.sutdfolio;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,8 @@ import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.Tag;
+import com.example.sutdfolio.utils.APIRequest;
+import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.Util;
 
 import org.w3c.dom.Text;
@@ -50,6 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.posts = Arrays.asList(posts);
         tempList = new ArrayList<>();
         tempList.addAll(Arrays.asList(posts));
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -59,8 +64,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private final ImageButton heartImageButton;
         private final TextView textHeartCount;
 //        private final TextView textTags;
-        private boolean liked = false;
+
         private final LinearLayout tagLinearLayout;
+        private APIRequest request = APIRequest.getInstance();
+        private SharedPreferences prefs;
+        private  String token;
+        private boolean liked = false;
 
         public ViewHolder(View v,Context context) {
             super(v);
@@ -79,6 +88,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Log.d(TAG, "Element " + getAdapterPosition() + " clicked.");
                 }
             });
+            prefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+            token = prefs.getString("token", "");
+
             textTitle = (TextView) v.findViewById(R.id.item_title);
             textDesc = (TextView) v.findViewById(R.id.item_detail);
             itemImage = v.findViewById(R.id.item_image);
@@ -90,16 +102,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             heartImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (liked) {
-                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_24);
-                        liked = !liked;
+                    Log.d(TAG, "onClick: Clicked");
+                    if (!token.equals("")){
+                        request.upVote(new Listener<String>() {
+                            @Override
+                            public void getResult(String object) {
+                                if (liked){
+                                    heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                                    liked = !liked;
+                                    textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())-1));
+                                }else{
+                                    heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                    liked = !liked;
+                                    textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())+1));
+                                }
+                            }
+                        },id,token);
+                    }else{
+                        Toast.makeText(context,"Please login to like the post!",Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        heartImageButton.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                        liked = !liked;
-                    }
+
                 }
             });
+        }
+
+        public boolean isLiked() {
+            return liked;
+        }
+
+        public void setLiked(boolean liked) {
+            this.liked = liked;
         }
 
         public ImageView getItemImage() {
@@ -156,6 +188,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         id = tempList.get(position).get_id();
 
         // get and update heart count
+        holder.setLiked(tempList.get(position).isLiked());
+
+        if (tempList.get(position).isLiked()){
+            holder.getHeartImageButton().setImageResource(R.drawable.ic_baseline_favorite_24);
+        }else{
+            holder.getHeartImageButton().setImageResource(R.drawable.ic_baseline_favorite_border_24);
+        }
 //        holder.getHeartImageButton().setImageResource(R.drawable.ic_baseline_favorite_24);
         holder.getTextHeartCount().setText(String.valueOf(tempList.get(position).getUpvoteCount()));
 
@@ -167,7 +206,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         for (Tag tag : tagList) {
             tagStrings.add("#"+tag.getName());
-            if (String.join(" ", tagStrings).length() <= 50) { // check that length of tags do not exceed a certain threshold/wrap
+            if (String.join(" ", tagStrings).length() <= 20) { // check that length of tags do not exceed a certain threshold/wrap
 
                 TextView tagTextView = new TextView(context.getApplicationContext());
                 tagTextView.setText("#"+tag.getName());
@@ -176,6 +215,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 int verticalPads = (int) Util.pxFromDp(context.getApplicationContext(), 1);
                 tagTextView.setPadding(horizontalPads,verticalPads,horizontalPads,verticalPads);
                 tagTextView.layout(horizontalPads, verticalPads, horizontalPads, verticalPads);
+                tagTextView.setTextSize(18);
+                tagTextView.setGravity(Gravity.CENTER);
                 holder.getTagLinearLayout().addView(tagTextView);
             }
         }

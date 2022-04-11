@@ -164,7 +164,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
-    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId){
+    public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId, TextView errorText){
         String url = prefixURL + "api/user/register";
 
         JSONObject body = new JSONObject();
@@ -189,7 +189,7 @@ public class APIRequest {
                 },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                errorText.setVisibility(View.VISIBLE);
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
@@ -282,64 +282,6 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void uploadImage(final Listener<String>listener,String image,String jwt) {
-        String url = prefixURL + "api/file";
-
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG + ": ", "Image Uploaded " + ": " + response.toString());
-                        if (null != response.toString())
-                            //TODO:Load the response into the image object using gson
-                            listener.getResult(response.toString());
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (null != error.networkResponse) {
-                            try {
-                                String body = new String(error.networkResponse.data,"UTF-8");
-                                Log.d(TAG + ": ", "Error Response code: " + body);
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-//                            listener.getResult(false);
-
-                        }
-                    }
-                })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-
-                //Creating parameters
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put("file", image);
-                //returning parameters
-                return params;
-            }
-
-                @Override
-                public Map<String,String> getHeaders() throws AuthFailureError{
-                HashMap<String,String> headers = new HashMap<>();
-                headers.put("auth-token",jwt);
-                return headers;
-            }
-
-
-
-        };
-        {
-            int socketTimeout = 30000;
-            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            request.setRetryPolicy(policy);
-            netWorkInstance.requestQueue.add(request);
-        };
-    }
 
     public void uploadPost(final Listener<JSONObject>listener, JSONObject postData,String jwt){
         String url = prefixURL + "api/posts";
@@ -442,5 +384,44 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
+    public void upVote(final Listener<String> listener, String id,String jwt){
+        String url = prefixURL + "api/posts/upvote/"+id;
+        Log.d(TAG, "upVote: "+url);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
 
+                        if(null != response.toString())
+                            Log.d(TAG + ": ", "Upvote : " + response.toString());
+                        listener.getResult(response.toString());
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                            Log.d(TAG + ": ", "Error Response message: " + error.getMessage());
+//                            listener.getResult(false);
+
+                        }
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap<>();
+                headers.put("auth-token",jwt);
+                return headers;
+            }
+        };
+
+        netWorkInstance.requestQueue.add(request);
+    }
 }

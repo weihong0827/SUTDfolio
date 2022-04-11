@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +40,7 @@ public class homePage extends Fragment{
     private RecyclerView.LayoutManager mLayoutManager;
     SearchView searchView;
 
+
     public static homePage newInstance() {
         return new homePage();
     }
@@ -46,6 +49,7 @@ public class homePage extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPostData();
+
     }
 
     @Override
@@ -55,8 +59,10 @@ public class homePage extends Fragment{
 
     @Override
     public void onResume() {
+
         super.onResume();
         getPostData();
+
     }
 
     @Override
@@ -96,7 +102,7 @@ public class homePage extends Fragment{
 //    }
     private void getPostData (){
 
-        Toast.makeText(getActivity(),"HELLO",Toast.LENGTH_LONG).show();
+
         APIRequest request = APIRequest.getInstance();
         request.getPosts(new Listener<String>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -106,7 +112,6 @@ public class homePage extends Fragment{
                 Log.d("TAG", "getResult: "+object);
                 posts = gson.fromJson(object, ReadPost[].class);
                 Log.d("get",posts[0].toString());
-//                Toast.makeText(getActivity(),object,Toast.LENGTH_LONG).show();
 
                 adapter = new RecyclerViewAdapter(getActivity(), posts);
 

@@ -19,12 +19,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sutdfolio.databinding.FragmentOTPverificationBinding;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +47,7 @@ public class RegisterFragment extends Fragment {
     EditText nameReg;
     EditText studentIDReg;
     Button register;
+    TextView errorText;
     String userID;
 
     public RegisterFragment() {
@@ -74,7 +78,6 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-
         return view;
     }
 
@@ -85,8 +88,9 @@ public class RegisterFragment extends Fragment {
         passwordReg = view.findViewById(R.id.PasswordReg);
         nameReg = view.findViewById(R.id.NameReg);
         studentIDReg = view.findViewById(R.id.StudentIDReg);
-        register = view.findViewById(R.id.registration);
-        final Boolean[] validEmailPasswordNameId = {false, false, false, false};
+        register = (Button)view.findViewById(R.id.registration);
+        errorText = (TextView)view.findViewById(R.id.RegisterErrorMessage);
+        Boolean[] validEmailPasswordNameId = {false, false, false, false};
         final Boolean[] isValid = {true, true, true, true};
 
         //for email checking
@@ -97,19 +101,17 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // check if email is valid sutd email
-                if(!emailReg.toString().contains("@mymail.sutd.edu.sg") && !emailReg.toString().contains("@sutd.edu.sg")){
+                // check if email is valid sutd email (staff/student)
+                if(s.toString().contains("sutd.edu.sg") && s.toString().contains("@")){
                     validEmailPasswordNameId[0] = true;
-                } else {
-                    validEmailPasswordNameId[0] = false;
                 }
-                if (validEmailPasswordNameId == isValid) {
-                    register.setEnabled(true);
-                }
+                errorText.setVisibility(View.INVISIBLE);
             }
+
 
             @Override
             public void afterTextChanged(Editable s) {
+                register.setEnabled(Arrays.equals(validEmailPasswordNameId, isValid));
             }
         };
 
@@ -122,18 +124,16 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // change this condition for password validation
-                if(passwordReg.toString().length()<=6){
+                if(s.length()>=6){
                     validEmailPasswordNameId[1] = true;
-                } else {
-                    validEmailPasswordNameId[1] = false;
+
                 }
-                if (validEmailPasswordNameId == isValid) {
-                    register.setEnabled(true);
-                }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                register.setEnabled(Arrays.equals(validEmailPasswordNameId, isValid));
             }
         };
 
@@ -146,18 +146,15 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // check name length
-                if(nameReg.toString().length()>=6){
+                if(s.length()>=6){
                     validEmailPasswordNameId[2] = true;
-                } else {
-                    validEmailPasswordNameId[2] = false;
                 }
-                if (validEmailPasswordNameId == isValid) {
-                    register.setEnabled(true);
-                }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                register.setEnabled(Arrays.equals(validEmailPasswordNameId, isValid));
             }
         };
 
@@ -169,17 +166,15 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // check whether both the fields are empty or not
-                if(studentIDReg.toString()!=null){
+                if(s.length()==7 && Integer.parseInt(s.toString())<=1100000 && Integer.parseInt(s.toString())>=1000000){
                     validEmailPasswordNameId[3] = true;
                 }
-                if (validEmailPasswordNameId == isValid) {
-                    register.setEnabled(true);
-                }
+                errorText.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                register.setEnabled(Arrays.equals(validEmailPasswordNameId, isValid));
             }
         };
 
@@ -197,11 +192,15 @@ public class RegisterFragment extends Fragment {
                 api.register(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {
-                        Toast.makeText(getActivity(),"Registered, please log in.",Toast.LENGTH_LONG).show();
-                        NavController navController = Navigation.findNavController(view);
-                        navController.navigate(R.id.action_registerFragment_to_loginFragment);
+                        try {
+                            Toast.makeText(getActivity(), "Registered, please log in.", Toast.LENGTH_LONG).show();
+                            NavController navController = Navigation.findNavController(view);
+                            navController.navigate(R.id.action_registerFragment_to_loginFragment);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }, emailReg.getText().toString(), passwordReg.getText().toString(), nameReg.getText().toString(), Integer.valueOf(studentIDReg.getText().toString()));
+                }, emailReg.getText().toString(), passwordReg.getText().toString(), nameReg.getText().toString(), Integer.valueOf(studentIDReg.getText().toString()), errorText);
             }
         });
 

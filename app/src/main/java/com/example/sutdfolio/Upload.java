@@ -84,6 +84,8 @@ public class Upload extends Fragment {
     SharedPreferences pref;
     String token;
     private StorageReference mStorageRef;
+    NavController navController;
+
     public static Upload newInstance() {
         return new Upload();
     }
@@ -272,54 +274,62 @@ public class Upload extends Fragment {
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String title = titleEdit.getText().toString();
-                String desc = descEdit.getText().toString();
-                String youtube = youtubeEdit.getText().toString();
-                String linkedIn = linkedInEdit.getText().toString();
-                String telegram = telegramEdit.getText().toString();
-
-                for (int i=0; i<peopleLL.getChildCount();i++){
-                    EditText peopleText;
-                    if (i==0){
-                        peopleText = (EditText) peopleLL.getChildAt(0);
-                    }else{
-                        LinearLayout subLayout = (LinearLayout) peopleLL.getChildAt(i);
-                        peopleText = (EditText) subLayout.getChildAt(0);
-                    }
-                    String input = peopleText.getText().toString();
-                    people.add(Integer.parseInt(input));
-                }
-                CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
-
-                Log.d("upload", "onClick: "+postToSend.toString());
-                Gson gson = new Gson();
-                String postString =  gson.toJson(postToSend);
-                if(token.isEmpty()){
+                if (token.isEmpty()){
+                    navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.loginFragment);
                     Toast.makeText(getActivity(),"Not Logged in. Please Log in on the Profile page before uploading a post.",Toast.LENGTH_LONG).show();
-                }else if(title.length()<6){
-                    Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
                 }
-                else{
-                try {
-                    JSONObject object = new JSONObject(postString);
-                    request.uploadPost(new Listener<JSONObject>() {
-                        @Override
-                        public void getResult(JSONObject object) {
-                            try{
-                                Log.d("HI", "getResult: "+object.getString("_id"));
-                                String id = object.getString("_id");
-                                Bundle bundle = new Bundle();
-                                bundle.putString("_id",id);
-                                NavController navController = Navigation.findNavController(v);
-                                navController.navigate(R.id.individualPost,bundle);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                else {
+                    String title = titleEdit.getText().toString();
+                    String desc = descEdit.getText().toString();
+                    String youtube = youtubeEdit.getText().toString();
+                    String linkedIn = linkedInEdit.getText().toString();
+                    String telegram = telegramEdit.getText().toString();
+
+
+                    for (int i=0; i<peopleLL.getChildCount();i++){
+                        EditText peopleText;
+                        if (i==0){
+                            peopleText = (EditText) peopleLL.getChildAt(0);
+                        }else{
+                            LinearLayout subLayout = (LinearLayout) peopleLL.getChildAt(i);
+                            peopleText = (EditText) subLayout.getChildAt(0);
                         }
-                    },object,token);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }}
+                        String input = peopleText.getText().toString();
+                        if (!input.equals("")){
+                        people.add(Integer.parseInt(input));}
+                    }
+                    CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
+
+                    Log.d("upload", "onClick: "+postToSend.toString());
+                    Gson gson = new Gson();
+                    String postString =  gson.toJson(postToSend);
+
+                    if(title.length()<6){
+                        Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        try {
+                            JSONObject object = new JSONObject(postString);
+                            request.uploadPost(new Listener<JSONObject>() {
+                                @Override
+                                public void getResult(JSONObject object) {
+                                    try{
+                                        Log.d("HI", "getResult: "+object.getString("_id"));
+                                        String id = object.getString("_id");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("_id",id);
+                                        navController = Navigation.findNavController(v);
+                                        navController.navigate(R.id.individualPost,bundle);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },object,token);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }}
+                }
             }
         });
 
