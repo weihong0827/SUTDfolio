@@ -130,7 +130,7 @@ public class IndividualPost extends Fragment {
 //                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
 
-                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+
 
                 List<Image> images = post.getImage();
 

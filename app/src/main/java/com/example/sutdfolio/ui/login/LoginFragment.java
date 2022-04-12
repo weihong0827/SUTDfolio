@@ -146,7 +146,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 loginButton.startAnimation();
                 APIRequest api =APIRequest.getInstance();
-                Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(),"pressed",Toast.LENGTH_LONG).show();
                 api.login(new Listener<JSONObject>() {
                     @Override
                     public void getResult(JSONObject object) {

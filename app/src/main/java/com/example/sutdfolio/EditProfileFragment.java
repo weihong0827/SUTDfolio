@@ -249,13 +249,13 @@ public class EditProfileFragment extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         Log.d("save changes", "pass");
-                        
+                        navController = Navigation.findNavController(view);
+                        navController.navigate(R.id.action_editProfileFragment_to_profileFragment);
                         Toast.makeText(getActivity(),"Changes saved.",Toast.LENGTH_LONG).show();
                     }
                 }, setAboutMe, setPillar, setClassOf, setAvatar, jwt);
 
-                navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_editProfileFragment_to_profileFragment);
+
             }
         });
 
