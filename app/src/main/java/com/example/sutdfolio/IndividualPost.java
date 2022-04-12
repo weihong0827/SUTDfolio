@@ -126,10 +126,13 @@ public class IndividualPost extends Fragment {
             public void getResult(String object) {
                 final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 post = gson.fromJson(object, ReadPost.class);
+
 //                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
+
+                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+
                 List<Image> images = post.getImage();
-                postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
                 postItems.add(new PostItem("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png"));
                 for(Image i:images)
                 {
