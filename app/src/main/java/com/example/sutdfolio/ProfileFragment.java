@@ -123,7 +123,7 @@ public class ProfileFragment extends Fragment {
 //            navController = Navigation.findNavController(view);
 //            navController.navigate(R.id.action_profileFragment_to_loginFragment);
 //        }
-        Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(),token,Toast.LENGTH_SHORT).show();
         Log.d("TOKEN", token);
 
         APIRequest api = APIRequest.getInstance();
@@ -149,7 +149,7 @@ public class ProfileFragment extends Fragment {
                 pillar.setText(String.valueOf(userObj.getPillar()));
                 name.setText(userObj.getName());
                 aboutMe.setText(userObj.getAboutMe());
-                Log.d("avatar", userObj.getAvatar());
+//                Log.d("avatar", userObj.getAvatar());
                 if (userObj.getAvatar()!=null){
                     Glide
                             .with(getActivity())

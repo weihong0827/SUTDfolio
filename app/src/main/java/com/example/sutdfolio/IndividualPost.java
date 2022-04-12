@@ -69,7 +69,7 @@ public class IndividualPost extends Fragment {
 
 
         } else {
-            Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
         }
 
 
@@ -126,7 +126,7 @@ public class IndividualPost extends Fragment {
             public void getResult(String object) {
                 final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 post = gson.fromJson(object, ReadPost.class);
-                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
                 List<Image> images = post.getImage();
                 postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
