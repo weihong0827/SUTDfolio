@@ -115,7 +115,7 @@ public class homePage extends Fragment{
                 final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 Log.d("TAG", "getResult: "+object);
                 posts = gson.fromJson(object, ReadPost[].class);
-                
+
 
                 adapter = new RecyclerViewAdapter(getActivity(), posts);
 

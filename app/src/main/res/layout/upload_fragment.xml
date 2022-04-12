@@ -83,6 +83,7 @@ tools:context=".Upload">
             android:height="50dp"
             android:text="Project Description" />
 
+
         <EditText
             android:id="@+id/uploadPage_projectDescription_EditText"
             android:layout_height="wrap_content"
@@ -151,11 +152,27 @@ tools:context=".Upload">
             android:height="50dp"
             android:text="Tag(s)" />
 
-        <LinearLayout
-            android:id="@+id/tagList"
+<!--        <LinearLayout-->
+<!--            android:id="@+id/tagList"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal" />-->
+        <HorizontalScrollView
+            android:id="@+id/uploadPage_tag_HorizontalScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/tagList"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:orientation="horizontal" >
+                
+            </LinearLayout>
+
+        </HorizontalScrollView>
         <TextView
             android:id="@+id/uploadPage_YouTube_TextView"
             android:layout_width="match_parent"

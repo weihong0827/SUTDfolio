@@ -129,8 +129,7 @@ public class IndividualPost extends Fragment {
                 Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
                 List<Image> images = post.getImage();
-                postItems.add(new PostItem("https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039"));
-                postItems.add(new PostItem("https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/500px-International_Pok%C3%A9mon_logo.svg.png"));
+
                 for(Image i:images)
                 {
                     postItems.add(new PostItem(i.getUrl()));
@@ -138,8 +137,10 @@ public class IndividualPost extends Fragment {
 
                 //postItems.add(new PostItem(R.drawable.ic_baseline_home_24));
 
-                telegram.setText("@hungchiayu1");
-                youtube.setText("youtube.com");
+                telegram.setText(post.getTelegram());
+                youtube.setText(post.getYoutube());
+                linkedIn.setText(post.getLinkIn());
+                term.setText(post.getTerm());
                 title.setText(post.getTitle());
                 descView.setText(post.getDesc());
 
