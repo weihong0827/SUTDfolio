@@ -28,6 +28,7 @@ import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.NetworkManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class homePage extends Fragment{
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void getResult(String object) {
-                final Gson gson = new Gson();
+                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 Log.d("TAG", "getResult: "+object);
                 posts = gson.fromJson(object, ReadPost[].class);
                 Log.d("get",posts[0].toString());

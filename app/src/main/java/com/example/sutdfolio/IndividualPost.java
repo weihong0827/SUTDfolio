@@ -30,6 +30,7 @@ import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.Util;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class IndividualPost extends Fragment {
         request.getPost(new Listener<String>() {
             @Override
             public void getResult(String object) {
-                final Gson gson = new Gson();
+                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 post = gson.fromJson(object, ReadPost.class);
                 Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
