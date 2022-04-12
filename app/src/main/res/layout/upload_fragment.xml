@@ -169,7 +169,7 @@ tools:context=".Upload">
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:orientation="horizontal" >
-                
+
             </LinearLayout>
 
         </HorizontalScrollView>

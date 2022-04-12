@@ -69,7 +69,7 @@ public class IndividualPost extends Fragment {
 
 
         } else {
-            Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
         }
 
 
@@ -126,8 +126,12 @@ public class IndividualPost extends Fragment {
             public void getResult(String object) {
                 final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 post = gson.fromJson(object, ReadPost.class);
-                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+
+//                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
+
+                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
+
                 List<Image> images = post.getImage();
 
                 for(Image i:images)
