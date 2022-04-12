@@ -353,6 +353,86 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
+    public void updatePost(final Listener<String>listener,String id,String token, JSONObject postData){
+        String url = prefixURL + "api/posts/"+id;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, postData,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        Log.d(TAG + ": ", "post "+id+": " + response.toString());
+                        if(null != response.toString())
+                            listener.getResult(response.toString());
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+//                            listener.getResult(false);
+
+                        }
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                if (!token.isEmpty()) {
+                    headers.put("auth-token", token);
+                }
+                return headers;
+            }
+        };
+
+        netWorkInstance.requestQueue.add(request);
+    }
+
+    public void delPost(final Listener<String>listener,String id,String token){
+        String url = prefixURL + "api/posts/"+id;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        Log.d(TAG + ": ", "post "+id+": " + response.toString());
+                        if(null != response.toString())
+                            listener.getResult(response.toString());
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+//                            listener.getResult(false);
+
+                        }
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                if (!token.isEmpty()) {
+                    headers.put("auth-token", token);
+                }
+                return headers;
+            }
+        };
+
+        netWorkInstance.requestQueue.add(request);
+    }
+
     public void getPosts( final Listener<String> listener,String token)
     {
         String url = prefixURL + "api/posts";
