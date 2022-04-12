@@ -39,6 +39,7 @@ import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.utils.APIRequest;
 import com.google.gson.Gson;
 import com.example.sutdfolio.utils.Listener;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -136,7 +137,7 @@ public class ProfileFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                final Gson gson = new Gson();
+                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
                 userObj = gson.fromJson(user, User.class);
                 postsObj = gson.fromJson(posts, ReadPost[].class);
                 Log.d("profile user", userObj.toString());
