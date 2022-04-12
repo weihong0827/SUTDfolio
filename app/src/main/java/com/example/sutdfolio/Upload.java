@@ -225,6 +225,7 @@ public class Upload extends Fragment {
                                 //the color is a direct color int and not a color resource
                                 DrawableCompat.setTint(buttonDrawable, getResources().getColor(R.color.sutd_red_1));
                                 tagButton.setBackground(buttonDrawable);
+                                tagButton.setTextColor(getResources().getColor(R.color.white));
                             }else{
                                 selectedTag.remove(tagId);
                                 Drawable buttonDrawable = tagButton.getBackground();
