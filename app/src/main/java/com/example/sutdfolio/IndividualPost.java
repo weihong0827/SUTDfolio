@@ -144,7 +144,7 @@ public class IndividualPost extends Fragment {
                 telegram.setText(post.getTelegram());
                 youtube.setText(post.getYoutube());
                 linkedIn.setText(post.getLinkIn());
-                term.setText(post.getTerm());
+                term.setText(String.valueOf(post.getTerm()));
                 title.setText(post.getTitle());
                 descView.setText(post.getDesc());
 
