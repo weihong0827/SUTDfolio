@@ -32,7 +32,7 @@ tools:context=".Upload">
             android:id="@+id/uploadPage_title_TextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Title (up to 280 characters)" />
+            android:text="Title (minimum 6 and up to 280 characters)" />
 
 
         <EditText

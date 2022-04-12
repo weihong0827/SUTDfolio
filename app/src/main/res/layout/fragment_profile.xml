@@ -87,21 +87,28 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:text="Edit details"
-        android:id="@+id/editProfile"
-        android:layout_gravity="center"
-        android:textSize="7dp"/>
-
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log out"
-        android:id="@+id/Logout"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit details"
+            android:layout_marginRight="30dp"
+            android:id="@+id/editProfile"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:layout_marginRight="30dp"
+            android:id="@+id/Logout"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView

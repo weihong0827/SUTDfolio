@@ -223,7 +223,7 @@ public class Upload extends Fragment {
                                 Drawable buttonDrawable = tagButton.getBackground();
                                 buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                                 //the color is a direct color int and not a color resource
-                                DrawableCompat.setTint(buttonDrawable, Color.BLUE);
+                                DrawableCompat.setTint(buttonDrawable, getResources().getColor(R.color.sutd_red_1));
                                 tagButton.setBackground(buttonDrawable);
                             }else{
                                 selectedTag.remove(tagId);
@@ -282,7 +282,7 @@ public class Upload extends Fragment {
         }
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                submitButton.startAnimation();
+//                submitButton.startAnimation();
                 String title = titleEdit.getText().toString();
                 String desc = descEdit.getText().toString();
                 String youtube = youtubeEdit.getText().toString();
@@ -315,16 +315,20 @@ public class Upload extends Fragment {
                 String postString =  gson.toJson(postToSend);
 
                 if(title.length()<6){
+                    Log.d("title char", "title not min 6 chars");
                     Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
-                }else if(!studentIDvalidchecker){Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
+                }else if(!studentIDvalidchecker){
+                    Log.d("studentID valid", "invalid");
+                    Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
                 else{
                     try {
                         JSONObject object = new JSONObject(postString);
+                        submitButton.startAnimation();
                         request.uploadPost(new Listener<JSONObject>() {
                             @Override
                             public void getResult(JSONObject object) {
                                 try{
-                                    Log.d("HI", "getResult: "+object.getString("_id"));
+                                    Log.d("uploadpost getresult", "getResult: "+object.getString("_id"));
                                     String id = object.getString("_id");
                                     Bundle bundle = new Bundle();
                                     bundle.putString("_id",id);

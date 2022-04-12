@@ -133,7 +133,7 @@ public class EditProfileFragment extends Fragment {
 //                                                R.drawable.ic_baseline_check_circle_outline_24);
 //                                        Log.d("TAG", "onSuccess: "+bm.toString());
 //                                        btn.doneLoadingAnimation(R.color.sutd_red_1,bm);
-                                        btn.revertAnimation();
+//                                        btn.revertAnimation();
                                         Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
                                         task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -141,6 +141,7 @@ public class EditProfileFragment extends Fragment {
                                             public void onSuccess(Uri uri) {
                                                 Log.d("HELL YEH", "onSuccess: "+uri.toString());
                                                 newUri = uri.toString();
+                                                btn.revertAnimation();
                                             }
                                         });
                                     }
