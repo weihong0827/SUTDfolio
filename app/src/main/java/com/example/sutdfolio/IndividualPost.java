@@ -2,11 +2,13 @@ package com.example.sutdfolio;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,8 +16,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
@@ -32,7 +37,11 @@ import com.example.sutdfolio.utils.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -49,6 +58,8 @@ public class IndividualPost extends Fragment {
     private SharedPreferences prefs;
     private  String token;
     private boolean liked = false;
+    String studentID = "";
+    NavController navController;
 
     private Context context;
 
@@ -65,9 +76,6 @@ public class IndividualPost extends Fragment {
         token = prefs.getString("token", "");
         if (getArguments() != null) {
             ID = getArguments().getString("_id");
-
-
-
         } else {
 //            Toast.makeText(getActivity(), "NO ID GIVEN", Toast.LENGTH_LONG).show();
         }
@@ -86,6 +94,7 @@ public class IndividualPost extends Fragment {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -99,6 +108,12 @@ public class IndividualPost extends Fragment {
         TextView textHeartCount = getView().findViewById(R.id.item_heart_counter);
         ImageView heartImageButton = getView().findViewById(R.id.item_heart_button);
         LinearLayout linearLayout = getView().findViewById(R.id.linear_layout);
+        Button deletePost = getView().findViewById(R.id.DeletePost);
+        Button editPost = getView().findViewById(R.id.EditPost);
+
+
+//        Log.d("decoded id", studentID);
+
 
         viewPager2 = (ViewPager2) getView().findViewById(R.id.viewPageImageSlider);
         List<PostItem> postItems = new ArrayList<>();
@@ -164,12 +179,7 @@ public class IndividualPost extends Fragment {
 
                     linearLayout.addView(tagTextView[i]);
                 }
-                List<User> users = post.getPeopleInvolved();
-                String temp = "";
-                for(User i :users)
-                {
-                   temp+=i.getName().toString()+" ("+i.getPillar()+")"+",";
-                }
+
                int count = post.getUpvoteCount();
                 liked = post.isLiked();
                 if (liked)
@@ -207,7 +217,33 @@ public class IndividualPost extends Fragment {
                     }
                 });
 
+                String[] chunks = token.split("\\.");
+                Base64.Decoder decoder = Base64.getUrlDecoder();
+                String header = new String(decoder.decode(chunks[0]));
+                String payload = new String(decoder.decode(chunks[1]));
+                Log.d("jwt header", header);
+                Log.d("jwt payload", payload);
 
+
+                try {
+                    JSONObject jwt = new JSONObject(payload);
+                    studentID = jwt.getString("studentId");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                List<User> users = post.getPeopleInvolved();
+                String temp = "";
+                for(User i :users)
+                {
+                    Log.d("contributor id", Integer.toString(i.getStudentId()));
+                    if (i.getStudentId() == Integer.parseInt(studentID)){
+                        deletePost.setVisibility(view.VISIBLE);
+                        editPost.setVisibility(view.VISIBLE);
+                    }
+                    temp+=i.getName().toString()+" ("+i.getPillar()+")"+",";
+                }
                 textHeartCount.setText(String.valueOf(post.getUpvoteCount()));
                 team.setText(temp);
 
@@ -216,6 +252,20 @@ public class IndividualPost extends Fragment {
 
             }
         }, ID,token);
+        deletePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                APIRequest request = APIRequest.getInstance();
+                request.delPost(new Listener<String>() {
+                    @Override
+                    public void getResult(String object) {
+                        navController = Navigation.findNavController(view);
+                        navController.navigate(R.id.homePage);
+                    }
+                }, ID, token);
+
+            }
+        });
        ;
     }
 }

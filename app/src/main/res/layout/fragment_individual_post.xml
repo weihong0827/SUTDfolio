@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/indiv_desc"
-        android:textSize="28dp"
+        android:textSize="20dp"
         android:layout_marginTop="20dp"/>
         <TextView
             android:id="@+id/desc"
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="Team"
-        android:textSize="28dp"
+        android:textSize="20dp"
         android:layout_marginTop="20dp"/>
 
     <TextView
@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Relevant links"
-        android:textSize="28dp"
+        android:textSize="20dp"
         android:id="@+id/relevantLInk"
         android:layout_marginTop="20dp"/>
 
@@ -127,6 +127,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/youtube" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Post"
+            android:layout_marginRight="30dp"
+            android:id="@+id/DeletePost"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Post"
+            android:layout_marginRight="30dp"
+            android:id="@+id/EditPost"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
+    </LinearLayout>
 
 
 
