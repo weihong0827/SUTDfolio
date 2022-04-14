@@ -15,6 +15,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.sutdfolio.data.LoginDataSource;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -509,6 +511,52 @@ public class APIRequest {
                 HashMap<String,String> headers = new HashMap<>();
                 headers.put("auth-token",jwt);
                 return headers;
+            }
+        };
+
+        netWorkInstance.requestQueue.add(request);
+    }
+    public void delImage(String filename,String jwt,String projectId){
+        String url = prefixURL + "api/file/"+filename;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+
+                        if(null != response.toString())
+                            Log.d(TAG, "onResponse: Image deleted");
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        if (null != error.networkResponse)
+                        {
+                            Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
+                            Log.d(TAG + ": ", "Error Response message: " + error.getMessage());
+//                            listener.getResult(false);
+
+                        }
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap<>();
+                headers.put("auth-token",jwt);
+                return headers;
+            }
+            @Override
+            public Map<String, String> getParams() {
+                HashMap<String,String> params = new HashMap<>();
+                if (!projectId.isEmpty()){
+                    params.put("project",projectId);
+                }
+                return params;
             }
         };
 

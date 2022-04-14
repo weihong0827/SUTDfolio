@@ -37,6 +37,7 @@ import com.example.sutdfolio.data.model.Posts;
 
 import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.utils.APIRequest;
+import com.example.sutdfolio.utils.Util;
 import com.google.gson.Gson;
 import com.example.sutdfolio.utils.Listener;
 import com.google.gson.GsonBuilder;
@@ -137,7 +138,7 @@ public class ProfileFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
+                final Gson gson = Util.GsonParser();
                 userObj = gson.fromJson(user, User.class);
                 postsObj = gson.fromJson(posts, ReadPost[].class);
                 Log.d("profile user", userObj.toString());
@@ -203,7 +204,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getUserPostData (){
-        adapter = new RecyclerViewAdapter(getActivity(),postsObj);
+        adapter = new RecyclerViewAdapter(getActivity(),postsObj,token);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

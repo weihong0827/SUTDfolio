@@ -45,12 +45,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.sutdfolio.data.model.Course;
 import com.example.sutdfolio.data.model.CreatePost;
 import com.example.sutdfolio.data.model.Image;
+import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.Tag;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
+import com.example.sutdfolio.utils.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -87,6 +90,7 @@ public class Upload extends Fragment {
     SharedPreferences pref;
     String token;
     private StorageReference mStorageRef;
+    private ReadPost postInfo;
     NavController navController;
 
 
@@ -100,6 +104,10 @@ public class Upload extends Fragment {
         token = pref.getString("token", "");
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        if (getArguments() != null) {
+            postInfo = Util.GsonParser().fromJson(getArguments().getString("postInfo"),ReadPost.class);
+            Log.d("Edit", "onCreate: ");
+        }
         super.onCreate(savedInstanceState);
 
     }
@@ -108,16 +116,17 @@ public class Upload extends Fragment {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    LinearLayout ll;
+
                     //TODO handle multiple image
                     //TODO Camera input
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Uri uri = result.getData().getData();
+                        Uri localUri = result.getData().getData();
+
                         String name = UUID.randomUUID().toString();
                         StorageReference ref
                                 = mStorageRef
                                 .child("images/" + name);
-                        ref.putFile(uri).addOnSuccessListener(
+                        ref.putFile(localUri).addOnSuccessListener(
                                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -131,6 +140,37 @@ public class Upload extends Fragment {
                                                         .toInstant());
                                                 Image tempImage = new Image(name,name,name,name,today ,"image/jpeg",uri.toString(),uri.toString());
                                                 image.add(tempImage);
+                                                LinearLayout ll;
+                                                ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
+                                                ImageButton imageButton = new ImageButton(getContext());
+                                                imageButton.setPadding(0,0,20,0);
+                                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
+                                                imageButton.setLayoutParams(layoutParams);
+                                                imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                                imageButton.setImageURI(localUri);
+                                                imageButton.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(tempImage.getUrl());
+                                                        photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                // File deleted successfully
+                                                                Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file");
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception exception) {
+                                                                // Uh-oh, an error occurred!
+                                                                Log.d("DELETE FROM FIREBASE", "onFailure: did not delete file");
+                                                            }
+                                                        });
+                                                        // TODO: delete image from list / storage before upload?
+                                                        ll.removeView(view);
+                                                    }
+                                                });
+                                                ll.addView(imageButton);
+                                                Log.d("Upload", "onActivityResult: "+ uri.toString());
                                                 Log.d("HELL YEH", "onSuccess: "+uri.toString());
                                             }
                                         });
@@ -146,22 +186,7 @@ public class Upload extends Fragment {
                         );
 //                        Bitmap bm = BitmapFactory.decodeFile(picturePath);
 
-                        ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
-                        ImageButton imageButton = new ImageButton(getContext());
-                        imageButton.setPadding(0,0,20,0);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
-                        imageButton.setLayoutParams(layoutParams);
-                        imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageButton.setImageURI(uri);
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // TODO: delete image from list / storage before upload?
-                                ll.removeView(view);
-                            }
-                        });
-                        ll.addView(imageButton);
-                        Log.d("Upload", "onActivityResult: "+ uri.toString());
+
                     }
                 }
             });
@@ -220,6 +245,7 @@ public class Upload extends Fragment {
                     Drawable buttonDrawable = tagButton.getBackground();
                     buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                     //the color is a direct color int and not a color resource
+
                     DrawableCompat.setTint(buttonDrawable, Color.GRAY);
                     tagButton.setBackground(buttonDrawable);
                     tagButton.setOnClickListener(new View.OnClickListener() {
@@ -320,7 +346,7 @@ public class Upload extends Fragment {
                     }
                 }
                 Log.d("upload", "onClick: "+postToSend.toString());
-                Gson gson = new Gson();
+                Gson gson = Util.GsonParser();
                 String postString =  gson.toJson(postToSend);
 
                 if(title.length()<6){
@@ -368,6 +394,64 @@ public class Upload extends Fragment {
 
             }
         });
+
+
+        if (postInfo != null){
+            titleEdit.setText(postInfo.getTitle());
+            descEdit.setText(postInfo.getDesc());
+            youtubeEdit.setText(postInfo.getYoutube());
+            telegramEdit.setText(postInfo.getTelegram());
+            linkedInEdit.setText(postInfo.getLinkIn());
+            ArrayList<Image> postImages = (ArrayList<Image>) postInfo.getImage();
+            image.addAll(postImages);
+            if (!postImages.isEmpty()){
+                for (Image image :postImages){
+                    LinearLayout ll;
+                    ll = v.findViewById(R.id.uploadPage_images_LinearLayout);
+                    ImageButton imageButton = new ImageButton(getContext());
+                    imageButton.setPadding(0,0,20,0);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
+                    imageButton.setLayoutParams(layoutParams);
+                    imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(image.getUrl());
+                            photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // File deleted successfully
+                                    request.delImage(image.getFilename(),token, postInfo.get_id());
+                                    Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file from project");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Uh-oh, an error occurred!
+                                    Log.d("DELETE FROM FIREBASE", "onFailure: did not delete file");
+                                }
+                            });
+                            // TODO: delete image from list / storage before upload?
+                            ll.removeView(view);
+
+                        }
+                    });
+                    ll.addView(imageButton);
+                    Glide
+                            .with(getContext())
+                            .load(image.getUrl())
+                            .centerCrop()
+//                .placeholder(R.drawable.loading_spinner)
+                            .into(imageButton);
+                }
+            }
+            //TODO add people bug fix
+            //TODO set tag color
+            //TODO set course and term value
+            //TODO image delete function
+            //TODO SHOULD DELETE THE IMAGE ONLY ON SAVE CHANGES
+            submitButton.setText("Save Changes");
+        }
         return v;
     }
 

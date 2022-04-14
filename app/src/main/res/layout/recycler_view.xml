@@ -58,8 +58,6 @@
         android:divider="@drawable/horizontal_divider"
         android:showDividers="middle">
 
-
-
         </LinearLayout>
 
     <TextView
@@ -85,5 +83,23 @@
         android:layout_marginBottom="10dp"
         android:layout_below="@+id/item_title"
         />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="310dp"
+            android:layout_marginStart="10dp"
+            android:id="@+id/postUpdate"
+            android:visibility="gone"
+            android:text="Update"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="310dp"
+            android:layout_marginStart="120dp"
+            android:id="@+id/postDelete"
+            android:visibility="gone"
+            android:text="Delete"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
