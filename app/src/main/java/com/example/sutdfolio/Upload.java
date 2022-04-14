@@ -39,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -146,13 +147,20 @@ public class Upload extends Fragment {
 //                        Bitmap bm = BitmapFactory.decodeFile(picturePath);
 
                         ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
-                        ImageView imageView = new ImageView(getContext());
-                        imageView.setPadding(0,0,20,0);
+                        ImageButton imageButton = new ImageButton(getContext());
+                        imageButton.setPadding(0,0,20,0);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
-                        imageView.setLayoutParams(layoutParams);
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageView.setImageURI(uri);
-                        ll.addView(imageView);
+                        imageButton.setLayoutParams(layoutParams);
+                        imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageButton.setImageURI(uri);
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // TODO: delete image from list / storage before upload?
+                                ll.removeView(view);
+                            }
+                        });
+                        ll.addView(imageButton);
                         Log.d("Upload", "onActivityResult: "+ uri.toString());
                     }
                 }
