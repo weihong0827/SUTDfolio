@@ -327,18 +327,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tempList.addAll(posts);
         }else{
             for (ReadPost item: posts){
-                if (item.getTitle().toLowerCase(Locale.ROOT).contains(lowerS)){
-                    tempList.add(0, item);
+
+                // check for matches in tags
+                Boolean tagCheck = false;
+                for (Tag tag : item.getTags()) {
+                    if (tag.getName().toLowerCase(Locale.ROOT).contains(lowerS)) {
+                        tagCheck = true;
+                    }
                 }
+                if (tagCheck) {
+                    tempList.add(item);
+                }
+
+                // check for matches in title
+                if (item.getTitle().toLowerCase(Locale.ROOT).contains(lowerS)){
+                    tempList.add(0, item); // insertion at index 0 places priority on title matches
+                }
+
+                // check for matches in description
                 else if (item.getDesc().toLowerCase(Locale.ROOT).contains(lowerS)) {
                     tempList.add(item);
                 }
-                else {
-                    for (Tag tag : item.getTags()) {
-                        if (tag.getName().toLowerCase(Locale.ROOT).contains(lowerS)) {
-                            tempList.add(item);
-                        }
-                    }
+
+                // check for matches in course
+                else if (item.getCourseNo().getCourseName().toLowerCase(Locale.ROOT).contains(lowerS)){
+                    tempList.add(item);
+                }
+
+                // check for matches in term
+                else if (("term "+String.valueOf(item.getTerm()).toLowerCase(Locale.ROOT)).contains(lowerS)) {
+                    tempList.add(item);
                 }
             }
         }
