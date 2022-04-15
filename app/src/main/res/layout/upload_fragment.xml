@@ -48,7 +48,7 @@ tools:context=".Upload">
             android:layout_height="match_parent"
             android:gravity="bottom"
             android:height="50dp"
-            android:text="Images" />
+            android:text="Images (Tap on image to remove) " />
 
         <HorizontalScrollView
             android:id="@+id/uploadPage_images_HorizontalScrollView"
@@ -69,11 +69,22 @@ tools:context=".Upload">
 
         </HorizontalScrollView>
 
-        <Button
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/uploadPage_addImage_Button"
             android:text="@string/add_another"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:background="@drawable/circular_border_shape" />
+        app:spinning_bar_width="4dp" <!-- Optional -->
+        app:spinning_bar_color="#FFF" <!-- Optional -->
+        app:spinning_bar_padding="6dp" <!-- Optional -->
+
+<!--        <Button-->
+<!--            android:id="@+id/uploadPage_addImage_Button"-->
+<!--            android:text="@string/add_another"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content" />-->
 
         <TextView
             android:id="@+id/uploadPage_projectDescription_TextView"

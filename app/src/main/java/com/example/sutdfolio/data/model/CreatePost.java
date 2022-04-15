@@ -22,6 +22,10 @@ public class CreatePost extends Posts {
         this.peopleInvolved = peopleInvolved;
     }
 
+    public List<String> getSelectedTags() {
+        return tag;
+    }
+
     @Override
     public String toString() {
         return "CreatePost{" +

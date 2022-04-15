@@ -54,5 +54,5 @@ public class ReadPost extends Posts {
         return courseNo;
     }
 
-    public List<Tag> getTags() { return tag; }
+    public List<Tag> getTags() { return tag;}
 }

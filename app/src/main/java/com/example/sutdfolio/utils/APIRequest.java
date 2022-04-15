@@ -355,8 +355,8 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void updatePost(final Listener<String>listener,String id,String token, JSONObject postData){
-        String url = prefixURL + "api/posts/"+id;
+    public void updatePost(final Listener<JSONObject>listener,String id,String token, JSONObject postData){
+        String url = prefixURL + "api/posts/" +id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, postData,
                 new Response.Listener<JSONObject>()
                 {
@@ -365,7 +365,7 @@ public class APIRequest {
                     {
                         Log.d(TAG + ": ", "post "+id+": " + response.toString());
                         if(null != response.toString())
-                            listener.getResult(response.toString());
+                            listener.getResult(response);
 
                     }
                 },

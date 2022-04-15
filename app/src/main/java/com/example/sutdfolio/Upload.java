@@ -82,6 +82,7 @@ public class Upload extends Fragment {
     private List<Course> courses;
     private List<Tag> tags;
     private String selectedCourse;
+    Course editCourse;
     private ArrayList<String> selectedTag = new ArrayList<>();
     private int term;
     private ArrayList<Integer> people;
@@ -91,6 +92,7 @@ public class Upload extends Fragment {
     String token;
     private StorageReference mStorageRef;
     private ReadPost postInfo;
+    String postID;
     NavController navController;
 
 
@@ -106,6 +108,7 @@ public class Upload extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         if (getArguments() != null) {
             postInfo = Util.GsonParser().fromJson(getArguments().getString("postInfo"),ReadPost.class);
+            postID = getArguments().getString("postID");
             Log.d("Edit", "onCreate: ");
         }
         super.onCreate(savedInstanceState);
@@ -126,6 +129,8 @@ public class Upload extends Fragment {
                         StorageReference ref
                                 = mStorageRef
                                 .child("images/" + name);
+                        CircularProgressButton btn = (CircularProgressButton) getActivity().findViewById(R.id.uploadPage_addImage_Button);
+                        btn.startAnimation();
                         ref.putFile(localUri).addOnSuccessListener(
                                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -140,6 +145,8 @@ public class Upload extends Fragment {
                                                         .toInstant());
                                                 Image tempImage = new Image(name,name,name,name,today ,"image/jpeg",uri.toString(),uri.toString());
                                                 image.add(tempImage);
+                                                Log.d("image list", image.toString());
+                                                btn.revertAnimation();
                                                 LinearLayout ll;
                                                 ll = getActivity().findViewById(R.id.uploadPage_images_LinearLayout);
                                                 ImageButton imageButton = new ImageButton(getContext());
@@ -151,12 +158,17 @@ public class Upload extends Fragment {
                                                 imageButton.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
+                                                        Log.d("image pressed", imageButton.toString());
+                                                        Log.d("localuri", localUri.toString());
+                                                        Log.d("tempimage", tempImage.toString());
                                                         StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(tempImage.getUrl());
                                                         photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
                                                                 // File deleted successfully
                                                                 Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file");
+                                                                image.remove(tempImage);
+                                                                Log.d("image list", image.toString());
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
@@ -167,8 +179,10 @@ public class Upload extends Fragment {
                                                         });
                                                         // TODO: delete image from list / storage before upload?
                                                         ll.removeView(view);
+
                                                     }
                                                 });
+
                                                 ll.addView(imageButton);
                                                 Log.d("Upload", "onActivityResult: "+ uri.toString());
                                                 Log.d("HELL YEH", "onSuccess: "+uri.toString());
@@ -197,16 +211,15 @@ public class Upload extends Fragment {
 
         View v = inflater.inflate(R.layout.upload_fragment, container, false);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.uploadPage_term_Spinner);
+        Spinner termSpinner = (Spinner) v.findViewById(R.id.uploadPage_term_Spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.term_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        termSpinner.setAdapter(adapter);
+        termSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 term = i+1;
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -229,6 +242,16 @@ public class Upload extends Fragment {
                     public void onNothingSelected(AdapterView<?> adapterView) {}
                 });
                 courseSpinner.setAdapter(courseArrayAdapter);
+                if (editCourse!= null){
+                Log.d("editCourse", editCourse.getCourseName());
+//                Log.d("editcourse index", String.valueOf(courses.indexOf(editCourse)));
+                for(Course c: courses){
+                    if (c.get_id().equals(editCourse.get_id())){
+                        courseSpinner.setSelection(courses.indexOf(c));
+                    }
+                }}
+
+
             }
         });
 
@@ -241,17 +264,21 @@ public class Upload extends Fragment {
                 LinearLayout tagListView = getActivity().findViewById(R.id.tagList);
                 for (Tag tag:tags){
                     Button tagButton = new Button(getContext());
+                    String tagId = tag.get_id();
                     tagButton.setText(tag.getName());
                     Drawable buttonDrawable = tagButton.getBackground();
                     buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                     //the color is a direct color int and not a color resource
+                    if (!selectedTag.contains(tagId)){DrawableCompat.setTint(buttonDrawable, Color.GRAY);}
+                    else{DrawableCompat.setTint(buttonDrawable, getResources().getColor(R.color.sutd_red_1));}
 
-                    DrawableCompat.setTint(buttonDrawable, Color.GRAY);
+
+
                     tagButton.setBackground(buttonDrawable);
                     tagButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String tagId = tag.get_id();
+
                             if (!selectedTag.contains(tagId)){
                                 selectedTag.add(tagId);
                                 Drawable buttonDrawable = tagButton.getBackground();
@@ -311,6 +338,8 @@ public class Upload extends Fragment {
         LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
         CircularProgressButton submitButton = (CircularProgressButton) v.findViewById(R.id.uploadPage_submit_Button);
 //        final Button submitButton = v.findViewById(R.id.uploadPage_submit_Button);
+
+
         if (token.isEmpty()){
             submitButton.setEnabled(false);
             Toast.makeText(getActivity(),"Not Logged in. Please Log in before uploading a post.",Toast.LENGTH_LONG).show();
@@ -402,6 +431,20 @@ public class Upload extends Fragment {
             youtubeEdit.setText(postInfo.getYoutube());
             telegramEdit.setText(postInfo.getTelegram());
             linkedInEdit.setText(postInfo.getLinkIn());
+            List<Tag> tags = postInfo.getTag();
+            for (Tag tag: tags){
+                selectedTag.add(tag.get_id());
+            }
+
+            Log.d("selected tags", tags.toString());
+            editCourse = postInfo.getCourseNo();
+            term = postInfo.getTerm();
+            Log.d("term", String.valueOf(term));
+            Log.d("selected course name", postInfo.getCourseNo().getCourseName());
+
+
+
+
             ArrayList<Image> postImages = (ArrayList<Image>) postInfo.getImage();
             image.addAll(postImages);
             if (!postImages.isEmpty()){
@@ -422,6 +465,7 @@ public class Upload extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     // File deleted successfully
                                     request.delImage(image.getFilename(),token, postInfo.get_id());
+                                    postImages.remove(image);
                                     Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file from project");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -445,12 +489,79 @@ public class Upload extends Fragment {
                             .into(imageButton);
                 }
             }
+
+            termSpinner.setSelection(term-1);
             //TODO add people bug fix
             //TODO set tag color
-            //TODO set course and term value
             //TODO image delete function
             //TODO SHOULD DELETE THE IMAGE ONLY ON SAVE CHANGES
             submitButton.setText("Save Changes");
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String title = titleEdit.getText().toString();
+                    String desc = descEdit.getText().toString();
+                    String youtube = youtubeEdit.getText().toString();
+                    String linkedIn = linkedInEdit.getText().toString();
+                    String telegram = telegramEdit.getText().toString();
+                    people = new ArrayList<>();
+
+
+                    for (int i=0; i<peopleLL.getChildCount();i++){
+                        EditText peopleText;
+                        if (i==0){
+                            peopleText = (EditText) peopleLL.getChildAt(0);
+                        }else{
+                            LinearLayout subLayout = (LinearLayout) peopleLL.getChildAt(i);
+                            peopleText = (EditText) subLayout.getChildAt(0);
+                        }
+                        String input = peopleText.getText().toString();
+                        if (!input.equals("") ){
+                            people.add(Integer.parseInt(input));}
+                    }
+                    Log.d("post update", "onClick: ");
+                    CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
+                    Boolean studentIDvalidchecker = true;
+                    for(Integer k : people){
+                        if (!(1000000<k && k<1100000)){
+                            studentIDvalidchecker=false;
+                        }
+                    }
+                    Log.d("post update", "onClick: "+postToSend.toString());
+
+                    Gson gson = Util.GsonParser();
+                    String postString =  gson.toJson(postToSend);
+
+                    if(title.length()<6){
+                        Log.d("title char", "title not min 6 chars");
+                        Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
+                    }else if(!studentIDvalidchecker){
+                        Log.d("studentID valid", "invalid");
+                        Toast.makeText(getActivity(),"Please ensure the stated student ID of each person involved is valid.",Toast.LENGTH_LONG).show();}
+                    else {
+                        try {
+                            JSONObject object = null;
+                            try {
+                                object = new JSONObject(postString);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            submitButton.startAnimation();
+                            request.updatePost(new Listener<JSONObject>() {
+                                @Override
+                                public void getResult(JSONObject object) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("_id",postID);
+                                    navController = Navigation.findNavController(v);
+                                    navController.navigate(R.id.individualPost,bundle);
+                                }
+                            },postID, token, object);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
         }
         return v;
     }

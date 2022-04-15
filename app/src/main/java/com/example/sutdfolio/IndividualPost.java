@@ -147,8 +147,6 @@ public class IndividualPost extends Fragment {
 //                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
                 Log.d("test",post.getTags().toString());
 
-
-
                 List<Image> images = post.getImage();
 
                 for(Image i:images)
@@ -284,6 +282,24 @@ public class IndividualPost extends Fragment {
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+        });
+
+        editPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("postInfo", post.toString());
+//                Log.d("post to edit", post.toString());
+//                navController = Navigation.findNavController(view);
+//                navController.navigate(R.id.upload);
+
+                Bundle bundle = new Bundle();
+                Gson gson = Util.GsonParser();
+                bundle.putString("postID", ID);
+                bundle.putString("postInfo",gson.toJson(post));
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.upload,bundle);
             }
         });
     }
