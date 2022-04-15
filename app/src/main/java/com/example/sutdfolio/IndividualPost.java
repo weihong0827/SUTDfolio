@@ -1,6 +1,8 @@
 package com.example.sutdfolio;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -252,20 +254,41 @@ public class IndividualPost extends Fragment {
 
             }
         }, ID,token);
+
+        AlertDialog.Builder deletepostdialog = new AlertDialog.Builder(context);
+
+        deletepostdialog.setMessage("Are you sure you wish to delete this post?");
+        deletepostdialog.setCancelable(true);
+
+        deletepostdialog.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        APIRequest request = APIRequest.getInstance();
+                        request.delPost(new Listener<String>() {
+                            @Override
+                            public void getResult(String object) {
+                                navController = Navigation.findNavController(view);
+                                navController.navigate(R.id.homePage);
+                            }
+                        }, ID, token);
+                    }
+                });
+
+        deletepostdialog.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
         deletePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                APIRequest request = APIRequest.getInstance();
-                request.delPost(new Listener<String>() {
-                    @Override
-                    public void getResult(String object) {
-                        navController = Navigation.findNavController(view);
-                        navController.navigate(R.id.homePage);
-                    }
-                }, ID, token);
-
+                AlertDialog alert11 = deletepostdialog.create();
+                alert11.show();
             }
         });
-       ;
     }
 }
