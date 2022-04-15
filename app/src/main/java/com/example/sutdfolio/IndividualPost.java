@@ -141,7 +141,7 @@ public class IndividualPost extends Fragment {
         request.getPost(new Listener<String>() {
             @Override
             public void getResult(String object) {
-                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
+                final Gson gson = Util.GsonParser();
                 post = gson.fromJson(object, ReadPost.class);
 
 //                Toast.makeText(getActivity(), object, Toast.LENGTH_LONG).show();
@@ -286,8 +286,34 @@ public class IndividualPost extends Fragment {
         deletePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog alert11 = deletepostdialog.create();
                 alert11.show();
+
+                APIRequest request = APIRequest.getInstance();
+                new AlertDialog.Builder(context)
+                        .setTitle("Delete entry")
+                        .setMessage("Are you sure you want to delete this entry?")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                request.delPost(new Listener<String>() {
+                                    @Override
+                                    public void getResult(String object) {
+                                        navController = Navigation.findNavController(view);
+                                        navController.navigate(R.id.homePage);
+                                        Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
+                                    }
+                                },ID,token);
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
     }

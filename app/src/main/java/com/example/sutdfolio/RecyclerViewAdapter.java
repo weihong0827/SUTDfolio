@@ -1,7 +1,10 @@
 package com.example.sutdfolio;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,6 +39,7 @@ import com.example.sutdfolio.data.model.Tag;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.Util;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -49,12 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<ReadPost> posts;
     private final Context context;
     private ArrayList<ReadPost> tempList;
-    public RecyclerViewAdapter(Context context,ReadPost[] posts) {
+    private String token;
+    private APIRequest request = APIRequest.getInstance();
+    public RecyclerViewAdapter(Context context,ReadPost[] posts, String token) {
         this.context = context;
         this.posts = Arrays.asList(posts);
         tempList = new ArrayList<>();
         tempList.addAll(Arrays.asList(posts));
-
+        this.token = token;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -65,6 +72,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private final ImageView itemImage;
         private final ImageButton heartImageButton;
         private final TextView textHeartCount;
+        private final Button updateButton;
+        private final Button deleteButton;
 
         private final LinearLayout tagLinearLayout;
         private APIRequest request = APIRequest.getInstance();
@@ -109,7 +118,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textHeartCount = (TextView) v.findViewById(R.id.item_heart_counter);
 //            textTags = (TextView) v.findViewById(R.id.item_tags);
             tagLinearLayout = (LinearLayout) v.findViewById(R.id.item_tag_linear_layout);
-
+            updateButton = v.findViewById(R.id.postUpdate);
+            deleteButton = v.findViewById(R.id.postDelete);
             heartImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -135,6 +145,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 }
             });
+
+        }
+
+        public Button getUpdateButton() {
+            return updateButton;
+        }
+
+        public Button getDeleteButton() {
+            return deleteButton;
         }
 
         public RelativeLayout getParentLayout() {
@@ -187,7 +206,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         holder.getTextTitle().setText(tempList.get(position).getTitle());
 //        holder.getTextDesc().setText(Html.fromHtml(posts[position].getDesc()));
@@ -201,11 +220,55 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                .placeholder(R.drawable.loading_spinner)
                     .into(holder.getItemImage());
         }
+        if (tempList.get(position).isEditable()){
+            Button deleteButton =holder.getDeleteButton();
+            deleteButton.setVisibility(Button.VISIBLE);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(context)
+                            .setTitle("Delete entry")
+                            .setMessage("Are you sure you want to delete this entry?")
+
+                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                            // The dialog is automatically dismissed when a dialog button is clicked.
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    request.delPost(new Listener<String>() {
+                                        @Override
+                                        public void getResult(String object) {
+                                            tempList.remove(position);
+                                            notifyDataSetChanged();
+                                            Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
+                                        }
+                                    },tempList.get(position).get_id(),token);
+                                }
+                            })
+
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                }
+            });
+            Button updateButton =holder.getUpdateButton();
+            updateButton.setVisibility(Button.VISIBLE);
+            updateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    Gson gson = Util.GsonParser();
+                    bundle.putString("postInfo",gson.toJson(tempList.get(position)));
+                    Log.d(TAG, "id " + holder.getId() + " update clicked.");
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.upload,bundle);
+                }
+            });
+        }
 
         holder.setId(tempList.get(position).get_id());
-        if (holder.getParentLayout()==null){
-            Log.d(TAG, "onBindViewHolder: rip");
-        }
+
         holder.getParentLayout().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -214,7 +277,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Log.d(TAG, "id " + holder.getId() + " clicked.");
                     NavController navController = Navigation.findNavController(view);
                     navController.navigate(R.id.individualPost,bundle);
-                    final Activity activity = (Activity) context;
+
 
                     }
                 }

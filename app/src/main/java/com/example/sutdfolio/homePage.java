@@ -27,6 +27,7 @@ import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.NetworkManager;
+import com.example.sutdfolio.utils.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -112,12 +113,12 @@ public class homePage extends Fragment{
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void getResult(String object) {
-                final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
+                final Gson gson = Util.GsonParser();
                 Log.d("TAG", "getResult: "+object);
                 posts = gson.fromJson(object, ReadPost[].class);
 
 
-                adapter = new RecyclerViewAdapter(getActivity(), posts);
+                adapter = new RecyclerViewAdapter(getActivity(), posts,token);
 
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
