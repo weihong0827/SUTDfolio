@@ -253,7 +253,7 @@ public class Upload extends Fragment {
 
 
             }
-        });
+        }, this.getActivity());
 
 
         request.getTags(new Listener<String>() {
@@ -301,7 +301,7 @@ public class Upload extends Fragment {
                 }
 
             }
-        });
+        }, this.getActivity());
 
         final Button addPersonButton = v.findViewById(R.id.uploadPage_addPerson_Button);
         addPersonButton.setOnClickListener(new View.OnClickListener() {
@@ -342,7 +342,7 @@ public class Upload extends Fragment {
 
         if (token.isEmpty()){
             submitButton.setEnabled(false);
-            Toast.makeText(getActivity(),"Not Logged in. Please Log in before uploading a post.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"Not logged in. Please log in before uploading a post.",Toast.LENGTH_LONG).show();
         }
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -402,7 +402,7 @@ public class Upload extends Fragment {
                                     e.printStackTrace();
                                 }
                             }
-                        },object,token);
+                        },object,token, v);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }}
@@ -464,7 +464,7 @@ public class Upload extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     // File deleted successfully
-                                    request.delImage(image.getFilename(),token, postInfo.get_id());
+                                    request.delImage(image.getFilename(),token, postInfo.get_id(), view);
                                     postImages.remove(image);
                                     Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file from project");
                                 }
@@ -555,7 +555,7 @@ public class Upload extends Fragment {
                                     navController = Navigation.findNavController(v);
                                     navController.navigate(R.id.individualPost,bundle);
                                 }
-                            },postID, token, object);
+                            },postID, token, object, view);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -168,7 +168,7 @@ public class ProfileFragment extends Fragment {
 
                 }
             }
-        }, token);
+        }, token, this.getActivity());
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

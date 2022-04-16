@@ -99,6 +99,7 @@ public class OTPverification extends Fragment {
         otpEditText = binding.otpfield;
         otpverification = binding.verify;
         TextView ErrorText = getView().findViewById(R.id.OTPErrorMessage);
+        TextView ErrorText2 = getView().findViewById(R.id.OTPErrorMessage2);
 
         //for OTP field checking
         TextWatcher textWatcher = new TextWatcher() {
@@ -148,7 +149,7 @@ public class OTPverification extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                }, getOtp, getDetails, getEmail, ErrorText);
+                }, getOtp, getDetails, getEmail, ErrorText, ErrorText2);
             }
 
         });

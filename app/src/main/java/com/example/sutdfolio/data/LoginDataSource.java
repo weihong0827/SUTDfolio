@@ -1,5 +1,6 @@
 package com.example.sutdfolio.data;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -59,7 +60,7 @@ public class LoginDataSource extends Fragment {
                 }
                 return null;
             }
-        }, token);
+        }, token, new Activity());
 
 
         //object.getString("Profile");

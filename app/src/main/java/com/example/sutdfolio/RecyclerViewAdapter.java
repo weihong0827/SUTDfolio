@@ -138,7 +138,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                     textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())+1));
                                 }
                             }
-                        },id,token);
+                        },id,token, v);
                     }else{
                         Toast.makeText(context,"Please login to like the post!",Toast.LENGTH_SHORT).show();
                     }
@@ -241,7 +241,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                             notifyDataSetChanged();
                                             Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
                                         }
-                                    },tempList.get(position).get_id(),token);
+                                    },tempList.get(position).get_id(),token, view);
                                 }
                             })
 

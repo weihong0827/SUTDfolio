@@ -123,7 +123,7 @@ public class homePage extends Fragment{
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
-        },token);
+        },token, this.getView());
     }
 
 }

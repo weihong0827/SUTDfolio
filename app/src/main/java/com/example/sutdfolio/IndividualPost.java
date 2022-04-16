@@ -216,7 +216,7 @@ public class IndividualPost extends Fragment {
                                         textHeartCount.setText(String.valueOf(Integer.parseInt(textHeartCount.getText().toString())+1));
                                     }
                                 }
-                            },ID,token);
+                            },ID,token, view);
                         }else{
                             Toast.makeText(context,"Please login to like the post!",Toast.LENGTH_SHORT).show();
                         }
@@ -257,8 +257,7 @@ public class IndividualPost extends Fragment {
 
                 adapter.notifyDataSetChanged();
 
-            }
-        }, ID,token);
+            } } , ID,token, view);
 
 
         deletePost.setOnClickListener(new View.OnClickListener() {
@@ -281,7 +280,7 @@ public class IndividualPost extends Fragment {
                                         navController.navigate(R.id.homePage);
                                         Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
                                     }
-                                },ID,token);
+                                },ID,token, view);
                             }
                         })
 

@@ -253,7 +253,7 @@ public class EditProfileFragment extends Fragment {
                         navController.navigate(R.id.action_editProfileFragment_to_profileFragment);
                         Toast.makeText(getActivity(),"Changes saved.",Toast.LENGTH_LONG).show();
                     }
-                }, setAboutMe, setPillar, setClassOf, setAvatar, jwt);
+                }, setAboutMe, setPillar, setClassOf, setAvatar, jwt, view);
 
 
             }

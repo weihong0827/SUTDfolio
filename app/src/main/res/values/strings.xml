@@ -123,4 +123,5 @@
         <item>Term 7</item>
         <item>Term 8</item>
     </string-array>
+    <string name="error">There was an error, please try again later. Error code: </string>
 </resources>

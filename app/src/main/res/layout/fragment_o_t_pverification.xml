@@ -38,9 +38,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="16dp"
         android:enabled="false"
         android:text="@string/verify_otp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OTPErrorMessage2"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="Have a 5 digit OTP?&#10;Enter an additional 0 at the start of the code."
+        android:textSize="16dp"
+        android:gravity="center"
+        />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.sutdfolio.utils;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.sutdfolio.R;
 import com.example.sutdfolio.data.LoginDataSource;
 
 import org.json.JSONArray;
@@ -42,7 +44,7 @@ public class APIRequest {
         }
         return instance;
     }
-    public void getUser (final Listener<JSONObject>listener,String jwt){
+    public void getUser (final Listener<JSONObject>listener,String jwt, Activity activity){
         String url = prefixURL + "api/user";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -60,6 +62,7 @@ public class APIRequest {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Response message: " + error.getMessage());
                 }
+                Toast.makeText(activity.getApplicationContext(), R.string.error+error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -71,7 +74,7 @@ public class APIRequest {
         };
         netWorkInstance.requestQueue.add(request);
     }
-    public void getCourse(final Listener<String> listener){
+    public void getCourse(final Listener<String> listener, Activity activity){
         String url = prefixURL + "api/posts/courses";
         Log.d(TAG, "getCourse: start"+url);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -96,14 +99,14 @@ public class APIRequest {
                         {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
 //                            listener.getResult(false);
-
                         }
+                        Toast.makeText(activity.getApplicationContext(), R.string.error+error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void getTags(final Listener<String> listener){
+    public void getTags(final Listener<String> listener, Activity activity){
         String url = prefixURL + "api/posts/tags";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>()
@@ -126,14 +129,15 @@ public class APIRequest {
                         {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
 //                            listener.getResult(false);
-
                         }
+                        Toast.makeText(activity.getApplicationContext(), R.string.error+error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email,TextView errorText){
+
+    public void verify(final Listener<JSONObject>listener,int otp,String detail,String email, TextView errorText, TextView errorText2){
         String url = prefixURL + "api/user/verify/otp";
         JSONObject body = new JSONObject();
         try {
@@ -141,10 +145,12 @@ public class APIRequest {
             body.put("verification_key",detail);
             body.put("check",email);
             errorText.setVisibility(View.INVISIBLE);
+            errorText2.setVisibility(View.INVISIBLE);
 
         } catch (JSONException e) {
             e.printStackTrace();
             errorText.setVisibility(View.VISIBLE);
+            errorText2.setVisibility(View.VISIBLE);
         }
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                 new Response.Listener<JSONObject>() {
@@ -160,6 +166,7 @@ public class APIRequest {
             public void onErrorResponse(VolleyError error) {
                 if (null != error.networkResponse) {
                     errorText.setVisibility(View.VISIBLE);
+                    errorText2.setVisibility(View.VISIBLE);
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
@@ -167,6 +174,7 @@ public class APIRequest {
         });
         netWorkInstance.requestQueue.add(request);
     }
+
     public void register(final Listener<JSONObject>listener,String email,String password,String name,int studentId, TextView errorText){
         String url = prefixURL + "api/user/register";
 
@@ -202,8 +210,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-
-    public void editUser(final Listener<JSONObject>listener,String aboutMe,String pillar,String class_of,String avatar, String jwt){
+    public void editUser(final Listener<JSONObject>listener,String aboutMe,String pillar,String class_of,String avatar, String jwt, View view){
         String url = prefixURL + "api/user";
 
         JSONObject body = new JSONObject();
@@ -226,13 +233,14 @@ public class APIRequest {
                             listener.getResult(response);
                     }
                 },new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 if (null != error.networkResponse) {
                     Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                     Log.d(TAG + ": ", "Error Message: " + error.getMessage());
                 }
+                Toast.makeText(view.getContext(), R.string.error+error.getMessage(), Toast.LENGTH_LONG).show();
             }
         })
         {
@@ -246,8 +254,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-
-    public void login(final Listener<JSONObject>listener, String email, String password,  Response.ErrorListener errorListener){
+    public void login(final Listener<JSONObject>listener, String email, String password,  Response.ErrorListener errorListener, View view){
         String url = prefixURL + "api/user/login";
 
         JSONObject body = new JSONObject();
@@ -258,7 +265,7 @@ public class APIRequest {
 
         } catch (JSONException e) {
             e.printStackTrace();
-
+            Toast.makeText(view.getContext(), R.string.error+ e.getMessage(), Toast.LENGTH_LONG).show();
         }
         Log.d(TAG + ": ", "Login " + ": " + body.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
@@ -277,7 +284,7 @@ public class APIRequest {
     }
 
 
-    public void uploadPost(final Listener<JSONObject>listener, JSONObject postData,String jwt){
+    public void uploadPost(final Listener<JSONObject>listener, JSONObject postData,String jwt, View view){
         String url = prefixURL + "api/posts";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>()
@@ -301,8 +308,8 @@ public class APIRequest {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                             Log.d(TAG + ": ", "Error Response code: " + error.getMessage());
 //                            listener.getResult(false);
-
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -315,7 +322,8 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void getPost(final Listener<String>listener,String id,String token){
+
+    public void getPost(final Listener<String>listener,String id,String token, View view){
         String url = prefixURL + "api/posts/"+id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>()
@@ -340,6 +348,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -355,7 +364,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void updatePost(final Listener<JSONObject>listener,String id,String token, JSONObject postData){
+    public void updatePost(final Listener<JSONObject>listener,String id,String token, JSONObject postData, View view){
         String url = prefixURL + "api/posts/" +id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, postData,
                 new Response.Listener<JSONObject>()
@@ -380,6 +389,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -395,7 +405,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void delPost(final Listener<String>listener,String id,String token){
+    public void delPost(final Listener<String>listener,String id,String token, View view){
         String url = prefixURL + "api/posts/"+id;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
                 new Response.Listener<JSONObject>()
@@ -420,6 +430,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }) {
             @Override
@@ -435,7 +446,7 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
 
-    public void getPosts( final Listener<String> listener,String token)
+    public void getPosts( final Listener<String> listener,String token, View view)
     {
         String url = prefixURL + "api/posts";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -462,6 +473,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -476,7 +488,7 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void upVote(final Listener<String> listener, String id,String jwt){
+    public void upVote(final Listener<String> listener, String id,String jwt, View view){
         String url = prefixURL + "api/posts/upvote/"+id;
         Log.d(TAG, "upVote: "+url);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -502,8 +514,8 @@ public class APIRequest {
                             Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                             Log.d(TAG + ": ", "Error Response message: " + error.getMessage());
 //                            listener.getResult(false);
-
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override
@@ -516,7 +528,7 @@ public class APIRequest {
 
         netWorkInstance.requestQueue.add(request);
     }
-    public void delImage(String filename,String jwt,String projectId){
+    public void delImage(String filename,String jwt,String projectId, View view){
         String url = prefixURL + "api/file/"+filename;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
                 new Response.Listener<JSONObject>()
@@ -542,6 +554,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){
             @Override

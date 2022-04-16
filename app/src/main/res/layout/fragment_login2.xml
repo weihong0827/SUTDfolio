@@ -46,6 +46,7 @@
         android:textSize="16dp"
         android:layout_gravity="center"
         android:visibility="invisible"
+        android:gravity="center"
         />
 
 <!--    <Button-->
