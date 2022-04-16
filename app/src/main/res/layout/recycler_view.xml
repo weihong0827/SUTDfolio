@@ -72,6 +72,7 @@
         android:layout_marginEnd="15dp"
         android:layout_below="@+id/item_heart_button"
         />
+
     <TextView
         android:id="@+id/item_detail"
         android:layout_width="match_parent"
@@ -84,22 +85,27 @@
         android:layout_below="@+id/item_title"
         />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="310dp"
-            android:layout_marginStart="10dp"
-            android:id="@+id/postUpdate"
-            android:visibility="gone"
-            android:text="Update"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/postUpdate"
+        android:visibility="gone"
+        android:layout_below="@+id/item_detail"
+        android:text="Update"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="310dp"
-            android:layout_marginStart="120dp"
-            android:id="@+id/postDelete"
-            android:visibility="gone"
-            android:text="Delete"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/postDelete"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/item_detail"
+        android:text="Delete"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

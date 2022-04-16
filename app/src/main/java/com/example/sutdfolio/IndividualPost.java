@@ -3,6 +3,7 @@ package com.example.sutdfolio;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -123,6 +124,12 @@ public class IndividualPost extends Fragment {
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
         viewPager2.setOffscreenPageLimit(3);
+        viewPager2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Tag","viewPager2 tapped.");
+            }
+        });
         viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
         CompositePageTransformer compositepagetransformer = new CompositePageTransformer();
         compositepagetransformer.addTransformer(new MarginPageTransformer(40));
