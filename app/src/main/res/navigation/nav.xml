@@ -41,7 +41,11 @@
         android:id="@+id/individualPost"
         android:name="com.example.sutdfolio.IndividualPost"
         android:label="fragment_individual_post"
-        tools:layout="@layout/fragment_individual_post" />
+        tools:layout="@layout/fragment_individual_post" >
+        <action
+            android:id="@+id/action_individualPost_to_indvImage"
+            app:destination="@id/indvImage" />
+    </fragment>
     <fragment
         android:id="@+id/OTPverification"
         android:name="com.example.sutdfolio.OTPverification"
@@ -80,6 +84,15 @@
         <action
             android:id="@+id/action_editProfileFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/indvImage"
+        android:name="com.example.sutdfolio.IndivImage"
+        android:label="fragment_indv_image"
+        tools:layout="@layout/fragment_indv_image" >
+        <action
+            android:id="@+id/action_indvImage_to_individualPost"
+            app:destination="@id/individualPost" />
     </fragment>
 
 </navigation>

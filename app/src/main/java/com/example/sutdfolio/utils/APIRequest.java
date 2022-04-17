@@ -286,6 +286,7 @@ public class APIRequest {
 
     public void uploadPost(final Listener<JSONObject>listener, JSONObject postData,String jwt, View view){
         String url = prefixURL + "api/posts";
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>()
                 {

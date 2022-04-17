@@ -1,16 +1,20 @@
 package com.example.sutdfolio;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sutdfolio.data.model.Posts;
 
 import java.util.List;
@@ -45,12 +49,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostAdapterHol
         private ImageView imageView;
         public PostAdapterHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageSlide);
+
+
         }
         void setImage(PostItem post)
         {
+            imageView = itemView.findViewById(R.id.imageSlide);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("imageUrl",post.getImage());
+                    NavController navController = Navigation.findNavController(itemView);
+                    navController.navigate(R.id.indvImage,bundle);
+                }
+            });
             Glide.with(itemView.getContext())
                     .load(post.getImage())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(imageView);
 
         }

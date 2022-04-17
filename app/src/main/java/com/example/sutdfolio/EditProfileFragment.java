@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
@@ -210,6 +211,8 @@ public class EditProfileFragment extends Fragment {
                     .with(getActivity())
                     .load(oriAvatar)
                     .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
 //                .placeholder(R.drawable.loading_spinner)
                     .into(avatar);
         }

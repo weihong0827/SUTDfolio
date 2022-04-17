@@ -32,6 +32,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.Posts;
 import com.example.sutdfolio.data.model.ReadPost;
@@ -216,6 +217,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Glide
                     .with(context)
                     .load(imageList.get(0).getUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                 .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
                     .into(holder.getItemImage());

@@ -47,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sutdfolio.data.model.Course;
 import com.example.sutdfolio.data.model.CreatePost;
 import com.example.sutdfolio.data.model.Image;
@@ -110,9 +111,11 @@ public class Upload extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         if (getArguments() != null) {
             postInfo = Util.GsonParser().fromJson(getArguments().getString("postInfo"),ReadPost.class);
-            postID = getArguments().getString("postID");
-            Log.d("Edit", postID);
+//            postID = getArguments().getString("postID");
+//            Log.d("Edit", postID);
+            postID = postInfo.get_id();
             Log.d("post.id", postInfo.get_id());
+
         }
         super.onCreate(savedInstanceState);
 
@@ -472,6 +475,8 @@ public class Upload extends Fragment {
                     Glide
                             .with(getContext())
                             .load(image.getUrl())
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
                             .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
                             .into(imageButton);
@@ -543,7 +548,7 @@ public class Upload extends Fragment {
                                     navController = Navigation.findNavController(v);
                                     navController.navigate(R.id.individualPost,bundle);
                                 }
-                            },postID, token, object, view);
+                            }, postID, token, object, view);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
