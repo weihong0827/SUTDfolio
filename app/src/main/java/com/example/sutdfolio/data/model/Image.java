@@ -50,6 +50,8 @@ public class Image {
         return contentType;
     }
 
+
+
     public String getUrl() {
         return url;
     }

@@ -224,28 +224,12 @@ public class IndividualPost extends Fragment {
                     }
                 });
 
-                String[] chunks = token.split("\\.");
-                Base64.Decoder decoder = Base64.getUrlDecoder();
-                String header = new String(decoder.decode(chunks[0]));
-                String payload = new String(decoder.decode(chunks[1]));
-                Log.d("jwt header", header);
-                Log.d("jwt payload", payload);
-
-
-                try {
-                    JSONObject jwt = new JSONObject(payload);
-                    studentID = jwt.getString("studentId");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 List<User> users = post.getPeopleInvolved();
                 String temp = "";
                 for(User i :users)
                 {
                     Log.d("contributor id", Integer.toString(i.getStudentId()));
-                    if (i.getStudentId() == Integer.parseInt(studentID)){
+                    if (post.isEditable()){
                         deletePost.setVisibility(view.VISIBLE);
                         editPost.setVisibility(view.VISIBLE);
                     }

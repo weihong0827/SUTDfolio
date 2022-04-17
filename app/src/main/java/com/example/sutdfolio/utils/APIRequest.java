@@ -76,7 +76,7 @@ public class APIRequest {
     }
     public void getCourse(final Listener<String> listener, Activity activity){
         String url = prefixURL + "api/posts/courses";
-        Log.d(TAG, "getCourse: start"+url);
+
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>()
                 {
@@ -366,6 +366,7 @@ public class APIRequest {
 
     public void updatePost(final Listener<JSONObject>listener,String id,String token, JSONObject postData, View view){
         String url = prefixURL + "api/posts/" +id;
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, postData,
                 new Response.Listener<JSONObject>()
                 {
@@ -389,6 +390,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
+                        Log.d(TAG + ": ", "Error Response code: " + error.networkResponse.statusCode);
                         Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -473,7 +475,7 @@ public class APIRequest {
 //                            listener.getResult(false);
 
                         }
-                        Toast.makeText(view.getContext(), R.string.error+ error.getMessage(), Toast.LENGTH_LONG).show();
+
                     }
                 }){
             @Override
@@ -529,7 +531,8 @@ public class APIRequest {
         netWorkInstance.requestQueue.add(request);
     }
     public void delImage(String filename,String jwt,String projectId, View view){
-        String url = prefixURL + "api/file/"+filename;
+        String url = prefixURL + "api/file/"+filename+'/'+projectId;
+        Log.d(TAG, "delImage: "+url);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
                 new Response.Listener<JSONObject>()
                 {
@@ -537,7 +540,6 @@ public class APIRequest {
                     public void onResponse(JSONObject response)
                     {
 
-                        if(null != response.toString())
                             Log.d(TAG, "onResponse: Image deleted");
 
                     }
@@ -563,14 +565,7 @@ public class APIRequest {
                 headers.put("auth-token",jwt);
                 return headers;
             }
-            @Override
-            public Map<String, String> getParams() {
-                HashMap<String,String> params = new HashMap<>();
-                if (!projectId.isEmpty()){
-                    params.put("project",projectId);
-                }
-                return params;
-            }
+
         };
 
         netWorkInstance.requestQueue.add(request);

@@ -43,6 +43,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +52,7 @@ import com.example.sutdfolio.data.model.CreatePost;
 import com.example.sutdfolio.data.model.Image;
 import com.example.sutdfolio.data.model.ReadPost;
 import com.example.sutdfolio.data.model.Tag;
+import com.example.sutdfolio.data.model.User;
 import com.example.sutdfolio.utils.APIRequest;
 import com.example.sutdfolio.utils.Listener;
 import com.example.sutdfolio.utils.Util;
@@ -165,6 +167,7 @@ public class Upload extends Fragment {
                                                         photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
+
                                                                 // File deleted successfully
                                                                 Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file");
                                                                 image.remove(tempImage);
@@ -307,27 +310,7 @@ public class Upload extends Fragment {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
-                LinearLayout itemSet = new LinearLayout(getContext());
-                itemSet.setOrientation(LinearLayout.VERTICAL);
-                itemSet.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
-                EditText editText = new EditText(getContext());
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-                itemSet.addView(editText);
-                Button removeButton = new Button(getContext());
-                FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
-
-                removeButton.setLayoutParams(param);
-                removeButton.setText("remove");
-                removeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        peopleLL.removeView(itemSet);
-                    }
-                });
-                itemSet.addView(removeButton);
-                peopleLL.addView(itemSet);
+                addPerson(view,"");
             }
         });
         EditText titleEdit = (EditText)v.findViewById(R.id.uploadPage_title_EditText);
@@ -435,15 +418,19 @@ public class Upload extends Fragment {
             for (Tag tag: tags){
                 selectedTag.add(tag.get_id());
             }
-
+            ArrayList<User> peopleInvolved = (ArrayList<User>) postInfo.getPeopleInvolved();
+            if (!peopleInvolved.isEmpty()){
+                TextView peopleText = (EditText) peopleLL.getChildAt(0);
+                peopleText.setText(String.valueOf(peopleInvolved.get(0).getStudentId()));
+                for (int i=1;i<peopleInvolved.size();i++){
+                    addPerson(v,String.valueOf(peopleInvolved.get(i).getStudentId()));
+                }
+            }
             Log.d("selected tags", tags.toString());
             editCourse = postInfo.getCourseNo();
             term = postInfo.getTerm();
             Log.d("term", String.valueOf(term));
             Log.d("selected course name", postInfo.getCourseNo().getCourseName());
-
-
-
 
             ArrayList<Image> postImages = (ArrayList<Image>) postInfo.getImage();
             image.addAll(postImages);
@@ -491,9 +478,7 @@ public class Upload extends Fragment {
             }
 
             termSpinner.setSelection(term-1);
-            //TODO add people bug fix
-            //TODO set tag color
-            //TODO image delete function
+
             //TODO SHOULD DELETE THE IMAGE ONLY ON SAVE CHANGES
             submitButton.setText("Save Changes");
             submitButton.setOnClickListener(new View.OnClickListener() {
@@ -519,7 +504,8 @@ public class Upload extends Fragment {
                         if (!input.equals("") ){
                             people.add(Integer.parseInt(input));}
                     }
-                    Log.d("post update", "onClick: ");
+
+                    Log.d("Data", "onClick: "+ title.toString()+ selectedTag.toString()+desc.toString()+image.toString()+people.toString());
                     CreatePost postToSend = new CreatePost(title,selectedTag,desc,image,people,selectedCourse,term,telegram,linkedIn,youtube,true);
                     Boolean studentIDvalidchecker = true;
                     for(Integer k : people){
@@ -527,11 +513,11 @@ public class Upload extends Fragment {
                             studentIDvalidchecker=false;
                         }
                     }
-                    Log.d("post update", "onClick: "+postToSend.toString());
+
 
                     Gson gson = Util.GsonParser();
                     String postString =  gson.toJson(postToSend);
-
+                    Log.d("post update", "onClick: "+postString);
                     if(title.length()<6){
                         Log.d("title char", "title not min 6 chars");
                         Toast.makeText(getActivity(),"Title has to be minimum 6 characters",Toast.LENGTH_LONG).show();
@@ -555,7 +541,7 @@ public class Upload extends Fragment {
                                     navController = Navigation.findNavController(v);
                                     navController.navigate(R.id.individualPost,bundle);
                                 }
-                            },postID, token, object, view);
+                            },postInfo.get_id(), token, object, view);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -565,7 +551,32 @@ public class Upload extends Fragment {
         }
         return v;
     }
+private void addPerson(View v,String text){
+    LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
+    LinearLayout itemSet = new LinearLayout(getContext());
+    itemSet.setOrientation(LinearLayout.VERTICAL);
+    itemSet.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT ));
+    EditText editText = new EditText(getContext());
+    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+    editText.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 
+    editText.setText(text);
+
+    itemSet.addView(editText);
+    Button removeButton = new Button(getContext());
+    FrameLayout.LayoutParams param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
+
+    removeButton.setLayoutParams(param);
+    removeButton.setText("remove");
+    removeButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            peopleLL.removeView(itemSet);
+        }
+    });
+    itemSet.addView(removeButton);
+    peopleLL.addView(itemSet);
+}
 
 
 }
