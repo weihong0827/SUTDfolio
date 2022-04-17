@@ -111,7 +111,8 @@ public class Upload extends Fragment {
         if (getArguments() != null) {
             postInfo = Util.GsonParser().fromJson(getArguments().getString("postInfo"),ReadPost.class);
             postID = getArguments().getString("postID");
-            Log.d("Edit", "onCreate: ");
+            Log.d("Edit", postID);
+            Log.d("post.id", postInfo.get_id());
         }
         super.onCreate(savedInstanceState);
 
@@ -316,7 +317,7 @@ public class Upload extends Fragment {
         EditText titleEdit = (EditText)v.findViewById(R.id.uploadPage_title_EditText);
         EditText descEdit = (EditText)v.findViewById(R.id.uploadPage_projectDescription_EditText);
         EditText youtubeEdit = v.findViewById((R.id.uploadPage_YouTube_EditText));
-        EditText linkedInEdit = v.findViewById(R.id.uploadPage_peopleInvolved_EditText);
+        EditText linkedInEdit = v.findViewById(R.id.uploadPage_LinkedIn_EditText);
         EditText telegramEdit = v.findViewById(R.id.uploadPage_telegram_EditText);
         LinearLayout peopleLL = v.findViewById(R.id.peopleInvolve);
         CircularProgressButton submitButton = (CircularProgressButton) v.findViewById(R.id.uploadPage_submit_Button);
@@ -538,10 +539,11 @@ public class Upload extends Fragment {
                                 public void getResult(JSONObject object) {
                                     Bundle bundle = new Bundle();
                                     bundle.putString("_id",postID);
+
                                     navController = Navigation.findNavController(v);
                                     navController.navigate(R.id.individualPost,bundle);
                                 }
-                            },postInfo.get_id(), token, object, view);
+                            },postID, token, object, view);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -108,6 +108,7 @@ public class IndividualPost extends Fragment {
         TextView linkedIn = getView().findViewById(R.id.linkedIn);
         TextView term = getView().findViewById(R.id.term);
         TextView team = getView().findViewById(R.id.teamInvolved);
+        TextView course = getView().findViewById(R.id.course);
         TextView textHeartCount = getView().findViewById(R.id.item_heart_counter);
         ImageView heartImageButton = getView().findViewById(R.id.item_heart_button);
         LinearLayout linearLayout = getView().findViewById(R.id.linear_layout);
@@ -163,10 +164,14 @@ public class IndividualPost extends Fragment {
 
                 //postItems.add(new PostItem(R.drawable.ic_baseline_home_24));
 
-                telegram.setText(post.getTelegram());
-                youtube.setText(post.getYoutube());
-                linkedIn.setText(post.getLinkIn());
-                term.setText(String.valueOf(post.getTerm()));
+                telegram.setText("Telegram: " + post.getTelegram());
+                Log.d("post", post.getTelegram());
+                Log.d("post", post.getYoutube());
+                Log.d("post", post.getLinkIn());
+                youtube.setText("Youtube: " + post.getYoutube());
+                course.setText(post.getCourseNo().getCourseName());
+                linkedIn.setText("Linked in: " + post.getLinkIn());
+                term.setText("Term " + String.valueOf(post.getTerm()));
                 title.setText(post.getTitle());
                 descView.setText(post.getDesc());
 
