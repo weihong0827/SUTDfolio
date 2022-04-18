@@ -151,7 +151,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void getResult(JSONObject object) {
                         try {
-                            Toast.makeText(getActivity(), "logged", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Email Sent", Toast.LENGTH_LONG).show();
                             String details = object.getString("Details");
                             Bundle bundle = new Bundle();
                             bundle.putString("details", details);

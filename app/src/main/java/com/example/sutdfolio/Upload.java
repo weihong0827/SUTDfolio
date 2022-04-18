@@ -175,6 +175,7 @@ public class Upload extends Fragment {
                                                                 // File deleted successfully
                                                                 Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file");
                                                                 image.remove(tempImage);
+                                                                Toast.makeText(getContext(),"Image Removed",Toast.LENGTH_SHORT).show();
                                                                 Log.d("image list", image.toString());
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
@@ -457,6 +458,7 @@ public class Upload extends Fragment {
                                     // File deleted successfully
                                     request.delImage(image.getFilename(),token, postInfo.get_id(), view);
                                     postImages.remove(image);
+                                    Toast.makeText(getContext(),"Image Removed",Toast.LENGTH_SHORT).show();
                                     Log.d("DELETE FROM FIREBASE", "onSuccess: deleted file from project");
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
