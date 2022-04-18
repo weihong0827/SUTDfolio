@@ -159,7 +159,7 @@ public class IndividualPost extends Fragment {
 
                 for(Image i:images)
                 {
-                    postItems.add(new PostItem(i.getUrl()));
+                    postItems.add(new PostItem(i.getUrl(),post.get_id()));
                 }
 
                 //postItems.add(new PostItem(R.drawable.ic_baseline_home_24));

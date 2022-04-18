@@ -24,13 +24,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
      >
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPageImageSlider"
             android:layout_width="match_parent"
-            android:layout_height="540px"
+            android:layout_height="700px"
             android:layout_marginTop="40px"
-            android:scaleType="fitXY"
-            />
+            android:scaleType="fitXY" />
 
 
         <LinearLayout

@@ -157,8 +157,8 @@ public class ProfileFragment extends Fragment {
                             .with(getActivity())
                             .load(userObj.getAvatar())
                             .centerCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
+//                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                            .skipMemoryCache(true)
 //                .placeholder(R.drawable.loading_spinner)
                             .into(avatar);
                 }

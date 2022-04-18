@@ -217,8 +217,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Glide
                     .with(context)
                     .load(imageList.get(0).getUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
                 .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
                     .into(holder.getItemImage());

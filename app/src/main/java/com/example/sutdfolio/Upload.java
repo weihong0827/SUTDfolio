@@ -475,8 +475,8 @@ public class Upload extends Fragment {
                     Glide
                             .with(getContext())
                             .load(image.getUrl())
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
+//                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                            .skipMemoryCache(true)
                             .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
                             .into(imageButton);

@@ -54,20 +54,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostAdapterHol
         }
         void setImage(PostItem post)
         {
-            imageView = itemView.findViewById(R.id.imageSlide);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("imageUrl",post.getImage());
-                    NavController navController = Navigation.findNavController(itemView);
-                    navController.navigate(R.id.indvImage,bundle);
-                }
-            });
+            imageView = (ImageView) itemView.findViewById(R.id.imageSlide);
+//            imageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("imageUrl",post.getImage());
+//                    bundle.putString("post",post.getId());
+//                    NavController navController = Navigation.findNavController(itemView);
+//                    navController.navigate(R.id.indvImage,bundle);
+//                }
+//            });
             Glide.with(itemView.getContext())
                     .load(post.getImage())
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
                     .into(imageView);
 
         }

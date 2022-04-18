@@ -211,8 +211,8 @@ public class EditProfileFragment extends Fragment {
                     .with(getActivity())
                     .load(oriAvatar)
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
 //                .placeholder(R.drawable.loading_spinner)
                     .into(avatar);
         }
