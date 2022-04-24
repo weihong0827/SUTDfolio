@@ -1,10 +1,13 @@
 package com.example.sutdfolio.utils;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -24,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -44,8 +48,23 @@ public class APIRequest {
         }
         return instance;
     }
-    public void getUser (final Listener<JSONObject>listener,String jwt, Activity activity){
-        String url = prefixURL + "api/user";
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void getUser (final Listener<JSONObject>listener, String jwt, Activity activity){
+
+        String[] chunks = jwt.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+
+        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+        String url="";
+        Log.d(TAG, "getUser: "+payload);
+        try {
+            JSONObject jsonObject = new JSONObject(payload);
+            url = prefixURL + "api/user/"+jsonObject.getString("_id");
+        }catch (JSONException err){
+            Log.d("Error", err.toString());
+        }
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
