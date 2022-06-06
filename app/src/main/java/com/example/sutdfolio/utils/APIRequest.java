@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class APIRequest {
     private static final String TAG = "API Request";
-    private static final String prefixURL = "https://sutd-root-backend-w5e7n.ondigitalocean.app/";
+    private static final String prefixURL = "****";
 
     private NetworkManager netWorkInstance = NetworkManager.getInstance();
     static final float DEFAULT_BACKOFF_MULT = 1f;
